@@ -1,0 +1,69 @@
+% PUT THE CONTENT OF THE PAPER IN THE FILES
+% title.tex, abstract.tex, main.tex, and references.bib
+
+\documentclass[a4paper,12pt]{article}
+\input{definitions}
+
+% ADD NOTE INFORMATION:
+\newcommand{\pubnumber}{}  % Belle II publication number
+\newcommand{\authors}{}  % names of the authors
+\newcommand{\referees}{}  % names of the referees
+\newcommand{\target}{}  % intended journal
+\newcommand{\deadline}{}  % deadline for the collaboration wide review
+\newcommand{\version}{}  % draft version number
+
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\headheight}{0mm}
+\setlength{\headsep}{0mm}
+
+\setlength{\textheight}{230mm}
+\setlength{\textwidth}{160mm}
+\setlength{\marginparwidth}{0mm}
+\setlength{\marginparsep}{0mm}
+
+
+\begin{document}
+
+\title{Some Title}
+
+\makeatletter
+\begin{titlepage}
+
+\includegraphics[width=3cm]{belle2-logo.pdf}\vspace*{-3cm}
+
+\begin{flushright}
+Publication number: \pubnumber\\
+Authors: \authors\\
+Referees: \referees\\
+Intended journal: \target\\
+Deadline: \deadline\\
+\end{flushright}
+\vspace*{24pt}
+
+\centering
+{\LARGE \input{title}}\\[8pt]
+
+Draft version \version
+
+\today
+
+\begin{abstract}
+    \linenumbers
+    \input{abstract}
+\end{abstract}
+
+\end{titlepage}
+\makeatother
+
+\linenumbers
+\input{main}
+
+\section*{Acknowledgements}
+\input{acknowledgements}
+
+\bibliography{references}
+\bibliographystyle{unsrt}
+
+\end{document}

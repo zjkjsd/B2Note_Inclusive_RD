@@ -1,0 +1,46 @@
+% WRITE THE MAIN TEXT IN THIS FILE
+
+\section{Title, abstract, and main text}
+Write the title in the file \texttt{title.tex}, the abstract in the file \texttt{abstract.tex}, and all other text in \texttt{main.tex}.
+It is recommended to use one line per sentence in the latex files because it makes diffs between versions more readable.
+
+\section{Draft versions}
+Fill the information about the paper draft in the file \texttt{draft.tex}.
+Make sure to increase the version number whenever a new version is released to the collaboration.
+
+\section{Figures}
+Put your figures in the subdirectory \texttt{figures}.
+Add them to the git repository with the commend \texttt{git add figures/*}.
+
+\section{Author list}
+Replace the file \texttt{authors.tex} with the actual author list.
+
+\section{References}
+The recommended references are
+\begin{itemize}
+\item Belle II physics: \cite{Kou:2018nap}
+\item B factories: \cite{Bevan:2014iga}
+\item Belle: \cite{Brodzicka:2012jm}
+\item CKM matrix: \cite{Kobayashi:1973fv}
+\item Belle II detector: \cite{Abe:2010gxa}
+\item SuperKEKB: \cite{Akai:2018mbz}
+\item EvtGen: \cite{Lange:2001uf}
+\item PYTHIA: \cite{Sjostrand:2014zea}
+\item KKMC: \cite{Jadach:1999vf}
+\item TAUOLA: \cite{Jadach:1990mz}
+\item PHOTOS: \cite{Barberio:1990ms}
+\item GEANT4: \cite{Agostinelli:2002hh}
+\item basf2: \cite{Kuhr:2018lps}
+\item FEI: \cite{Keck:2018lcd}
+\item PDG: \cite{Tanabashi:2018oca}
+\item HFLAV: \cite{Amhis:2019ckw}
+\end{itemize}
+To add your own references to the bibtex file use the command \texttt{./addref} with the arXiv number or inspire ID as argument.
+
+\section{Compiling the latex}
+Use the \texttt{make} command to compile the latex.
+Possible build targets are
+\begin{itemize}
+\item \texttt{draft} (default) for a version for collaboration wide review
+\item \texttt{prl} for submission to PRL
+\end{itemize}

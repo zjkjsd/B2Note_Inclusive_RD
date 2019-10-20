@@ -1,0 +1,26 @@
+% PUT THE CONTENT OF THE PAPER IN THE FILES
+% title.tex, abstract.tex, main.tex, and references.bib
+
+\documentclass[aps,prl,twocolumn,superscriptaddress,showpacs,amsmath,amssymb]{revtex4}
+\input{definitions}
+
+\begin{document}
+
+% ADD PACS NUMBERS:
+\pacs{}
+
+\title{\input{title}}
+\input{authors}
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+\maketitle
+
+\input{main}
+
+\input{acknowledgements}
+
+\bibliography{references}
+
+\end{document}
