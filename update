@@ -1,0 +1,13 @@
+#!/bin/bash
+
+git remote get-url upstream &> /dev/null
+if [ "$?" != "0" ]; then
+  ORIGIN=`git remote get-url origin`
+  if [ "${ORIGIN:0:3}" != "ssh" ]; then
+    git remote add upstream ${ORIGIN%@*}@stash.desy.de/scm/b2d/belle2-pub-template.git
+  else
+    git remote add upstream ssh://git@stash.desy.de:7999/b2d/belle2-pub-template.git
+  fi
+fi
+
+git pull upstream master
