@@ -17,7 +17,7 @@ bibfile = 'references.bib'
 if '/' in id or '.' in id:
     if ':' in id:
         id = id[id.find(':')+1:]
-    data = urlopen(f'http://inspirehep.net/search?p=find+eprint+{id}').read()
+    data = urlopen(f'http://old.inspirehep.net/search?p=find+eprint+{id}').read()
     match = re.compile(b'record/(\d*)').findall(data)
     if not match:
         print(f'ERROR: Could not get inspire ID for arXiv number {id}.')
@@ -25,7 +25,7 @@ if '/' in id or '.' in id:
     id = match[0].decode()
 
 # get bibtex from inspire
-data = urlopen(f'http://inspirehep.net/record/{id}/export/hx').read()
+data = urlopen(f'http://old.inspirehep.net/record/{id}/export/hx').read()
 match = re.compile(b'[\S\s]*<pre>\n([\S\s]*)</pre>[\S\s]*').findall(data)
 if not match:
     print(f'ERROR: Could not get bibtex for inspire ID {id}.')
