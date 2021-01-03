@@ -13,24 +13,21 @@ if len(sys.argv) != 2:
 id = sys.argv[1]
 bibfile = 'references.bib'
 
-# convert arxiv to inspire ID
-if '/' in id or '.' in id:
-    if ':' in id:
-        id = id[id.find(':')+1:]
-    data = urlopen(f'http://old.inspirehep.net/search?p=find+eprint+{id}').read()
-    match = re.compile(b'record/(\d*)').findall(data)
-    if not match:
-        print(f'ERROR: Could not get inspire ID for arXiv number {id}.')
-        sys.exit(1)
-    id = match[0].decode()
-
 # get bibtex from inspire
-data = urlopen(f'http://old.inspirehep.net/record/{id}/export/hx').read()
-match = re.compile(b'[\S\s]*<pre>\n([\S\s]*)</pre>[\S\s]*').findall(data)
-if not match:
-    print(f'ERROR: Could not get bibtex for inspire ID {id}.')
+if '/' in id:
+    query = 'eprint'
+elif '.' in id:
+    query = 'arxiv'
+else:
+    query = 'recid'
+try:
+    bibtex = urlopen(f'https://inspirehep.net/api/literature?q={query}%3A{id}&format=bibtex').read().decode()
+except:
+    print(f'ERROR: Query for {id} failed.')
     sys.exit(1)
-bibtex = match[0].decode()
+if len(bibtex) == 0:
+    print(f'ERROR: Could not get bibtex for {id}.')
+    sys.exit(1)
 
 # check whether the entry is already in references.bib
 entry = re.compile('@[\w]*{([\S]*),').findall(bibtex)[0]
