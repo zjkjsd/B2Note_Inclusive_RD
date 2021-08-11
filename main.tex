@@ -1,4 +1,5 @@
-% WRITE THE MAIN TEXT IN THIS FILE
+% WRITE THE MAIN TEXT IN THIS FILE.
+% REMOVE THE INITIAL, EXAMPLE CONTENT.
 
 \section{Title, abstract, and main text}
 Write the title in the file \texttt{title.tex}, the abstract in the file \texttt{abstract.tex}, and all other text in \texttt{main.tex}.
@@ -40,10 +41,16 @@ To add your own references to the bibtex file use the command \texttt{./addref} 
 \section{Acknowledgements}
 Use the command \texttt{./update} to get the latest version of the acknowledgements and any other updates of the template.
 
+\section{Additional Material}
+Add all figures and numbers that should be approved for public presentation in the file \texttt{material.tex}.
+
 \section{Compiling the latex}
 Use the \texttt{make} command to compile the latex.
 Possible build targets are
 \begin{itemize}
 \item \texttt{draft} (default) for a version for collaboration wide review
 \item \texttt{prl} for submission to PRL
+\item \texttt{prd} for submission to PRD
+\item \texttt{jhep} for submission to JHEP
+\item \texttt{epjc} for submission to EPJC
 \end{itemize}

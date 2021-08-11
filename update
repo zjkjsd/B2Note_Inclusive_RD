@@ -10,4 +10,4 @@ if [ "$?" != "0" ]; then
   fi
 fi
 
-git pull upstream master
+git pull upstream main

@@ -1,8 +1,13 @@
 # input files
-SOURCES:=title.tex abstract.tex main.tex authors.tex acknowledgements.tex definitions.tex references.bib $(wildcard figures/*)
+SOURCES:=title.tex abstract.tex pacs.tex main.tex authors.tex material.tex acknowledgements.tex definitions.tex references.bib $(wildcard figures/*)
 
 # default is draft
 draft:
+
+# tarball
+%.paper: %.tex $(SOURCES)
+	@./create_paper $@
+
 
 # latex build
 %: %.tex $(SOURCES)
