@@ -3,9 +3,9 @@
 Use this template for writing Belle II notes or publications.
 
 The following instructions tell how to
-* [set up the git repository for the document](#Git_repository),
-* [add the content](#Document_editing), and
-* [produce the files for review or submission](#Document_compilation).
+* [set up the git repository for the document](#git-repository),
+* [add the content](#document-editing), and
+* [produce the files for review or submission](#document-compilation).
 
 ## Git repository
 
