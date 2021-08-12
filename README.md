@@ -7,6 +7,8 @@ The following instructions tell how to
 * [add the content](#document-editing), and
 * [produce the files for review or submission](#document-compilation).
 
+<br>
+
 ## Git repository
 
 The first step is to make a fork of this repository.
@@ -36,6 +38,8 @@ Use `Fork syncing` in the `Repository settings` of your git repository or the co
 
 to get the latest version of acknowledgements or any other update of the template.
 
+
+<br>
 
 ## Document editing
 
@@ -78,6 +82,8 @@ You can add your own references by getting the bibtex information from [INSPIRE 
 with the arXiv number or inspire ID as argument.
 
 
+<br>
+
 ## Document compilation
 
 Use
@@ -97,6 +103,14 @@ To merge all tex files into one and produce a tarball `paper.tgz` with all files
 
     make [argument].paper
 
+If you want to show the changed between two versions the `latexdiff-git` tool can be used.
+For example,
+
+    latexdiff-git --pdf --flatten -r 36e3ee54 draft.tex
+
+will produce the file `draft-diff36e3ee54.pdf` with indication of changes with respect to revision 36e3ee54.
+
+<br>
 
 ## Overleaf
 
