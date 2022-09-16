@@ -1,6 +1,5 @@
 \documentclass[a4paper,12pt]{article}
 \input{definitions}
-\usepackage[noblocks]{authblk}
 
 \setlength{\oddsidemargin}{0mm}
 \setlength{\evensidemargin}{0mm}
@@ -13,6 +12,8 @@
 \setlength{\marginparwidth}{0mm}
 \setlength{\marginparsep}{0mm}
 
+\newboolean{final}
+\setboolean{final}{false} % Set to true for final version
 
 \begin{document}
 
@@ -24,28 +25,20 @@
 \begin{flushright}
 \vspace*{24pt}
 BELLE2-NOTE-XX-YYYY-ZZZ \\ % INSERT THE NOTE NUMBER HERE
-Version X.Y \\ % INSERT THE NOTE VERSION NUMBER AND UPDATE IT WHENEVER A NEW VERSION IS UPLOADED
+\ifthenelse{\boolean{final}}{}{Version X.Y \\} % INSERT THE VERSION NUMBER
 \today
 \end{flushright}
 \vspace*{24pt}
 
 \centering
-{\LARGE TITLE}\\[24pt] % INSERT THE TITLE HERE
+{\LARGE\bfseries\input{title}}\\[24pt]
 
-% INSERT/ADD AUTHORS BELOW
-\author[1]{AUTHOR1}
-\author[2]{AUTHOR2}
-\author[1]{AUTHOR3}
-\affil[1]{AFFIL1}
-\affil[2]{AFFIL2}
-
-\@author\\[12pt]
-
-\textit{The Belle II Collaboration}\\[24pt]
+\input{authors}
+\vspace*{24pt}
 
 \begin{abstract}
-\linenumbers
-% INSERT THE ABSTRACT HERE
+\ifthenelse{\boolean{final}}{}{\linenumbers}
+\input{abstract}
 \end{abstract}
 
 \end{titlepage}
@@ -53,238 +46,22 @@ Version X.Y \\ % INSERT THE NOTE VERSION NUMBER AND UPDATE IT WHENEVER A NEW VER
 
 \tableofcontents
 
-\linenumbers
+\ifthenelse{\boolean{final}}{}{\linenumbers}
+
+\clearpage
 % INSERT MAIN TEXT HERE
+\input{instructions}
 
-% Below is an example of a structure for a simple search for a rare/exotic process
-
-%\section{Basic questions}
-
-% Question: What are you looking for?
-% Describe it in one or two sentences, and give a reference.
-% If you must, you can include a Feynman diagram.
-
-% Question: What is interesting about it?
-% Explain the physics motivation for yur analysis
-
-% Question: What previous measurements exist?
-% Give references to previous measurements and discuss
-% how your measurement relates to them (e.g. more data,
-% better method, independent cross-check, etc.).
-
-% Question: How did you look for it?
-% Keep it very simple: e.g.\ ``we looked for an invariant mass peak in the
-% continuum'', or ``we looked for $B$-decays to this final state'', or
-% ``we looked for a two-body $XY$ mass peak in $B \to XYZ$ decays''
-
-% Question: What data sample did you use?
-% Give experiment numbers, total int-luminosity;
-% specify if you used on-resonance data, off-resonance data, or both;
-% and which skim.
-
-% Question: Did you use a signal MC sample?
-% Yes or No;
-% if Yes, describe the assumptions / generator settings
-% used to generate it, and the sample size
-
-% Question: What about background MC?
-% Yes or No; details as for signal MC
-
-% Question: What basf2 versions did you use?
-% Give the basf2 version used for MC generation, skimming, and
-% analysis (maybe they're different, so be specific), and any other
-% version-number information that might be relevant here.}
-
-% Question: Where can one find your analysis code?
-% Give the location of the git repository with your analysis code.
-
-
-%\section{Questions about cuts}
-
-%\subsection{Skimming}
-
-% Question: Did you use a skim?
-% Apart from using an official skim,
-% did you use a skimming module to reduce the size of the data/MC?
-% Answer Yes or No.
-% If Yes, and it's taken from someone else's analysis, give a reference.
-% If No, skip the rest of the subsection.
-
-% Question: If yes, list the cuts used by the skim
-% An itemized list is fine: e.g.\ invariant mass cuts on combinations,
-% multiplicity cuts, PID cuts.
-% If some variable is non-standard, and you also use it in your main
-% analysis code, you can postpone the description until
-% the event selection section.
-
-%\begin{itemize}
-%  \item	skimcut 1
-%  \item	skimcut 2
-%  \item	skimcut 3
-%  \item	skimcut 4
-%  \item	\ldots
-%\end{itemize}
-
-% Question: What fraction of events pass the skim condition?
-% If you know the fraction for signal and background MC samples, 
-% quote that as well.
-
-%\subsection{Event selection}
-
-% Question: How do you select tracks, ECL clusters, $K^0_S$ candidates etc. for further analysis?
-% e.g. list minimum track momenta and allowed ranges in polar angle; 
-% minimum $E_\gamma$ or energy asymmetry cuts for $\pi^0$; 
-% Vzero cuts for $K^0_S$ and $\Lambda^0$;
-% $\pi^0/\eta$ veto for hard gammas \ldots}
-
-%\begin{itemize}
-%  \item	Track selection:
-%	\begin{itemize}
-%	  \item	track cut 1
-%	  \item	track cut 2
-%	  \item	\ldots
-%	\end{itemize}
-%  \item	$\pi^0$ selection:
-%	\begin{itemize}
-%	  \item	$\pi^0$ cut 1
-%	  \item	$\pi^0$ cut 2
-%	  \item	\ldots
-%	\end{itemize}
-%  \item	$K^0_S$ selection:
-%	\begin{itemize}
-%	  \item	$K^0_S$ cut 1
-%	  \item	$K^0_S$ cut 2
-%	  \item	\ldots
-%	\end{itemize}
-%  \item	and so on \ldots
-%\end{itemize}
-
-% Question: Do you have any cuts against a very general class of background?
-% e.g.\ if you're looking for a $B$-decay,
-% list your continuum-suppression cuts:
-% if they are copied from another Belle II analysis, give the reference.
-
-% Question: Once you've selected tracks, $\pi^0$ candidates etc., how do you select events?
-% Give an itemized list:
-% e.g.\
-% multiplicity cuts, PID cuts,
-% and (very important:) \underline{valid combinations of particles
-% to form your signal candidates} \ldots}
-
-%\begin{itemize}
-%  \item	selection cut 1
-%  \item	selection cut 2
-%  \item	selection cut 3
-%  \item	selection cut 4
-%  \item	\ldots
-%\end{itemize}
-
-% Question: How many events survive?
-% If you know this for each stage of the analysis (i.e.\ how many events
-% survive after each cut) perhaps you could list this in a table,
-% especially if you know the answer for signal/background MC as well.
-% If not, just write what you \underline{do} know.
-
-%\subsection{The signal region, \emph{etc.}}
-
-% Question: You probably have a ``signal region'': how is it defined?
-% e.g.\ give $(M_{bc}, \Delta E)$ cuts if appropriate,
-% invariant mass windows for your signal candidates \ldots
-
-% Question: Do you get multiple signal candidates in an event?	If so, how do you handle them?
-% (This question should be easy to answer.)
-
-% Question: What about sideband regions, or control samples?
-% (This question should be easy to answer.)
-
-% Question: How many events make it into your signal/sideband regions?
-% Again, this should be an easy question. If you know this for signal
-% and background MC, also give those numbers here.
-
-
-%\section{Data/MC agreement}
-
-% Question: How did you verify that the MC describes your data?
-
-%\subsection{MC corrections, calibrations}
-% Question: If the MC does not describe the data sufficiently well, how did you determine and apply corrections or calibrations?
-
-
-%\section{Signal extraction}
-
-%\subsection{Getting the yield}
-
-% Question: How do you obtain the signal yield?
-% e.g.\ using a fit to $\Delta E$ or an invariant mass distribution, 
-% or by counting, etc.; give details.
-
-% Question: How do you make sure your analysis is unbiased?
-% Describe the data hiding technique you used.
-
-% Question: What result do you get (on MC)?
-% If you use a fit, show it here, as well as giving the result.
-% In any case, show the appropriate plots.
-% Keep the signal in data hidden until you got the approval
-% to look at it from the reviewers.
-
-% Question: Are there any other relevant results/plots/etc.?
-% e.g.\ show sideband distributions and yields if you know them,
-% or yields in control samples \ldots
-
-% Question: How did you verify that the signal extractions gives a correct estimate of the signal yield?
-% Describe how you checked the fit, e.g. with pseudo-experiments.
-
-
-%\subsection{Efficiency}
-
-% Question: How have you estimated the efficiency of your selection/analysis?
-% If you're just looking for some final state, perhaps the answer is
-% ``I used the MC described at~\ref{q-basic-mc-signal} to estimate it''.
-% Or if you're looking for an XY peak in $B \to XYZ$ decays,
-% perhaps you've done a check in $M(XY)$ bins.
-% Anyway, please give the details.
-
-%\subsection{Physics numbers}
-
-% Question: What is the relevant ``physics number'' for this analysis?
-% It might be a cross-section; or a product of branching fractions,
-% or $\sigma \times \mathcal{B} \times \mathcal{B}$;
-% or a quasi-two-body fraction
-% $\mathcal{B}(B \to \aleph Z) \times \mathcal{B}(\aleph \to XY) /
-%  \mathcal{B}(B \to XYZ)$.
-
-% Question: So, what value do you find for this number?
-% Please also include all numbers you use in any calculation.
-
-
-%\section{Systematics}
-
-% Question: Have you done any studies of systematic error?
-% Answer Yes or No: go on, be honest!
-
-% Question: If yes, what studies? With what result?
-% This part is too hard to do in a ``question-and-answer'' format.
-% Please set out this part by yourself.
-% You can use \texttt{$\backslash$subsection}, 
-% but \texttt{$\backslash$subsubsection} won't work
-
-
-%\section{Other issues}
-
-% Question: Is there anything important that has been missed so far?
-
-% Question: Are there other, related analyses being done by you or by people in your group?
-
-% Question: Do you plan to extend this analysis in the future?
-% Basically, answer Yes, No, or Not Sure; and give details if appropriate.
-
-% Question: Do you have a plan for a longer writeup of this analysis?
-% Answer Yes or No; ``No'' is an acceptable answer, if it's the truth.
-% If this analysis is part of a wider study (e.g.\ of a particular
-% final state in $B$-decay), mention it here.
-
-
+\cleardoublepage
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{belle2}
 \bibliography{references}
-\bibliographystyle{unsrt}
+
+% INSERT ANY APPENDICES BELOW
+\cleardoublepage
+\appendix
+\input{material}
+
+
 
 \end{document}

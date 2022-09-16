@@ -1,0 +1,244 @@
+\section{Title, abstract, and main text}
+Write the title in the file \texttt{title.tex}, the abstract in the file \texttt{abstract.tex}, and all other text in \texttt{body.tex}.
+It is recommended to use one line per sentence in the latex files because it makes diffs between versions more readable.
+
+\section{Draft versions}
+Fill the information about the paper draft in the file \texttt{draft.tex} and about internal/conference notes in \texttt{note.tex}.
+
+\section{Figures}
+Put your figures in the subdirectory \texttt{figures}.
+Add them to the git repository with the commend \texttt{git add figures/*}.
+
+\section{Author list}
+Replace the file \texttt{authors.tex} with the actual author list.
+
+\section{References}
+The recommended references are
+\begin{itemize}
+\item \belletwo physics: \cite{Kou:2018nap}
+\item B factories: \cite{Bevan:2014iga}
+\item Belle: \cite{Brodzicka:2012jm}
+\item CKM matrix: \cite{Kobayashi:1973fv}
+\item Belle II detector: \cite{Abe:2010gxa}
+\item SuperKEKB: \cite{Akai:2018mbz}
+\item \evtgen: \cite{Lange:2001uf}
+\item \pythia: \cite{Sjostrand:2014zea}
+\item \kkmc: \cite{Jadach:1999vf}
+\item \tauola: \cite{Jadach:1990mz}
+\item \photos: \cite{Barberio:1990ms}
+\item \geant: \cite{Agostinelli:2002hh}
+\item basf2: \cite{Kuhr:2018lps}
+\item FEI: \cite{Keck:2018lcd}
+\item PDG: \cite{Zyla:2020zbs}
+\item HFLAV: \cite{Amhis:2019ckw}
+\end{itemize}
+Some other standard references are available in \texttt{references.bib}. To add your own references to the bibtex file use the command \texttt{./addref} with the arXiv number or inspire ID as argument.  The added entries are might still need some editing:
+\begin{itemize}
+\item check that Latex symbols in the titles are properly rendered (use \belletwo symbols whenever possible);
+\item page ranges should in many cases be shortened to just  having the start page;
+\item collaborations might need to be added or indeed just the word  ``collaboration'' put after them;
+\item for errata and/or addenda use the fields \texttt{extraPrefix}, \texttt{extraVolume}, \texttt{extraPages}, \texttt{extraYear}, and \texttt{extraDoi}, as done for example in Ref.~\cite{Kou:2018nap}.
+
+\end{itemize}
+
+\section{Acknowledgements}
+Use the command \texttt{./update} to get the latest version of the acknowledgements and any other updates of the template.
+
+\section{Additional Material}
+Add all figures and numbers that should be approved for public presentation in the file \texttt{material.tex}.
+
+\section{Compiling the latex}
+Use the \texttt{make} command to compile the latex.
+Possible build targets are
+\begin{itemize}
+\item \texttt{note} (default) for internal notes and for conference notes;
+\item \texttt{draft} for paper drafts to be used for collaboration wide review;
+\item \texttt{prl} for submission to PRL;
+\item \texttt{prd} for submission to PRD;
+\item \texttt{jhep} for submission to JHEP;
+\item \texttt{epjc} for submission to EPJC.
+\end{itemize}
+
+\section{Word counting for PRL}
+Use the \texttt{make prlcount} command to perform a word counting following PRL requirements.
+
+\section{Drafting Belle II notes}
+Here are examples of questions to ask yourself while drafting a Belle II note.
+
+\subsection*{Basic questions}
+
+\begin{itemize}
+\item What are you looking for?
+Describe it in one or two sentences, and give a reference.
+If you must, you can include a Feynman diagram.
+
+\item What is interesting about it?
+Explain the physics motivation for your analysis
+
+\item What previous measurements exist?
+Give references to previous measurements and discuss
+how your measurement relates to them (\eg more data,
+better method, independent cross-check, \etc).
+
+\item How did you look for it?
+Keep it very simple: \eg ``we looked for an invariant mass peak in the
+ continuum'', or ``we looked for $B$-decays to this final state'', or
+``we looked for a two-body $XY$ mass peak in $B \to XYZ$ decays''
+
+\item What data sample did you use?
+Give experiment numbers, total int-luminosity;
+specify if you used on-resonance data, off-resonance data, or both;
+and which skim.
+
+\item Did you use a signal MC sample?
+Yes or No;
+if Yes, describe the assumptions / generator settings
+used to generate it, and the sample size
+
+\item What about background MC?
+Yes or No; details as for signal MC
+
+\item What basf2 versions did you use?
+Give the basf2 version used for MC generation, skimming, and
+analysis (maybe they're different, so be specific), and any other
+version-number information that might be relevant here.
+
+\item Where can one find your analysis code?
+Give the location of the git repository with your analysis code.
+\end{itemize}
+
+\subsection*{Skimming}
+
+\begin{itemize}
+
+\item Did you use a skim?
+Apart from using an official skim,
+did you use a skimming module to reduce the size of the data/MC?
+Answer Yes or No.
+If Yes, and it's taken from someone else's analysis, give a reference.
+If No, skip the rest of the subsection.
+
+\item If yes, list the cuts used by the skim
+An itemized list is fine: \eg invariant mass cuts on combinations,
+multiplicity cuts, PID cuts.
+If some variable is non-standard, and you also use it in your main
+analysis code, you can postpone the description until
+the event selection section.
+
+\item What fraction of events pass the skim condition?
+If you know the fraction for signal and background MC samples, 
+quote that as well.
+
+\end{itemize}
+
+\subsection*{Event selection}
+
+\begin{itemize}
+
+\item How do you select tracks, ECL clusters, \KS candidates \etc for further analysis?
+\eg list minimum track momenta and allowed ranges in polar angle; 
+ minimum $E_\gamma$ or energy asymmetry cuts for $\pi^0$; 
+ V0 cuts for \KS and \Lz; $\pi^0/\eta$ veto for hard gammas...
+
+\item Do you have any cuts against a very general class of background?
+ \eg if you're looking for a $B$-decay,
+ list your continuum-suppression cuts:
+ if they are copied from another Belle II analysis, give the reference.
+
+\item Once you've selected tracks, $\pi^0$ candidates \etc, how do you select events?
+ Give an itemized list:
+\eg multiplicity cuts, PID cuts,
+ valid combinations of particles
+ to form your signal candidates, ...
+
+\item How many events survive?
+ If you know this for each stage of the analysis (\ie how many events
+ survive after each cut) perhaps you could list this in a table,
+ especially if you know the answer for signal/background MC as well.
+ If not, just write what you do know.
+
+\item You probably have a ``signal region'': how is it defined?
+ \eg give $(M_{\rm bc}, \Delta E)$ cuts if appropriate,
+ invariant mass windows for your signal candidates...
+
+\item Do you get multiple signal candidates in an event?	If so, how do you handle them?
+
+\item What about sideband regions, or control samples?
+
+\item How many events make it into your signal/sideband regions?
+ Again, this should be an easy question. If you know this for signal
+ and background MC, also give those numbers here.
+
+\end{itemize}
+
+\subsection*{Data/MC agreement}
+
+\begin{itemize}
+
+\item How did you verify that the MC describes your data?
+
+\item If the MC does not describe the data sufficiently well, how did you determine and apply corrections or calibrations?
+
+\end{itemize}
+
+\subsection*{Analysis}
+
+\begin{itemize}
+
+\item How do you obtain the signal yield?
+ \eg using a fit to $\Delta E$ or an invariant mass distribution, 
+ or by counting, \etc; give details.
+
+\item How do you make sure your analysis is unbiased?
+ Describe the data hiding technique you used.
+
+\item What result do you get (on MC)?
+ If you use a fit, show it here, as well as giving the result.
+ In any case, show the appropriate plots.
+ Keep the signal in data hidden until you got the approval
+ to look at it from the reviewers.
+
+\item Are there any other relevant results/plots/\etc?
+ \eg show sideband distributions and yields if you know them,
+ or yields in control samples...
+
+\item How did you verify that the signal extractions gives a correct estimate of the signal yield?
+ Describe how you checked the fit, \eg with pseudo-experiments.
+
+\item How have you estimated the efficiency of your selection/analysis?
+ If you're just looking for some final state, perhaps the answer is
+ ``I used the MC described at... to estimate it''.
+ Or if you're looking for an XY peak in $B \to XYZ$ decays,
+ perhaps you've done a check in $M(XY)$ bins.
+ Anyway, please give the details.
+
+\item What is the relevant ``physics number'' for this analysis?
+ It might be a cross-section; or a product of branching fractions,
+ or $\sigma \times\BF\times\BF$;
+ or a quasi-two-body fraction
+ $\BF(B \to \L Z) \times \BF(\L \to XY) / \BF(B \to XYZ)$.
+
+\item So, what value do you find for this number?
+ Please also include all numbers you use in any calculation.
+
+\item Have you done any studies of systematic error? If yes, what studies? With what result?
+ Answer Yes or No, describe all details.
+
+\end{itemize}
+
+\subsection*{Other issues}
+\begin{itemize}
+
+\item Is there anything important that has been missed so far?
+
+\item Are there other, related analyses being done by you or by people in your group?
+
+\item Do you plan to extend this analysis in the future?
+ Basically, answer Yes, No, or Not Sure; and give details if appropriate.
+
+\item Do you have a plan for a longer writeup of this analysis?
+ Answer Yes or No; ``No'' is an acceptable answer, if it's the truth.
+ If this analysis is part of a wider study (\eg of a particular
+ final state in $B$-decay), mention it here.
+
+\end{itemize}

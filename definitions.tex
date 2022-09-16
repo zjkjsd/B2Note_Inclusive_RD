@@ -3,12 +3,19 @@
 \usepackage{epstopdf} % Allow to include eps files
 \usepackage{dcolumn} % Align table columns on decimal point
 \usepackage{xcolor} % Color support
-\usepackage{amssymb} % Extended symbol collection
+\usepackage{amsmath,amssymb} % Extended symbol collection
 \usepackage{hyperref} % Generate pdfs with hyperlinks
 \usepackage[utf8]{inputenc} % Allow UTF8 characters
 \usepackage[english]{babel} % All publications are in English
 \usepackage[displaymath, mathlines]{lineno} % Line numbers for drafts
 \usepackage{blindtext} % For testing
+\usepackage{ifthen} % for conditional statements
 
 % Configuration
 \graphicspath{{figures/}} % Use figures directory for figures
+
+\newboolean{articletitles}
+\setboolean{articletitles}{true} % False removes titles in references
+
+% Macros
+\input{belle2-symbols}
