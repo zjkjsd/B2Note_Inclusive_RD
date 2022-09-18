@@ -1,8 +1,9 @@
 # input files
-SOURCES:=title.tex abstract.tex pacs.tex body.tex authors.tex material.tex acknowledgements.tex definitions.tex references.bib instructions.tex $(wildcard figures/*)
+SOURCES:=title.tex abstract.tex pacs.tex body.tex authors.tex material.tex acknowledgements.tex \
+         definitions.tex references.bib instructions.tex belle2-symbols.tex belle2.bst $(wildcard figures/*)
 
 # default is note
-note: note.tex references.bib $(wildcard figures/*)
+note: note.tex $(SOURCES)
 	latexmk -pdf -bibtex note
 
 # tarball
