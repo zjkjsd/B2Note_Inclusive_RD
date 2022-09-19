@@ -6,6 +6,7 @@ The following instructions tell how to
 * [set up the git repository for the document](#git-repository),
 * [add the content](#document-editing), and
 * [produce the files for review or submission](#document-compilation).
+Compile the example note for more detailed instructions.
 
 <br>
 
