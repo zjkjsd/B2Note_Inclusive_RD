@@ -6,6 +6,7 @@ The following instructions tell how to
 * [set up the git repository for the document](#git-repository),
 * [add the content](#document-editing), and
 * [produce the files for review or submission](#document-compilation).
+Compile the example note for more detailed instructions.
 
 <br>
 
@@ -59,7 +60,7 @@ Use
  * [`title.tex`](title.tex) for the title,
  * [`abstract.tex`](abstract.tex) for the abstract,
  * [`pacs.tex`](pacs.tex) for PACS codes,
- * [`main.tex`](main.tex) for the main content, and
+ * [`body.tex`](body.tex) for the main content, and
  * [`material.tex`](material.tex) for all further figures and numbers that should be approved for public presentation.
 
 In addition the note information should be added in [`draft.tex`](draft.tex).

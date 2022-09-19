@@ -1,20 +1,35 @@
 % ADD YOUR OWN REFERENCES AT THE END OF THIS FILE.
+%
 % To add reference from the arxiv or inspire use the "addref" script.
-% The file already contains some recommended references.
+%
+% Bibtex entries from inspire might still need some editing
+% - Check Latex symbols in the titles are properly rendered (use
+%   Belle II symbols whenever possible)
+% - Page ranges should in many cases be shortened to just 
+%   having the start page.
+% - Collaborations might need to be added or indeed just the word 
+%   "collaboration" put after them.
+% - For errata or addenda use the fields extraPrefix, extraVolume,
+%   extraPages, extraYear, extraDoi (see, e.g., entry Kou:2018nap).
+%
+% Below are a set of standard references to use for Belle II papers.
 
 % Belle II Physics Book
 @article{Kou:2018nap,
       author         = "Altmannshofer, W. and others",
       editor         = "Kou, E. and Urquijo, P.",
-      title          = "{The Belle II Physics Book}",
-      collaboration  = "Belle-II",
+      title          = "{The Belle~II physics book}",
       journal        = "PTEP",
       volume         = "2019",
       year           = "2019",
       number         = "12",
       pages          = "123C01",
-      doi            = "10.1093/ptep/ptz106, 10.1093/ptep/ptaa008",
-      note           = "[erratum: PTEP2020,no.2,029201(2020)]",
+      doi            = "10.1093/ptep/ptz106",
+      extraPrefix    = "Erratum",
+      extraVolume    = "2020",
+      extraPages     = "029201",
+      extraYear      = "2020",
+      extraDoi       = "10.1093/ptep/ptaa008",
       eprint         = "1808.10567",
       archivePrefix  = "arXiv",
       primaryClass   = "hep-ex",
@@ -27,8 +42,8 @@
 % B factories
 @article{Bevan:2014iga,
       author         = "Bevan, A. J. and others",
-      title          = "{The Physics of the B Factories}",
-      collaboration  = "BaBar, Belle",
+      title          = "{The physics of the \B factories}",
+      collaboration  = "BaBar and Belle collaborations",
       journal        = "Eur. Phys. J.",
       volume         = "C74",
       year           = "2014",
@@ -45,8 +60,8 @@
 % Belle physics
 @article{Brodzicka:2012jm,
       author         = "Brodzicka, Jolanta and others",
-      title          = "{Physics Achievements from the Belle Experiment}",
-      collaboration  = "Belle",
+      title          = "{Physics achievements from the Belle experiment}",
+      collaboration  = "Belle collaboration",
       journal        = "PTEP",
       volume         = "2012",
       year           = "2012",
@@ -62,12 +77,12 @@
 % CKM
 @article{Kobayashi:1973fv,
       author         = "Kobayashi, Makoto and Maskawa, Toshihide",
-      title          = "{CP Violation in the Renormalizable Theory of Weak
-                        Interaction}",
+      title          = "{\CP violation in the renormalizable theory of weak
+                        interaction}",
       journal        = "Prog. Theor. Phys.",
       volume         = "49",
       year           = "1973",
-      pages          = "652-657",
+      pages          = "652",
       doi            = "10.1143/PTP.49.652",
       reportNumber   = "KUNS-242",
       SLACcitation   = "%%CITATION = PTPKA,49,652;%%"
@@ -76,8 +91,8 @@
 % Belle II TDR
 @article{Abe:2010gxa,
       author         = "Abe, T.",
-      title          = "{Belle II Technical Design Report}",
-      collaboration  = "Belle II Collaboration",
+      title          = "{Belle II technical design report}",
+      collaboration  = "Belle II collaboration",
       year           = "2010",
       eprint         = "1011.0352",
       archivePrefix  = "arXiv",
@@ -89,12 +104,11 @@
 % SuperKEKB
 @article{Akai:2018mbz,
       author         = "Akai, Kazunori and Furukawa, Kazuro and Koiso, Haruyo",
-      title          = "{SuperKEKB Collider}",
-      collaboration  = "SuperKEKB",
+      title          = "{SuperKEKB collider}",
       journal        = "Nucl. Instrum. Meth.",
       volume         = "A907",
       year           = "2018",
-      pages          = "188-199",
+      pages          = "188",
       doi            = "10.1016/j.nima.2018.08.017",
       eprint         = "1809.01958",
       archivePrefix  = "arXiv",
@@ -106,23 +120,23 @@
 @article{Lange:2001uf,
       author         = "Lange, D. J.",
       title          = "{The EvtGen particle decay simulation package}",
-      booktitle      = "{Proceedings, 7th International Conference on B physics
+      booktitle      = "{Proceedings, 7th International Conference on \B physics
                         at hadron machines (BEAUTY 2000): Maagan, Israel,
                         September 13-18, 2000}",
       journal        = "Nucl. Instrum. Meth.",
       volume         = "A462",
       year           = "2001",
-      pages          = "152-155",
+      pages          = "152",
       doi            = "10.1016/S0168-9002(01)00089-4",
       SLACcitation   = "%%CITATION = NUIMA,A462,152;%%"
 }
 
 % Pythia
 @article{Sjostrand:2014zea,
-      author         = "Sjöstrand, Torbjörn and Ask, Stefan and Christiansen,
+      author         = {Sj\"{o}strand, Torbj\"{o}rn and Ask, Stefan and Christiansen,
                         Jesper R. and Corke, Richard and Desai, Nishita and Ilten,
                         Philip and Mrenna, Stephen and Prestel, Stefan and
-                        Rasmussen, Christine O. and Skands, Peter Z.",
+                        Rasmussen, Christine O. and Skands, Peter Z.},
       title          = "{An Introduction to PYTHIA 8.2}",
       journal        = "Comput. Phys. Commun.",
       volume         = "191",
@@ -139,13 +153,13 @@
 
 % KKMC
 @article{Jadach:1999vf,
-      author         = "Jadach, S. and Ward, B. F. L. and Was, Z.",
-      title          = "{The Precision Monte Carlo event generator K K for two
-                        fermion final states in e+ e- collisions}",
+      author         = "Jadach, S. and Ward, B. F. L. and W\c{a}s, Z.",
+      title          = "{The precision Monte Carlo event generator KK for two-fermion
+                        final states in $e^+e^-$ collisions}",
       journal        = "Comput. Phys. Commun.",
       volume         = "130",
       year           = "2000",
-      pages          = "260-325",
+      pages          = "260",
       doi            = "10.1016/S0010-4655(00)00048-5",
       eprint         = "hep-ph/9912214",
       archivePrefix  = "arXiv",
@@ -156,13 +170,13 @@
 
 % TAUOLA
 @article{Jadach:1990mz,
-      author         = "Jadach, Stanislaw and Kuhn, Johann H. and Was, Zbigniew",
-      title          = "{TAUOLA: A Library of Monte Carlo programs to simulate
+      author         = "Jadach, S. and Kuhn, J. H. and W\c{a}s, Z.",
+      title          = "{TAUOLA: A library of Monte Carlo programs to simulate
                         decays of polarized tau leptons}",
       journal        = "Comput. Phys. Commun.",
       volume         = "64",
       year           = "1990",
-      pages          = "275-299",
+      pages          = "275",
       doi            = "10.1016/0010-4655(91)90038-M",
       reportNumber   = "CERN-TH-5856-90",
       SLACcitation   = "%%CITATION = CPHCB,64,275;%%"
@@ -170,13 +184,13 @@
 
 % PHOTOS
 @article{Barberio:1990ms,
-      author         = "Barberio, Elisabetta and van Eijk, Bob and Was, Zbigniew",
-      title          = "{PHOTOS: A Universal Monte Carlo for QED radiative
+      author         = "Barberio, Elisabetta and van Eijk, Bob and W\c{a}s, Zbigniew",
+      title          = "{PHOTOS: A universal Monte Carlo for QED radiative
                         corrections in decays}",
       journal        = "Comput. Phys. Commun.",
       volume         = "66",
       year           = "1991",
-      pages          = "115-128",
+      pages          = "115",
       doi            = "10.1016/0010-4655(91)90012-A",
       reportNumber   = "CERN-TH-5857-90",
       SLACcitation   = "%%CITATION = CPHCB,66,115;%%"
@@ -185,8 +199,8 @@
 % GEANT 4
 @article{Agostinelli:2002hh,
       author         = "Agostinelli, S. and others",
-      title          = "{GEANT4: A Simulation toolkit}",
-      collaboration  = "GEANT4",
+      title          = "{GEANT4: A simulation toolkit}",
+      collaboration  = "GEANT4 collaboration",
       journal        = "Nucl.Instrum.Meth.",
       volume         = "A506",
       pages          = "250-303",
@@ -201,7 +215,7 @@
       author         = "Kuhr, T. and Pulvermacher, C. and Ritter, M. and Hauth,
                         T. and Braun, N.",
       title          = "{The Belle II Core Software}",
-      collaboration  = "Belle-II Framework Software Group",
+      collaboration  = "Belle II Framework Software Group",
       journal        = "Comput. Softw. Big Sci.",
       volume         = "3",
       year           = "2019",
@@ -216,7 +230,7 @@
 
 % basf2 public repository
 @misc{basf2-zenodo,
-    author = "{The Belle II Collaboration}",
+    collaboration = "{Belle II collaboration}",
     title = "{Belle II Analysis Software Framework (basf2)}",
     doi = {10.5281/zenodo.5574115},
     howpublished = "\url{https://doi.org/10.5281/zenodo.5574115}"
@@ -248,6 +262,18 @@
     year = "2019"
 }
 
+% alignment
+@article{Bilka:2020kgr,
+    author = "Bilka, Tadeas and others",
+    editor = "Doglioni, C. and Kim, D. and Stewart, G. A. and Silvestris, L. and Jackson, P. and Kamle, W.",
+    title = "{Alignment for the first precision measurements at Belle II}",
+    doi = "10.1051/epjconf/202024502023",
+    journal = "EPJ Web Conf.",
+    volume = "245",
+    pages = "02023",
+    year = "2020"
+}
+
 % FEI
 @article{Keck:2018lcd,
       author         = "Keck, T. and others",
@@ -263,6 +289,21 @@
       primaryClass   = "hep-ex",
       reportNumber   = "DESY-19-048",
       SLACcitation   = "%%CITATION = ARXIV:1807.08680;%%"
+}
+
+% TreeFitter
+@article{Krohn:2019dlq,
+    author = "Krohn, J.-F. and others",
+    collaboration = "Belle II Analysis Software Group",
+    title = "{Global decay chain vertex fitting at Belle II}",
+    eprint = "1901.11198",
+    archivePrefix = "arXiv",
+    primaryClass = "hep-ex",
+    doi = "10.1016/j.nima.2020.164269",
+    journal = "Nucl. Instrum. Meth.",
+    volume = "A976",
+    pages = "164269",
+    year = "2020"
 }
 
 % PDG
@@ -296,7 +337,7 @@
 @article{Amhis:2019ckw,
       author = "Amhis, Yasmine Sara and others",
       title = "{Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2018}",
-      collaboration = "HFLAV",
+      collaboration = "Heavy Flavor Averaging Group",
       journal = "Eur. Phys. J.",
       volume = "C81",
       pages = "226",
@@ -306,7 +347,7 @@
       archivePrefix = "arXiv",
       primaryClass = "hep-ex",
       SLACcitation = "%%CITATION = ARXIV:1909.12524;%%",
-      note = "{updated results and plots available at \href{https://hflav.web.cern.ch/}{{\texttt{https://hflav.web.cern.ch/}}}}",
+      note = "{updated results and plots available at \url{https://hflav.web.cern.ch/}}",
 }
 
 % Crystal Ball function
@@ -316,7 +357,7 @@
 %   Olegria contributed early development, but the shape is different.
 @phdthesis{Gaiser:Phd,
     author = "Gaiser, John",
-    title = "{Charmonium Spectroscopy from Radiative Decays of the $J/\psi$ and $\psi^\prime$}",
+    title = "{Charmonium spectroscopy from radiative decays of the $J/\psi$ and $\psi^\prime$}",
     reportNumber = "SLAC-R-255",
     school = "Stanford University",
     year = "1982"
@@ -332,11 +373,27 @@
 
 @mastersthesis{Oreglia:1980cs,
     author = "Oreglia, M.",
-    title = "{A Study of the Reactions $\psi^\prime \to \gamma \gamma \psi$}",
+    title = "{A Study of the reactions $\psi^\prime \to \gamma \gamma \psi$}",
     reportNumber = "SLAC-0236, SLAC-236, UMI-81-08973, SLAC-R-0236, SLAC-R-236",
     type = "Other thesis",
     month = "12",
     year = "1980"
+}
+
+%sPlot
+@article{Pivk:2004ty,
+      author         = "Pivk, Muriel and Le Diberder, Francois R.",
+      title          = "{sPlot: A statistical tool to unfold data distributions}",
+      journal        = "Nucl. Instrum. Meth.",
+      volume         = "A555",
+      pages          = "356-369",
+      doi            = "10.1016/j.nima.2005.08.106",
+      year           = "2005",
+      eprint         = "physics/0402083",
+      archivePrefix  = "arXiv",
+      primaryClass   = "physics.data-an",
+      reportNumber   = "LAL-04-07",
+      SLACcitation   = "%%CITATION = PHYSICS/0402083;%%",
 }
 
 % ADD YOUR OWN REFERENCES BELOW
