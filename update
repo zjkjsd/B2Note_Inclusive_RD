@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# connect upstream remote repository
 git remote get-url upstream &> /dev/null
 if [ "$?" != "0" ]; then
   ORIGIN=`git remote get-url origin`
@@ -10,4 +11,103 @@ if [ "$?" != "0" ]; then
   fi
 fi
 
+# get updates from upstream repository
 git pull upstream main
+
+# get publication number on AC web page
+ID_FILE=.pub_id
+if [ -f ${ID_FILE} ]; then
+  ID=$(cat ${ID_FILE})
+else
+  echo
+  echo "What is the number of the publication on the authorship confirmation web page (https://authors.belle2.org/)?"
+  echo "Just press enter if there is no publication number (yet)."
+  read -p "Publication number: " ID
+  if [ -z "${ID}" ]; then
+    exit 0
+  fi
+  echo ${ID} > ${ID_FILE}
+fi
+
+# get credentials for author list download
+CREDENTIALS_FILE=${HOME}/.pub_access
+if [ -f ${CREDENTIALS_FILE} ]; then
+  USERNAME=$(head -1 ${CREDENTIALS_FILE})
+  PASSWORD=$(tail -1 ${CREDENTIALS_FILE})
+else
+  echo
+  echo "Please enter your DESY credentials for the download of the authorship list."
+  DEFAULT=${BELLE2_USER:-${USER}}
+  read -p "Username [${DEFAULT}]: " USERNAME
+  if [ -z "${USERNAME}" ]; then
+    USERNAME=${DEFAULT}
+  fi
+  read -p "Password: " -s PASSWORD
+  echo
+  read -p "Do you want to store the credentials so that you don't have to enter them for further updates (y/n)?" -n 1 ANSWER
+  echo
+  if [ "${ANSWER}" = "y" ]; then
+    touch ${CREDENTIALS_FILE}
+    chmod 0600 ${CREDENTIALS_FILE}
+    echo "${USERNAME}" > ${CREDENTIALS_FILE}
+    echo "${PASSWORD}" >> ${CREDENTIALS_FILE}
+    echo "Your credentials are stored in the file ${CREDENTIALS_FILE}."
+  fi
+fi
+
+# check access to the AC web page
+COMMAND="wget --post-data=username=${USERNAME}&password=${PASSWORD} -O "
+which wget > /dev/null
+if [ "$?" != 0 ]; then
+  COMMAND="curl -d username=${USERNAME} -d password=${PASSWORD} -o "
+  which curl > /dev/null
+  if [ "$?" != 0 ]; then
+    echo "ERROR: Either wget or curl is needed to download the authorship list."
+    exit 1
+  fi
+fi
+${COMMAND} - https://authors.belle2.org/check.pl 2> /dev/null | grep logout &> /dev/null
+if [ "$?" != 0 ]; then
+  echo
+  echo "ERROR: Accessing the authorship confirmation web page failed."
+  read -p "Do you want to try again with new credentials (y/n)?" -n 1 ANSWER
+  echo
+  if [ "${ANSWER}" = "y" ]; then
+    rm -f ${CREDENTIALS_FILE}
+    ./update
+    exit $?
+  fi
+  exit 1
+fi
+
+# get author lists
+${COMMAND} authors.tex "https://authors.belle2.org/deliver.pl?O=${ID}" &> /dev/null
+RESULT=$?
+grep "does not exist" authors.tex &> /dev/null
+if [ "$?" = 0 ]; then
+  rm -f authors.tex
+  RESULT=1
+fi
+if [ "${RESULT}" != 0 ]; then
+  echo
+  echo "ERROR: The download of the author list failed."
+  read -p "Do you want to try again with a new publication number (y/n)?" -n 1 ANSWER
+  echo
+  if [ "${ANSWER}" = "y" ]; then
+    rm -f ${ID_FILE}
+    ./update
+    exit $?
+  fi
+  exit 1
+fi
+${COMMAND} authors-PRIVATE.tex "https://authors.belle2.org/deliver.pl?A=${ID}" &> /dev/null
+${COMMAND} authors.xml "https://authors.belle2.org/deliver.pl?X=${ID}" &> /dev/null
+grep "does not exist" authors.xml &> /dev/null
+if [ "$?" = 0 ]; then
+  rm -f authors.xml
+fi
+${COMMAND} authors.txt "https://authors.belle2.org/deliver.pl?V=${ID}" &> /dev/null
+grep "does not exist" authors.txt &> /dev/null
+if [ "$?" = 0 ]; then
+  rm -f authors.txt
+fi

@@ -23,25 +23,40 @@ def get_content(filename):
         return content
 
 
-# create paper.tex with included content
+# create paper.tex and paper-PRIVATE.tex with included content
 paper = get_content(f'{base}.tex')
-for part in ['definitions', 'authors', 'title', 'abstract', 'pacs', 'main', 'acknowledgements', 'material']:
+private = None
+if os.path.exists('authors-PRIVATE.tex'):
+    private = get_content(f'{base}.tex')
+for part in ['definitions', 'authors', 'title', 'abstract', 'pacs', 'body', 'acknowledgements', 'material']:
     print(part)
     content = get_content(f'{part}.tex')
     paper = paper.replace(f'\\input{{{part}}}', content)
+    if private:
+        if part == 'authors':
+            content = get_content(f'{part}-PRIVATE.tex')
+        private = private.replace(f'\\input{{{part}}}', content)
 
 with open('paper.tex', 'w') as output:
     output.write(paper)
+if private:
+    with open('paper-PRIVATE.tex', 'w') as output:
+        output.write(private)
 
 # compile latex and make tarball
 subprocess.run(['make', 'paper'])
+if private:
+    subprocess.run(['make', 'paper-PRIVATE'])
 dependencies = {
     'prl': [],
     'prd': [],
     'jhep': ['jheppub.sty', 'JHEP.bst'],
     'epjc': ['svjour.cls', 'svepj.clo'],
 }
-files = ['paper.tex', 'paper.bbl', 'references.bib'] + dependencies.get(base, [])
+files = ['paper.pdf', 'paper.tex', 'paper.bbl', 'references.bib'] + dependencies.get(base, [])
 if os.path.isdir('figures'):
     files.append('figures')
-subprocess.run(['tar', 'czvf', 'paper.tgz'] + files)
+subprocess.run(['tar', 'czvf', 'arxiv.tgz'] + files)
+if private and os.path.exists('authors.xml'):
+    files += ['paper-PRIVATE.pdf', 'paper-PRIVATE.tex', 'paper-PRIVATE.bbl', 'authors.xml']
+    subprocess.run(['tar', 'czvf', 'journal.tgz'] + files)
