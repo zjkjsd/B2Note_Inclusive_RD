@@ -80,6 +80,16 @@ if [ "$?" != 0 ]; then
   exit 1
 fi
 
+# get orcidlink.sty
+if [ ! -f orcidlink.sty ]; then
+  which wget > /dev/null
+  if [ "$?" != 0 ]; then
+    curl https://raw.githubusercontent.com/duetosymmetry/orcidlink-LaTeX-command/master/orcidlink.sty > /dev/null
+  else
+    wget https://raw.githubusercontent.com/duetosymmetry/orcidlink-LaTeX-command/master/orcidlink.sty > /dev/null
+  fi
+fi
+
 # get author lists
 ${COMMAND} authors.tex "https://authors.belle2.org/deliver.pl?O=${ID}" &> /dev/null
 RESULT=$?
