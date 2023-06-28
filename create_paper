@@ -53,7 +53,7 @@ dependencies = {
     'jhep': ['jheppub.sty', 'JHEP.bst'],
     'epjc': ['svjour.cls', 'svepj.clo'],
 }
-files = ['paper.pdf', 'paper.tex', 'paper.bbl', 'references.bib', 'orcidlink.sty'] + dependencies.get(base, [])
+files = ['paper.pdf', 'paper.tex', 'paper.bbl', 'references.bib', 'orcidlink.sty', 'definitions.tex', 'belle2-symbols.tex'] + dependencies.get(base, [])
 if os.path.isdir('figures'):
     files.append('figures')
 subprocess.run(['tar', 'czvf', 'arxiv.tgz'] + files)
