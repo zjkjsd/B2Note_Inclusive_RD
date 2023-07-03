@@ -25,6 +25,7 @@ def get_content(filename):
 
 # create paper.tex and paper-PRIVATE.tex with included content
 paper = get_content(f'{base}.tex')
+paper = paper.replace('\\begin{document}', '\\begin{document}\n\n\\vspace*{-3\\baselineskip}\n\\resizebox{!}{2cm}{\\includegraphics{belle2-logo.pdf}}')
 private = None
 if os.path.exists('authors-PRIVATE.tex'):
     private = get_content(f'{base}.tex')
