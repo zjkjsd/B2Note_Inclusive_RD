@@ -341,42 +341,6 @@ FUNCTION {format.eprint.paren}
   if$
 }
 
-FUNCTION {format.lhcbid}
-{ number
-  "{" "" find.replace
-  "}" "" find.replace
-  's :=
-  s #6 #3 substring$ "ANA" =
-  { "LHCb+Analysis+Notes" }
-  { s #6 #3 substring$ "INT" = 
-      { "LHCb+Internal+Notes"}
-      { s #6 #4 substring$ "CONF" = 
-	  { "LHCb+Conference+Contributions"}
-	  { s #6 #3 substring$ "PUB" = 
-	      { "LHCb+Notes"}
-	      { s #6 #5 substring$ "PAPER" = 
-		  { "LHCb+Papers" }
-		  { s #6 #4 substring$ "PROC" = 
-		      { "LHCb+Conference+Proceedings" }
-		      { s #6 #6 substring$ "THESIS" = 
-			  { "LHCb+Theses" }
-			  { s #6 #4 substring$ "TALK" = 
-  			      { "LHCb+Talks" }
-			      { "LHCb+Reports" 
-			      } if$
-			  } if$
-		      } if$
-		  } if$
-	      } if$
-	  } if$
-      } if$
-  } if$
-
-  "\href{http://cdsweb.cern.ch/search?p=" s * 
-  "&f=reportnumber&action_search=Search&c=" * swap$ * "} {" * 
-  s * "}" *
-}
-
 FUNCTION {format.DOI}
 { DOI empty$
     { ""}
@@ -1251,15 +1215,12 @@ FUNCTION {techreport}
   fin.entry
 }
 
-FUNCTION {lhcbreport}
+FUNCTION {biinote}
 { output.bibitem
-  format.collaboration output
   format.authors "author" output.check
   format.title "title" output.check
   blank.sep
-  format.lhcbid output.nonnull
-  new.block
-  note output
+  note "note" output.check
   fin.entry
 }
 
