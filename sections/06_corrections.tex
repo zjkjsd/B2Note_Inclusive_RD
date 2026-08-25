@@ -1,0 +1,63 @@
+\section{Corrections and Calibrations}
+\label{sec:corrections}
+
+Corrections are applied in a fixed order: collaboration-recommended
+corrections first, then analysis-specific corrections derived where a
+data/MC discrepancy persists.
+
+\subsection{Collaboration-recommended corrections}
+\label{sec:corrections:recommended}
+Track momentum scale and energy loss are corrected during reconstruction
+(Sec.~\ref{sec:recon:fsp}).
+PID efficiency and fake-rate corrections are applied offline by
+\texttt{utilities.apply\_pid\_corrections()} through the systematics
+framework, using per-run-period tables for the lepton, the kaon and both
+pions; the per-particle weights are multiplied into a single event weight.
+The correction is run dependent and is evaluated before run periods are
+combined.
+\AnalysisTBD{the PID table versions and their provenance; the tables are read
+from absolute user-specific paths and are not part of the repository}
+
+\subsection{Analysis-specific corrections}
+\label{sec:corrections:specific}
+The generic-$B\bar{B}$ reweighting of Sec.~\ref{sec:bbbar} is the main
+analysis-specific correction.
+
+\subsection{Correction ordering and double-application safeguards}
+\label{sec:corrections:order}
+Table~\ref{tab:correction-order} records where each correction is applied and,
+critically, where it is \emph{not}.
+
+% PROVENANCE
+%   status      : CODE_FACT (application points) / ANALYSIS_DECISION (ordering)
+%   produced-by : Recon_scripts/2_Reconstruction.py; utilities.py
+%                 (apply_pid_corrections, create_templates_new,
+%                 create_workspace); 5_BBbkg_weights_optuna_minuit.py
+%   commit      : dd520a5
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : n/a (applies to the whole chain)
+%   corrections : the table is itself the list
+\begin{table}[htbp]
+  \centering
+  \caption{Correction application points.  A correction must appear exactly
+  once in the chain leading to any given number.}
+  \label{tab:correction-order}
+  \small
+  \begin{tabular}{p{0.24\textwidth} p{0.30\textwidth} p{0.38\textwidth}}
+    \hline
+    Correction & Applied at & Note \\
+    \hline
+    Track momentum scale, energy loss & Reconstruction & \texttt{central} variation only \\
+    PID efficiency / fake rate & Offline, before run combination & Run dependent \\
+    Generic MC luminosity ($0.25$) & Normalisation comparisons & Generic MC only, not signal MC \\
+    Generic-$B\bar{B}$ category weights & Sec.~\ref{sec:bbbar} & Derived in the tuning region \\
+    Fake-$D$ normalisation ($0.87$ Run~1, $1.0$ Run~2) & Generic-$B\bar{B}$ tuning \emph{only} & \textbf{Not} applied when building fit templates; in the fit this normalisation is absorbed by the free parameter \texttt{bkg\_fakeD\_norm} (Sec.~\ref{sec:fit}).  Applying it at both points would double-count it \\
+    Slow-$\pi^{0}$ efficiency & Not applied & Awaiting an updated MC16rd table \\
+    Form factors & Not applied & See below \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\AnalysisTBD{form-factor reweighting (e.g.\ via HAMMER) and branching-fraction
+updates are not implemented in the analysis code at the pinned commit.  State
+the plan, or the justification for omitting them}

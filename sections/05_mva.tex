@@ -1,0 +1,61 @@
+\section{Multivariate Background Suppression}
+\label{sec:mva}
+
+A four-class LightGBM classifier separates signal from the three dominant
+background topologies.
+The output probabilities \texttt{sig\_prob}, \texttt{fakeD\_prob},
+\texttt{continuum\_prob} and \texttt{combinatorial\_prob} are used for the
+final event selection and to define control regions.
+
+\subsection{Training configuration}
+\label{sec:mva:training}
+Training uses \texttt{4\_LightGBM\_Multiclass\_Training.py} with an 80/20
+train/validation split (\texttt{random\_state=0}) and event weights.
+\AnalysisTBD{the four target-class definitions and the composition of the
+training sample, from \texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb};
+and the hyper-parameter values in use, which are hard-coded rather than taken
+from the Optuna study}
+
+The separate tuner \texttt{2\_LightGBM\_Tuner.py} performs an Optuna study
+for the \emph{binary} off-resonance data/MC check only; its study is not
+consumed by the four-class training, which uses hard-coded parameters.
+It therefore does not tune the final classifier.
+
+\subsection{Input variables}
+\label{sec:mva:inputs}
+The training variables are the continuum-suppression, $D$-vertex and
+$B$-kinematic variables listed in \texttt{utilities.training\_variables}.
+Variables are deliberately excluded on two grounds, both recorded as source
+comments: correlation with the fit observables
+(\texttt{thrustBm}, \texttt{KSFWV1}, \texttt{KSFWV2}, \texttt{KSFWV11},
+\texttt{KSFWV12}), and known data/MC mismodelling
+(\texttt{R2}, \texttt{thrustOm}, \texttt{cosTBz}, \texttt{KSFWV8},
+\texttt{KSFWV14}--\texttt{KSFWV18}, \texttt{D\_vtxReChi2},
+\texttt{B0\_vtxReChi2}, \texttt{B0\_TagVReChi2IP}).
+Excluding variables correlated with $\mmiss$ and $\pdl$ is required so that
+the classifier does not sculpt the fit observables.
+\AnalysisTBD{quantitative demonstration that the retained variables do not
+sculpt $\mmiss$ or $\pdl$, in the bins used by the fit}
+
+\subsection{Working point}
+\label{sec:mva:wp}
+The nominal signal selection is \texttt{lgb\_tight}:
+\begin{equation}
+  \texttt{sig\_prob} > 0.5,\quad
+  \texttt{fakeD\_prob} < 0.06,\quad
+  \texttt{continuum\_prob} < 0.4,\quad
+  \texttt{combinatorial\_prob} < 0.6 .
+  \label{eq:lgb-tight}
+\end{equation}
+A looser selection, \texttt{lgb\_loose}, is used for preliminary studies and
+as a file-size filter, and was chosen by inspection rather than optimised.
+\texttt{lgb\_tight} was optimised with a figure of merit.
+\AnalysisTBD{not done: the signal selection should be optimised on the
+$R(D)$ sensitivity, equivalently on the $B \to D \tau \nu$ yield uncertainty,
+rather than on a generic figure of merit.  State the figure of merit
+currently used and the scan that produced Eq.~\eqref{eq:lgb-tight}}
+
+\subsection{Validation}
+\label{sec:mva:validation}
+\AnalysisTBD{data/MC comparison of every BDT input variable and of the four
+output probabilities, in an unblinded control region}

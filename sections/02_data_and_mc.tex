@@ -1,0 +1,44 @@
+\section{Data, Simulated Samples, and Software Versions}
+\label{sec:data}
+
+\subsection{Data and simulation}
+\label{sec:data:samples}
+The analysis uses Proc16 and Prompt16 data and MC16rd simulation, for both
+Run~1 and Run~2, and is evaluated separately for the $e$ and $\mu$ channels.
+\AnalysisTBD{integrated luminosity per run period and per channel, with the
+producing artifact; the figure of approximately 490\,fb$^{-1}$ quoted in the
+analysis context document has no recorded source}
+
+Generic MC16rd is produced at four times the data luminosity, so a factor
+$0.25$ is applied to generic MC whenever an absolute normalisation is
+compared with data.
+This factor is specific to generic MC; signal MC has its own scaling
+(\texttt{CODE\_FACT}: \texttt{LUMINOSITY\_SCALE = \{"all\_mc": 0.25\}},
+\texttt{5\_BBbkg\_weights\_optuna\_minuit.py} line 93).
+\AnalysisTBD{the corresponding scale factor for the signal-enriched MC
+samples, and where it is applied}
+
+\subsection{Software versions}
+\label{sec:data:software}
+Data and simulation are produced and processed with the basf2 main release
+\texttt{release-08-00-08}.
+The analysis-level reconstruction of Sec.~\ref{sec:reconstruction} is run
+with the basf2 light release \texttt{light-2505-deimos}, which is the nominal
+analysis release for this note.
+The next major production update is expected to use
+\texttt{light-2607-kasei}.
+Release names appearing inside global-tag names refer to the preparation of
+those payloads and do not indicate the release used for this analysis.
+
+Global tags used: the analysis global tag,
+\texttt{pid\_nn\_release08\_v1} for the neural-network PID, and
+\texttt{tracking\_release08\_20260119\_EnergyMomentumScale} for the track
+momentum-scale and energy-loss corrections.
+\AnalysisTBD{versions of the offline Python stack (pyhf, cabinetry, iminuit,
+LightGBM, sysvar/SysVar) used to produce the results in this note; no
+lockfile currently exists}
+
+\subsection{Sample overlap}
+\label{sec:data:overlap}
+\AnalysisTBD{explicit statement of which MC samples are used where, and the
+rule preventing overlap between generic and signal-enriched samples}

@@ -1,0 +1,49 @@
+% PROVENANCE (section-level)
+%   produced-by : utilities.py :: create_templates_new(), create_workspace()
+%   commit      : dd520a5
+\section{Signal Extraction}
+\label{sec:fit}
+
+\subsection{Fit observables and channels}
+\label{sec:fit:observables}
+Yields are extracted from a two-dimensional binned likelihood fit in
+$\mmiss$ (\texttt{B0\_recMissM2}) and $\pdl$ (\texttt{p\_D\_l}), performed
+simultaneously in two channels:
+\begin{itemize}
+  \item the $D$-mass signal region, $1.855 < m(K\pi\pi) < 1.885$;
+  \item the $D$-mass sideband, $[1.79,1.82] \cup [1.92,1.95]$
+        (Sec.~\ref{sec:recon:d}), which constrains the fake-$D$ background.
+\end{itemize}
+No other control region enters the fit; the $q^{2}$, $D^{*}$-veto, BDT and
+wrong-charge regions of Sec.~\ref{sec:validation} are cross-checks.
+\AnalysisTBD{motivation for a 2D fit rather than two 1D fits, in terms of the
+correlation between $\mmiss$ and $\pdl$ and the separation it buys}
+\AnalysisTBD{the nominal binning in each channel, and the bin-merging and
+coverage thresholds actually used}
+
+\subsection{Templates and parameters}
+\label{sec:fit:parameters}
+Templates are built per truth category (Sec.~\ref{sec:truth}) with per-bin
+statistical uncertainties from the sum of squared weights.
+The parameter of interest is the normalisation of the $B \to D \tau \nu$
+template; $R(D)$ is derived from it together with the normalisation of
+$B \to D \ell \nu$, not fitted directly.
+\AnalysisTBD{the explicit relation between the fitted normalisations and
+$R(D)$, including the efficiency ratio and the $\tau \to \ell \nu \nu$
+branching fraction}
+\AnalysisTBD{full table of channels, samples, observables, bins, parameters
+of interest, nuisance parameters, modifiers, constraints, initial values,
+bounds and correlations, cross-checked against a generated pyhf workspace}
+
+Two issues in the current workspace generator require a decision:
+\AnalysisTBD{all normalisation parameters, including the signal, are given
+bounds $[-5, 5]$, which permits negative yields}
+\AnalysisTBD{the generic-$B\bar{B}$ families enter as free normalisation
+factors.  This is appropriate for the tuning-script context but not for the
+signal-region fit, where they should be fixed or constrained; otherwise the
+final fit reopens what the tuning of Sec.~\ref{sec:bbbar} constrained}
+
+\subsection{Fit validation}
+\label{sec:fit:validation}
+\AnalysisTBD{Asimov sensitivity, toy studies, pull distributions and
+linearity tests, each reported separately from any result on data}

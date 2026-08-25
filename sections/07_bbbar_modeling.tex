@@ -1,0 +1,129 @@
+% PROVENANCE (section-level)
+%   produced-by : 5_BBbkg_weights_optuna_minuit.py, bbbar_reweighting.py
+%   commit      : dd520a5
+\section{Generic-$B\bar{B}$ Background Modelling and Validation}
+\label{sec:bbbar}
+
+Generic $B\bar{B}$ events in which a true $D$ and a true lepton are
+reconstructed --- either from different $B$ mesons
+(\texttt{bkg\_combinatorial}) or from a single hadronic $B$ decay supplying a
+secondary lepton (\texttt{bkg\_hadronicB\_secondaryL}) --- are the dominant
+background and are mismodelled in MC16rd.
+They are corrected by a data-driven reweighting of the underlying $B$-decay
+composition.
+
+\subsection{Hierarchical decay classification}
+\label{sec:bbbar:hierarchy}
+For each of the two categories, the generated decay of the $B$ that supplied
+the $D$ (and optionally of the $B$ that supplied the lepton) is identified by
+the product of its daughter PDG codes, and assigned to one family:
+\begin{enumerate}
+  \item \texttt{BBbar\_semileptonic} --- any generated daughter is a lepton;
+  \item \texttt{BBbar\_measured\_hadronic} --- the decay-mode identifier
+        appears in the list of modes with a measured branching fraction,
+        in which case a PDG branching-fraction correction is also applied;
+  \item \texttt{BBbar\_unmeasured:$n$-body} --- otherwise, grouped by the
+        generated daughter multiplicity, capped at $5+$.
+\end{enumerate}
+The hierarchy is applied in this order, so the families are mutually
+exclusive and, because the last is a catch-all over multiplicity, exhaustive.
+Its purpose is to separate what is externally constrained (measured branching
+fractions) from what is not (the unmeasured hadronic modes, which carry the
+bulk of the modelling freedom), and to group the unmeasured modes by a
+variable --- multiplicity --- that drives the ROE observables without
+requiring a per-mode measurement.
+
+\subsection{Family normalisation versus internal composition}
+\label{sec:bbbar:normalisation}
+One weight is fitted per family; the composition \emph{within} a family is
+left at its generated values.
+This is deliberate: floating individual decay modes without external
+constraints is not supported by the available statistics.
+An optional many-to-one mode replacement merges configured non-resonant
+3- and 4-body modes into resonant 2-body states before tuning, preserving the
+total yield of the affected modes through an $(N_{\mathrm{old}} +
+N_{\mathrm{new}})/N_{\mathrm{new}}$ rescaling of the surviving mode.
+It is disabled in the results shown here (\texttt{replaceFalse}).
+
+The reweighting does \emph{not} preserve the inclusive $B$-decay rate, and is
+not intended to.
+The generic-$B\bar{B}$ normalisation differs between data and MC in the
+tuning region; requiring the inclusive rate to remain fixed would force that
+discrepancy entirely into the composition, which is the quantity being
+measured.
+The total rate is therefore allowed to move, and the requirement is instead
+that the resulting change be validated in a region independent of the one it
+was tuned in (Sec.~\ref{sec:bbbar:validation}).
+
+\subsection{Tuning procedure and region}
+\label{sec:bbbar:tuning}
+Five family weights are fitted by minimising a binned Poisson deviance
+between data and weighted MC, using Optuna (TPE sampler, \texttt{MedianPruner})
+for global exploration followed by iminuit MIGRAD/HESSE/MINOS.
+\texttt{BBbar\_semileptonic} is held at unity and the fake-$D$ normalisation
+is held at its externally determined value, so they are not free parameters.
+The set of fit bins is derived once from unweighted MC support and held
+fixed, so that the likelihood support cannot depend on the parameters being
+fitted.
+
+The nominal objective is \texttt{kinematic-2d-plus-roe}: a two-dimensional
+deviance in $\mmiss \times \pdl$ ($20 \times 20$ bins over
+$[-4,10]\,\mathrm{GeV}^{2}/c^{4} \times [0.2,4.0]\,\mathrm{GeV}/c$) plus a
+shape-only one-dimensional deviance in the ROE track multiplicity, with the
+final bin merging all multiplicities $\geq 14$.
+The tuning region is
+\begin{equation}
+  1.855 < m(K\pi\pi) < 1.885,\quad
+  \texttt{fakeD\_prob} < 0.1,\quad
+  \texttt{sig\_prob} < 0.1 ,
+  \label{eq:bbbar-region}
+\end{equation}
+together with the offline requirements of Eq.~\eqref{eq:offline-cut} except
+$p_{\ell} < 4$ (Sec.~\ref{sec:recon:offline}).
+Note that Eq.~\eqref{eq:bbbar-region} is a \emph{signal-region} $D$-mass
+selection with the signal and fake-$D$ classifier outputs suppressed; it is
+not the combinatorial-enhanced BDT sideband, and it places no requirement on
+\texttt{combinatorial\_prob} or \texttt{continuum\_prob}.
+
+\subsection{Run dependence}
+\label{sec:bbbar:rundep}
+Weights are derived separately for each run period and channel.
+For the combined \texttt{run1+run2} fit the differing fake-$D$ normalisations
+($0.87$ for Run~1, $1.0$ for Run~2) are applied as an event-level factor
+rather than as a common category weight, so that the run dependence survives
+the combination.
+
+\subsection{Current status of the tuned weights}
+\label{sec:bbbar:results}
+\PreliminaryResult{Run~1, $e$ channel, objective
+\texttt{kinematic-2d-plus-roe} ($\alpha = 1$, ROE tail bin from 14), mode
+replacement disabled: measured hadronic $2.027 \pm 0.062$, unmeasured 2-body
+$0.0010$, 3-body $0.785 \pm 0.124$, 4-body $0.0010$, 5+-body
+$0.193 \pm 0.044$; total deviance $609.95$ ($399.84$ from the 2D term,
+$210.11$ from the ROE term).  Source:
+\texttt{BBbkg\_weights/best\_bbbar\_weights\_kinematic-2d-plus-roe\_alpha1\_%
+roetail14\_run1\_e\_replaceFalse\_minuit.json} at commit \texttt{dd520a5};
+MC16rd + Proc16/Prompt16, Run~1, $e$ channel, region of
+Eq.~\eqref{eq:bbbar-region}}
+
+\InProgress{the stored minimum has
+\texttt{has\_parameters\_at\_limit = true}: the 2-body and 4-body weights sit
+on their lower bound of $0.001$, i.e.\ two hadronic families are scaled
+essentially to zero.  Uncertainties from HESSE are not meaningful at a
+boundary, and this configuration is not acceptable for publication.  A fit
+with an interior minimum is required before these weights or their
+uncertainties can be used}
+
+\subsection{Validation}
+\label{sec:bbbar:validation}
+\AnalysisTBD{an independent validation region for the tuned weights has not
+been established.  The wrong-charge sample was the candidate, but its physics
+composition differs from that of the tuning region --- different hadronic
+versus semileptonic fractions, and a different hadronic multiplicity spectrum
+(see \texttt{Notebooks/Plotting/4\_Plot\_WC\_*.ipynb}) --- so agreement or
+disagreement there does not cleanly test the weights.  A validation region
+matched in composition to the tuning region is needed}
+
+\AnalysisTBD{closure of the tuned weights in the bins actually used by the
+final fit (Sec.~\ref{sec:fit}), which are not the same bins as the tuning
+histogram}

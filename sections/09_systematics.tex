@@ -1,0 +1,44 @@
+\section{Systematic Uncertainties}
+\label{sec:syst}
+\AnalysisTBD{complete systematics table.  The components identified so far
+are: MC statistics; generic-$B\bar{B}$ composition (Sec.~\ref{sec:syst:bbbar});
+fake-$D$ extrapolation; continuum normalisation; $D^{**}\ell\nu$ and gap-mode
+modelling; $D^{*}\tau\nu$ and $D^{**}\tau\nu$ feed-down; form factors;
+tracking and PID efficiency; fit bias and finite-template effects}
+
+\subsection{Generic-$B\bar{B}$ composition}
+\label{sec:syst:bbbar}
+The proposed treatment is to propagate the covariance of the tuned family
+weights (Sec.~\ref{sec:bbbar}) into the fit as constrained nuisance
+parameters.
+Because the family weights are strongly correlated, assigning one independent
+constrained parameter per family would discard that correlation.
+The intended construction is instead to diagonalise the covariance matrix and
+use its eigenvectors as a small set of uncorrelated nuisance parameters, each
+varying all five family weights coherently by
+$\sqrt{\lambda_{i}}\, \hat{v}_{i}$.
+\InProgress{this cannot be applied to the currently stored fit.  Two
+obstacles, both consequences of the minimum sitting on a parameter bound
+(Sec.~\ref{sec:bbbar:results}): the stored HESSE errors and the stored
+covariance matrix disagree by up to three orders of magnitude for the two
+at-limit parameters, and the covariance is near-singular (condition number
+$\sim 10^{8}$) with two eigenvalues consistent with zero, so the construction
+would assign essentially no uncertainty to two entire hadronic families.
+The method is sound and the tooling exists
+(\texttt{scripts/bbbar\_eigen\_systematics.py}); it requires a fit with an
+interior minimum}
+
+\subsection{Continuum normalisation}
+\label{sec:syst:continuum}
+\AnalysisTBD{the continuum normalisation constraint in the workspace is
+one-sided, $+15\%/-0\%$, whereas the analysis context document describes it
+as $\pm 15\%$.  Confirm which is intended and record the source of the
+$15\%$}
+
+\subsection{Fake-$D$ normalisation}
+\label{sec:syst:faked}
+\AnalysisTBD{the analysis context document records a candidate $\pm 3.5\%$
+prior from the $D$-mass sideband, but no such constraint exists in the
+workspace generator, where fake-$D$ is an unconstrained normalisation.
+Confirm whether the sideband channel is intended to determine this
+normalisation in situ, in which case the prior is unnecessary}

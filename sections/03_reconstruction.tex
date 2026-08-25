@@ -1,0 +1,258 @@
+% =========================================================================
+% PROVENANCE (section-level)
+%   status      : CODE_FACT unless marked otherwise
+%   produced-by : Recon_scripts/2_Reconstruction.py
+%   commit      : dd520a5 (external-code submodule pin)
+%   scope       : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
+%   note        : every selection below was transcribed from the pinned
+%                 source.  Physics motivation is marked TODO wherever the
+%                 code does not document it -- do not invent one.
+% =========================================================================
+\section{Event Reconstruction}
+\label{sec:reconstruction}
+
+The signal-side $B$ candidate is reconstructed exclusively as
+$B^{0} \to D^{-} \ell^{+}$ with $D^{-} \to K^{+} \pi^{-} \pi^{-}$, from four
+charged final-state particles and no slow pion.
+The tag-side $B$ is not reconstructed: it is represented by the rest of the
+event (ROE), from which the tag-side kinematic quantities used in this
+analysis are derived.
+All selections in this section are applied in the steering script
+\texttt{Recon\_scripts/2\_Reconstruction.py} at the pinned analysis commit,
+and are transcribed literally in Table~\ref{tab:recon-cuts}.
+
+\subsection{Final-state particle selection}
+\label{sec:recon:fsp}
+
+Charged tracks are required to originate from the interaction region and to
+be within the CDC acceptance with hits in both the CDC and the SVD.
+Particle identification uses the neural-network identifiers
+(\texttt{pionIDNN}, \texttt{kaonIDNN}, \texttt{electronIDNN},
+\texttt{muonIDNN}) evaluated with the \texttt{pid\_nn\_release08\_v1} global
+tag.
+Muons are additionally required to fall inside the KLM acceptance.
+
+Electron candidates receive a bremsstrahlung correction
+(\texttt{correctBremsBelle}) using photons from the \texttt{cdc} standard
+photon list with $0.05 < E_{\gamma} < 2.5$~GeV and a beam-background
+suppression requirement, within a $0.15$~rad cone.
+Both the corrected and the pre-correction (\texttt{BFbrems\_}) lepton
+quantities are written to the ntuple; the pre-correction electron variables
+are the ones used for electron truth matching and for the PID corrections
+(Sec.~\ref{sec:truth} and Sec.~\ref{sec:corrections}).
+
+Track momenta are corrected for the momentum scale and for energy loss using
+the \texttt{tracking\_release08\_20260119\_EnergyMomentumScale} global tag,
+with separate payloads for data and simulation.
+The \texttt{central} scale factor is applied to the nominal reconstruction;
+the ten systematic variations are stored as extra ntuple columns but are
+\emph{not} written to the ntuple in the pinned version of the script (the
+\texttt{track\_variables} list is commented out of every variable
+collection), so they are not currently available offline.
+\AnalysisTBD{decide whether the momentum-scale variations need to be
+re-enabled in the ntuple for the tracking systematic in Sec.~\ref{sec:syst}}
+
+Exactly one lepton is required per event
+(\texttt{nParticlesInList(e-:goode) + nParticlesInList(mu-:goodmu) == 1}),
+so the electron and muon channels are disjoint by construction at the event
+level.
+
+\subsection{$D^{-}$ candidate reconstruction}
+\label{sec:recon:d}
+
+$D^{\pm}$ candidates are formed from a kaon and two pions and are required to
+lie in a wide mass window before a tree fit is performed with
+\texttt{updateAllDaughters} enabled.
+Because the tree fit updates the daughter momenta, the mass window is applied
+a second time after the fit; the second window is the one that defines the
+regions retained on tape.
+That second window is not contiguous:
+\begin{equation}
+  m(K\pi\pi) \in
+  \underbrace{[1.79, 1.82]}_{\text{left sideband}} \cup
+  \underbrace{[1.855, 1.885]}_{\text{signal region}} \cup
+  \underbrace{[1.92, 1.95]}_{\text{right sideband}}\ \mathrm{GeV}/c^{2}.
+  \label{eq:dmass-windows}
+\end{equation}
+The intervals between the signal region and the sidebands are deliberately
+not reconstructed.
+The motivation is that signal tails and physics backgrounds populate the
+region immediately adjacent to the signal peak, whereas the more distant
+sidebands are dominated by fake-$D$ combinations; excluding the intermediate
+region therefore yields a cleaner fake-$D$ control sample
+(\texttt{ANALYSIS\_DECISION}).
+
+This choice predates the decision to perform a simultaneous signal-region
+plus sideband fit (Sec.~\ref{sec:fit}).
+Under the current fit strategy a pure control region is no longer required,
+since the fit models whatever is present in each channel.
+\AnalysisTBD{potential future change: re-include the masked intervals
+$[1.82,1.855]$ and $[1.885,1.92]$ in the sideband channel, or narrow the
+sidebands towards the signal region.  This requires a new reconstruction
+campaign because the masked events are not on tape.  Estimated contamination
+of the masked region is below 5\%; source for that number to be supplied}
+
+Throughout this note, a query of the form \texttt{D\_M < 1.85} in the
+analysis code should be read as the left sideband $[1.79, 1.82]$, and
+\texttt{D\_M > 1.9} as the right sideband $[1.92, 1.95]$: the intervening
+values do not exist in the ntuples.
+
+\subsection{$D^{*}$ veto}
+\label{sec:recon:dstveto}
+
+Candidates in which the $D^{-}$ originates from a $D^{*-} \to D^{-} \pi^{0}$
+decay are identified by combining the signal-region $D^{\pm}$ with a slow
+$\pi^{0}$ from the \texttt{eff50\_May2020Fit} list, with additional
+beam-background and fake-photon suppression on both photon daughters.
+The best candidate is the one whose mass difference is closest to the
+nominal $D^{*}$--$D$ mass splitting of $0.14065$~GeV$/c^{2}$, and the
+resulting $\Delta M$ is stored per event.
+The veto itself is applied offline as
+$\Delta M < 0.135$ or $\Delta M > 0.145$~GeV$/c^{2}$
+(\texttt{utilities.Dst\_veto\_cut}); the reconstruction stores the variable
+without cutting on it, so the complementary region remains available as the
+$B \to D^{*} \ell \nu$-enriched control region of Sec.~\ref{sec:validation}.
+\AnalysisTBD{slow-$\pi^{0}$ efficiency corrections for the $D^{*}$ veto
+region await an updated MC16rd table (expected summer 2026); until then the
+$D^{*}$ veto region is not used quantitatively}
+
+\subsection{$B^{0}$ candidate and rest of event}
+\label{sec:recon:b}
+
+$B^{0}$ candidates are formed as
+\texttt{B0 =norad=> D- $\ell$+ ?addbrems} and vertex-fitted with an IP
+constraint.
+The ROE is built with a single mask (\texttt{my\_mask}), first with loose
+track and photon requirements, then updated using $V^{0}$ candidates with a
+mass-constrained tree fit, and finally tightened with the
+transverse-momentum-dependent impact-parameter requirements and the photon
+timing, beam-background and fake-photon requirements listed in
+Table~\ref{tab:recon-cuts}.
+The tag-side vertex is obtained with \texttt{TagV} using the same mask.
+
+The ROE-based quantities entering the analysis are
+$M_{\mathrm{bc}}^{\mathrm{ROE}}$, $\Delta E^{\mathrm{ROE}}$, the ROE charge,
+the ROE extra energy, the ROE track multiplicity, and the missing-mass
+squared $\mmiss$ (\texttt{B0\_recMissM2}), which is one of the two fit
+observables.
+The second fit observable, $\pdl$ (\texttt{p\_D\_l}), is \emph{not} produced
+by the steering script; it is constructed offline as the sum of the two
+centre-of-mass momenta already stored in the ntuple,
+\texttt{p\_D\_l = D\_CMS\_p + ell\_CMS\_p}, for example in
+\texttt{Notebooks/Plotting/1\_Plot\_BFBDT\_sigMC.ipynb}.
+\AnalysisTBD{move the definition of \texttt{p\_D\_l} into shared library code
+so that both fit observables have a single, citable producing step}
+
+\subsection{Wrong-charge sample}
+\label{sec:recon:wc}
+
+For on-resonance ($4S$) samples only, the same chain is repeated with the
+lepton charge reversed
+(\texttt{allowChargeViolation=True}), producing the wrong-charge (WC)
+control sample used in Sec.~\ref{sec:bbbar}.
+Apart from the charge requirement, the WC reconstruction applies the same
+vertex, ROE and tag-vertex selections as the nominal one.
+The WC sample is not reconstructed for off-resonance data.
+
+\subsection{Candidate multiplicity and best-candidate selection}
+\label{sec:recon:bcs}
+
+\AnalysisTBD{candidate multiplicity after the full selection, and the
+best-candidate criterion actually used in the nominal chain.  The helper
+\texttt{utilities.apply\_mva\_bcs()} exposes a \texttt{bcs} argument
+defaulting to \texttt{'vtx'}, but the nominal working point and the resulting
+multiplicity have not been established from a source artifact}
+
+\subsection{Summary of selections}
+\label{sec:recon:table}
+
+Table~\ref{tab:recon-cuts} lists every selection applied in the pinned
+steering script together with the literal code expression and its line
+number, separating the requirement from its motivation.
+
+\begin{table}[p]
+  \centering
+  \caption{Selections applied in \texttt{Recon\_scripts/2\_Reconstruction.py}
+  at analysis commit \texttt{dd520a5}.  Line numbers refer to that file.
+  Motivations marked TODO are not documented in the source and have not been
+  invented here.}
+  \label{tab:recon-cuts}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.17\textwidth} >{\raggedright\arraybackslash}p{0.42\textwidth} >{\raggedright\arraybackslash}p{0.05\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth}}
+    \hline
+    Object & Code expression & Line & Motivation \\
+    \hline
+    All tracks &
+      \texttt{abs(dz)<2 and dr<0.5 and thetaInCDCAcceptance and nCDCHits>0 and nSVDHits>0} &
+      57 & Standard track quality \\
+    $\pi^{\pm}$ &
+      \texttt{pionIDNN > 0.1 and p > 0.1} & 58 & Loose, to retain BDT training statistics \\
+    $K^{\pm}$ &
+      \texttt{kaonIDNN > 0.9 and p > 0.3} & 59 & TODO \\
+    $e^{\pm}$ (pre-brems) &
+      \texttt{electronIDNN > 0.9} & 61 & TODO \\
+    $e^{\pm}$ (post-$p$ cut) &
+      \texttt{p > 0.3} & 127 & TODO \\
+    $\mu^{\pm}$ &
+      \texttt{muonIDNN > 0.9}, then \texttt{inKLMAcceptance and p > 0.6} & 62, 129 & KLM acceptance required for muon ID \\
+    Brems $\gamma$ &
+      \texttt{0.05 < clusterE < 2.5 and beamBackgroundSuppression > 0.2} & 64 & Bremsstrahlung recovery input \\
+    Event &
+      \texttt{nParticlesInList(e-:goode) + nParticlesInList(mu-:goodmu) == 1} & 139 & Exactly one lepton; makes $e$/$\mu$ channels disjoint \\
+    $D^{\pm}$ (pre-fit) &
+      \texttt{1.78 < M < 1.96} & 148, 150 & Wide window before the tree fit \\
+    $D^{\pm}$ vertex &
+      \texttt{vtxReChi2 < 13} & 169 & Vertex quality \\
+    $D^{\pm}$ (post-fit) &
+      \texttt{1.79<M<1.82 or 1.92<M<1.95 or 1.855<M<1.885} & 149, 169 & Signal region plus clean fake-$D$ sidebands; see Eq.~\eqref{eq:dmass-windows} \\
+    $\pi^{0}$ (slow) &
+      \texttt{eff50\_May2020Fit} plus \texttt{beamBackgroundSuppression>0.5} and \texttt{fakePhotonSuppression>0.1} on both daughters & 178--182 & $D^{*}$ veto input \\
+    $D^{*\pm}$ veto &
+      best candidate by \texttt{abs(massDiff\_0 - 0.14065)}; $\Delta M$ stored, cut applied offline & 188--193 & Veto applied offline so the complement stays usable as a control region \\
+    $B^{0}$ vertex &
+      \texttt{vtxReChi2 < 14} & 231--232 & Vertex quality \\
+    ROE mask (loose) &
+      \texttt{dr<10 and abs(dz)<20 and thetaInCDCAcceptance and E<5.5}; $\gamma$: \texttt{0.05<clusterE<5.5} & 259--260 & Initial mask before $V^{0}$ update \\
+    ROE mask (tight) &
+      $p_{T}$-dependent \texttt{dr}/\texttt{dz} ellipses, \texttt{pValue>=0.0005}; $\gamma$: \texttt{clusterE>0.05}, \texttt{abs(clusterTiming)<2*clusterErrorTiming}, \texttt{<200}, \texttt{beamBackgroundSuppression>0.5}, \texttt{fakePhotonSuppression>0.1} & 261--269 & Beam-background and fake-photon rejection in the tag side \\
+    Tag side &
+      \texttt{4 < roeMbc and -5 < roeDeltae < 5 and abs(roeCharge) < 3 and 0 < TagVReChi2IP < 100} & 346--349 & Loose, tightened offline (Sec.~\ref{sec:recon:offline}) \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Offline tightening}
+\label{sec:recon:offline}
+
+Two further selections are applied offline rather than during
+reconstruction, and both are tighter than their reconstruction-level
+counterparts.
+The nominal offline requirement is \texttt{utilities.offline\_cut}:
+\begin{equation}
+  M_{\mathrm{bc}}^{\mathrm{ROE}} > 5,\quad
+  -4 < \Delta E^{\mathrm{ROE}} < 1,\quad
+  d_{r}(B^{0}) < 0.1,\quad
+  p_{\ell} < 4 .
+  \label{eq:offline-cut}
+\end{equation}
+The generic-$B\bar{B}$ weight tuning of Sec.~\ref{sec:bbbar} applies the same
+requirements \emph{except} $p_{\ell} < 4$, which it omits
+(\texttt{5\_BBbkg\_weights\_optuna\_minuit.py}, lines 809--814).
+\AnalysisTBD{confirm whether the omission of $p_{\ell} < 4$ in the
+generic-$B\bar{B}$ tuning is intentional.  If it is not, the tuned weights
+were derived in a slightly wider region than the one they are applied in}
+
+\subsection{Superseded and test-only code}
+\label{sec:recon:superseded}
+
+For completeness, the following reconstruction code exists in the analysis
+repository but is not part of the nominal chain:
+\texttt{Recon\_scripts/1\_Reconstruction\_test.py} (test harness) and
+\texttt{Recon\_scripts/Old\_scripts/} (separate per-channel and per-charge
+steering scripts, superseded by the single combined script).
+In addition, the pinned nominal script hard-codes a single input file and an
+output file name (lines 45--47); these are overridden by the grid submission,
+so the checked-in values are a local test configuration rather than the
+production one.

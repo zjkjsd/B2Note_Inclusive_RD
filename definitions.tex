@@ -1,15 +1,17 @@
 % Packages
 \usepackage{graphicx} % Include figure files
 \usepackage{epstopdf} % Allow to include eps files
+\usepackage{array}
 \usepackage{dcolumn} % Align table columns on decimal point
 \usepackage{xcolor} % Color support
 \usepackage{amsmath,amssymb} % Extended symbol collection
 \usepackage{hyperref} % Generate pdfs with hyperlinks
 \usepackage[utf8]{inputenc} % Allow UTF8 characters
 \usepackage[english]{babel} % All publications are in English
-\usepackage[displaymath, mathlines]{lineno} % Line numbers for drafts
-\usepackage{blindtext} % For testing
+\usepackage[mathlines]{lineno} % Line numbers for drafts ([displaymath] is obsolete)
+% blindtext removed: the note has real content
 \usepackage{ifthen} % for conditional statements
+\usepackage[htt]{hyphenat} % allow line breaks inside \texttt{} (long code strings)
 \usepackage{orcidlink} % for ORCIDs in author list
 
 % Configuration
@@ -20,3 +22,27 @@
 
 % Macros
 \input{belle2-symbols}
+
+% ---------------------------------------------------------------------------
+% Result-status macros.  Every number, figure or statement in this note must
+% be in exactly one of four states: settled prose (no macro), TBD, PRELIMINARY,
+% or SUPERSEDED.  See AGENTS.md, section "Result and placeholder discipline".
+% ---------------------------------------------------------------------------
+\newcommand{\AnalysisTBD}[1]{%
+  \textcolor{red}{\textbf{[TBD: #1]}}%
+}
+\newcommand{\PreliminaryResult}[1]{%
+  \textcolor{blue}{\textbf{[PRELIMINARY: #1]}}%
+}
+\newcommand{\Superseded}[1]{%
+  \textcolor{gray}{\textbf{[SUPERSEDED: #1]}}%
+}
+% In-progress work that is known to be incomplete and is actively being worked
+% on, as distinct from \AnalysisTBD (not started / source unknown).
+\newcommand{\InProgress}[1]{%
+  \textcolor{orange}{\textbf{[IN PROGRESS: #1]}}%
+}
+
+% Shorthand used throughout for the two fit observables.
+\newcommand{\mmiss}{M_{\mathrm{miss}}^{2}}
+\newcommand{\pdl}{|\vec{p}^{\,*}_{D}| + |\vec{p}^{\,*}_{\ell}|}
