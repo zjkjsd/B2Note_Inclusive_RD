@@ -25,9 +25,9 @@ covariance matrix disagree by up to three orders of magnitude for the two
 at-limit parameters, and the covariance is near-singular (condition number
 $\sim 10^{8}$) with two eigenvalues consistent with zero, so the construction
 would assign essentially no uncertainty to two entire hadronic families.
-The method is sound and a prototype exists on the \texttt{claude/bbbar-tuning-diagnostics} branch of the analysis repository; it is not
-part of the analysis at the pinned commit and requires a fit with an interior
-minimum.  Whether that is achievable by relaxing the bounds, requires
+The method is sound and is implemented in
+\texttt{scripts/bbbar\_eigen\_systematics.py}, which postdates the commit
+pinned by this note; it requires a fit with an interior minimum.  Whether that is achievable by relaxing the bounds, requires
 merging families the tuning region cannot separate, or reflects a
 data-preferred weight outside the physical range, is the three-way question
 posed in Sec.~\ref{sec:bbbar:degeneracy}}
