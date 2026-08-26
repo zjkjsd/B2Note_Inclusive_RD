@@ -11,6 +11,11 @@ First structured draft. The note previously consisted of the unmodified
 Belle II note template.
 
 Added:
+- Sections 7 and 9 no longer cite the BBbar diagnostic scripts as if they were
+  part of the analysis: they were held back from the analysis-repo PR and live
+  on a separate branch, unvalidated and never run on real ntuples. The note
+  now says so rather than pointing at paths that do not exist at the pinned
+  commit.
 - Section 7.6 now poses the generic-BBbar problem as a three-way question,
   not two-way: bounds too tight, families degenerate, or a data-preferred
   weight outside the physical range. The last mimics a flat direction in the

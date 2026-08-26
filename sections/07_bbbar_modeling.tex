@@ -130,8 +130,7 @@ Every fit therefore contains at least one near-degenerate pair.
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT (fit metadata, not a physics measurement)
-%   produced-by : BBbkg_weights/*.json, read by
-%                 scripts/bbbar_eigen_systematics.py
+%   produced-by : BBbkg_weights/*.json (fit metadata read directly)
 %   commit      : dd520a5
 %   sample      : MC16rd + Proc16/Prompt16, run periods and channels as listed
 %   selection   : tuning region of Eq. (bbbar-region)
@@ -195,12 +194,15 @@ the second or the third.
 The strong correlations of Table~\ref{tab:bbbar-correlations} point towards
 the second, but they do not exclude the third, and the distinction matters
 because the two call for opposite responses.
-\InProgress{the three explanations are distinguished by
-\texttt{scripts/scan\_bbbar\_bounds.py}, which re-runs the minimisation over a
-sequence of bound relaxations, profiles each pinned weight inward, and reports
-which of the three applies.  Everything above is an inference from the
-metadata of eight stored fits, not the result of that scan; no conclusion
-about merging families should be drawn until it has been run}
+\InProgress{the three explanations are distinguished by re-running the
+minimisation over a sequence of bound relaxations and profiling each pinned
+weight inward while re-minimising the others.  A diagnostic that does this
+exists on the \texttt{claude/bbbar-tuning-diagnostics} branch of the analysis repository but is not part of the analysis at
+the pinned commit: repeated review found several ways for its verdict to be
+confidently wrong, and it has never been run on real ntuples.  Everything
+above is therefore an inference from the metadata of eight stored fits.  No
+conclusion about merging decay families should be drawn until the scan has
+been validated and run}
 
 \subsection{Validation}
 \label{sec:bbbar:validation}
