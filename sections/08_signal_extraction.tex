@@ -1,11 +1,18 @@
 % PROVENANCE (section-level)
-%   produced-by : utilities.py :: create_templates_new(), create_workspace()
+%   status      : CODE_FACT unless marked otherwise
+%   produced-by : utilities.py :: create_templates_new() (lines 1073-1273),
+%                 create_workspace() (lines 1397-1553)
 %   commit      : dd520a5
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : lgb_tight (Eq. lgb-tight) plus offline_cut (Eq. offline-cut)
+%   corrections : PID; generic-MC luminosity 0.25; generic-BBbar weights
+% =========================================================================
 \section{Signal Extraction}
 \label{sec:fit}
 
 \subsection{Fit observables and channels}
 \label{sec:fit:observables}
+
 Yields are extracted from a two-dimensional binned likelihood fit in
 $\mmiss$ (\texttt{B0\_recMissM2}) and $\pdl$ (\texttt{p\_D\_l}), performed
 simultaneously in two channels:
@@ -14,36 +21,119 @@ simultaneously in two channels:
   \item the $D$-mass sideband, $[1.79,1.82] \cup [1.92,1.95]$
         (Sec.~\ref{sec:recon:d}), which constrains the fake-$D$ background.
 \end{itemize}
-No other control region enters the fit; the $q^{2}$, $D^{*}$-veto, BDT and
-wrong-charge regions of Sec.~\ref{sec:validation} are cross-checks.
-\AnalysisTBD{motivation for a 2D fit rather than two 1D fits, in terms of the
-correlation between $\mmiss$ and $\pdl$ and the separation it buys}
-\AnalysisTBD{the nominal binning in each channel, and the bin-merging and
-coverage thresholds actually used}
+These two are the only channels in the fit.
+The $q^{2}$, $D^{*}$-veto, off-resonance, BDT-sideband and wrong-charge
+regions of Sec.~\ref{sec:validation} are cross-checks and do not enter the
+likelihood.
 
-\subsection{Templates and parameters}
-\label{sec:fit:parameters}
-Templates are built per truth category (Sec.~\ref{sec:truth}) with per-bin
-statistical uncertainties from the sum of squared weights.
-The parameter of interest is the normalisation of the $B \to D \tau \nu$
-template; $R(D)$ is derived from it together with the normalisation of
-$B \to D \ell \nu$, not fitted directly.
-\AnalysisTBD{the explicit relation between the fitted normalisations and
-$R(D)$, including the efficiency ratio and the $\tau \to \ell \nu \nu$
-branching fraction}
-\AnalysisTBD{full table of channels, samples, observables, bins, parameters
-of interest, nuisance parameters, modifiers, constraints, initial values,
-bounds and correlations, cross-checked against a generated pyhf workspace}
+The templates are built from the same MC categories in both channels, so the
+sideband determines the fake-$D$ normalisation and shape in situ rather than
+through an external prior.
+\AnalysisTBD{motivation for a two-dimensional fit rather than two
+one-dimensional fits, quantified in terms of the correlation between $\mmiss$
+and $\pdl$ and the separation it buys between signal and normalisation}
+\AnalysisTBD{the nominal binning in each channel, together with the
+bin-population threshold and the merging rule actually used.  The template
+builder exposes \texttt{bin\_threshold} and \texttt{merge\_threshold} but the
+nominal values are not recorded in library code}
 
-Two issues in the current workspace generator require a decision:
-\AnalysisTBD{all normalisation parameters, including the signal, are given
-bounds $[-5, 5]$, which permits negative yields}
-\AnalysisTBD{the generic-$B\bar{B}$ families enter as free normalisation
-factors.  This is appropriate for the tuning-script context but not for the
-signal-region fit, where they should be fixed or constrained; otherwise the
-final fit reopens what the tuning of Sec.~\ref{sec:bbbar} constrained}
+\subsection{Templates}
+\label{sec:fit:templates}
+
+Templates are filled per truth category with per-bin statistical
+uncertainties from the sum of squared weights, then trimmed to bins whose
+summed content passes the population threshold and flattened.
+Three categories are excluded before filling
+(Sec.~\ref{sec:truth:closure}), and the narrow and broad $D^{**}\ell\nu$
+categories are merged (Sec.~\ref{sec:truth:merging}).
+
+\subsection{Parameter of interest}
+\label{sec:fit:poi}
+
+The parameter of interest in the generated workspace is the normalisation of
+the $B \to D \tau \nu$ template, \texttt{\$D$\backslash$tau$\backslash$nu\$\_norm}.
+$R(D)$ is therefore not fitted directly; it is derived from the fitted
+signal and normalisation yields.
+\AnalysisTBD{the explicit relation between the two fitted normalisations and
+$R(D)$, including the signal and normalisation efficiencies, their ratio, and
+the $\tau \to \ell \nu \nu$ branching fraction.  Until this is written down
+the note does not define its own observable}
+
+\subsection{Modifiers and constraints}
+\label{sec:fit:modifiers}
+
+Table~\ref{tab:fit-parameters} lists the modifiers as generated at the pinned
+commit, and the intended configuration where the two differ.
+
+% PROVENANCE
+%   status      : CODE_FACT (current) / ANALYSIS_DECISION (intended)
+%   produced-by : utilities.py :: create_workspace() lines 1397-1553
+%   commit      : dd520a5
+%   sample      : n/a (model definition)
+%   selection   : n/a
+%   corrections : n/a
+\begin{table}[htbp]
+  \centering
+  \caption{Fit parameters as generated at commit \texttt{dd520a5}, and the
+  intended configuration. ``free'' denotes an unconstrained
+  \texttt{normfactor}.}
+  \label{tab:fit-parameters}
+  \small
+  \begin{tabular}{l l l}
+    \hline
+    Sample & Current modifier & Intended \\
+    \hline
+    $D\tau\nu$ & free (POI) & unchanged \\
+    $D\ell\nu$ & free & unchanged \\
+    $D^{*}\ell\nu$ & free & unchanged \\
+    $D^{**}\ell\nu + \text{gap}$ & free & unchanged \\
+    $D^{*}\tau\nu$ & \texttt{normsys} $\pm 10\%$ & unchanged \\
+    $D^{**}\tau\nu$ & \texttt{normsys} $\pm 30\%$ & unchanged \\
+    \texttt{bkg\_fakeD} & free & unchanged; determined by the sideband channel \\
+    \texttt{bkg\_continuum} & \texttt{normsys} $+15\%/-0\%$ & see Sec.~\ref{sec:syst:continuum} \\
+    Generic-$B\bar{B}$ families & free & \texttt{normsys}, width from the tuning covariance \\
+    All samples & \texttt{staterror}, one shared parameter per channel & see below \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Three properties of the generated workspace require attention.
+
+\paragraph{Generic-$B\bar{B}$ normalisations.}
+The generic-$B\bar{B}$ families currently enter as free normalisation
+factors.
+That is appropriate in the control-region context the workspace generator was
+originally written for, but not in the signal-region fit: floating them there
+discards the constraint obtained by the tuning of Sec.~\ref{sec:bbbar} and
+adds five free parameters that the signal normalisation must be separated
+from.
+The intended configuration is instead a \texttt{normsys} constraint per
+family, with the width taken from the uncertainty of the tuned weights
+(\texttt{ANALYSIS\_DECISION}).
+\InProgress{no usable width exists yet.  Every stored tuning result sits on a
+parameter bound (Sec.~\ref{sec:bbbar:degeneracy}), so its uncertainties
+cannot be propagated.  This constraint can only be set once a tuning fit
+reaches an interior minimum}
+
+\paragraph{Parameter bounds.}
+Every normalisation parameter, the signal included, is generated with bounds
+$[-5, 5]$, which permits negative yields.
+\AnalysisTBD{confirm whether the lower bound is intentional; if not, restrict
+the normalisations to non-negative values}
+
+\paragraph{MC statistical uncertainty.}
+All samples in a channel share a single \texttt{staterror} modifier name,
+\texttt{mcStat\_ch$n$}, so the MC statistical uncertainty is treated as one
+parameter per channel correlated across samples rather than as a per-sample
+uncertainty.
+\AnalysisTBD{confirm that this is the intended treatment, and state its
+effect relative to independent per-sample statistical uncertainties}
 
 \subsection{Fit validation}
 \label{sec:fit:validation}
+
 \AnalysisTBD{Asimov sensitivity, toy studies, pull distributions and
-linearity tests, each reported separately from any result on data}
+linearity tests, each reported separately from any result on data.  The
+machinery exists in \texttt{utilities.pyhf\_utils} and
+\texttt{utilities.toy\_utils} and in \texttt{Fit\_toys/FitToys\_b2luigi.py},
+but no nominal study is recorded}

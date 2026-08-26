@@ -114,6 +114,74 @@ boundary, and this configuration is not acceptable for publication.  A fit
 with an interior minimum is required before these weights or their
 uncertainties can be used}
 
+\subsection{Constraining power of the tuning region}
+\label{sec:bbbar:degeneracy}
+
+The tuned fits do not reach an interior minimum.
+In all eight results stored in \texttt{BBbkg\_weights/} the minimum sits on a
+parameter bound, and the pinned parameter is always one of the
+\emph{unmeasured} $n$-body weights and never the measured-hadronic weight.
+Table~\ref{tab:bbbar-correlations} shows the accompanying correlation
+structure: the pairwise correlation between unmeasured families reaches
+$0.64$ to $0.93$ in seven of the eight fits, and in the eighth the
+measured-hadronic weight is instead correlated with another family at
+$0.94$.
+Every fit therefore contains at least one near-degenerate pair.
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT (fit metadata, not a physics measurement)
+%   produced-by : BBbkg_weights/*.json, read by
+%                 scripts/bbbar_eigen_systematics.py
+%   commit      : dd520a5
+%   sample      : MC16rd + Proc16/Prompt16, run periods and channels as listed
+%   selection   : tuning region of Eq. (bbbar-region)
+%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
+%                 semileptonic weights
+\begin{table}[htbp]
+  \centering
+  \caption{Correlation structure of the stored generic-$B\bar{B}$ weight fits.
+  ``unmeasured pairs'' is the largest absolute correlation between two
+  unmeasured $n$-body weights; the last column is the largest absolute
+  correlation of the measured-hadronic weight with any other parameter.
+  Every fit reported \texttt{has\_parameters\_at\_limit = true}.}
+  \label{tab:bbbar-correlations}
+  \small
+  \begin{tabular}{l c c l}
+    \hline
+    Fit & $\max|\rho|$ unmeasured pairs & $\max|\rho|$ measured & Pinned \\
+    \hline
+    \texttt{kin-2d-plus-roe run1 $e$} & 0.77 & 0.77 & 2-body, 4-body \\
+    \texttt{kin-2d run1+run2 $e$}     & 0.77 & 0.72 & 4-body \\
+    \texttt{kin-2d run1 $e$}          & 0.77 & 0.72 & 2-body \\
+    \texttt{missm2-roe-2d run1 $e$}   & 0.05 & 0.94 & 2-body, 4-body, 5+-body \\
+    \texttt{poisson-2d run1 $e$}      & 0.93 & 0.00 & 4-body, 5+-body \\
+    \texttt{poisson-2d run1 $\mu$}    & 0.81 & 0.51 & 2-body \\
+    \texttt{poisson-2d run2 $e$}      & 0.76 & 0.45 & 5+-body \\
+    \texttt{poisson-2d run2 $\mu$}    & 0.64 & 0.48 & 4-body \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Two explanations are consistent with this pattern.
+Either the parameter bounds are simply too tight, in which case relaxing them
+gives an interior minimum; or the tuning region cannot separate the
+unmeasured families, in which case the likelihood is flat along at least one
+direction and relaxing the bounds only lets the minimum slide further before
+pinning again.
+That the measured-hadronic weight --- the one family with an external
+constraint on its composition --- never pins, while the unconstrained
+families repeatedly do, favours the second explanation: the observables in
+the tuning region appear not to distinguish the unmeasured $n$-body families
+from one another.
+If that is confirmed, the remedy is to merge the families that the region
+cannot separate, or to add an observable that separates them, rather than to
+widen the bounds.
+\InProgress{the two explanations are distinguished by
+\texttt{scripts/scan\_bbbar\_bounds.py}, which re-runs the minimisation over a
+sequence of bound relaxations and reports where the minimum lands and how far
+the deviance moves.  The argument above is an inference from fit metadata
+across eight fits, not the result of that scan}
+
 \subsection{Validation}
 \label{sec:bbbar:validation}
 \AnalysisTBD{an independent validation region for the tuned weights has not

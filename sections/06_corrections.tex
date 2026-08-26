@@ -20,8 +20,22 @@ from absolute user-specific paths and are not part of the repository}
 
 \subsection{Analysis-specific corrections}
 \label{sec:corrections:specific}
-The generic-$B\bar{B}$ reweighting of Sec.~\ref{sec:bbbar} is the main
-analysis-specific correction.
+The generic-$B\bar{B}$ reweighting of Sec.~\ref{sec:bbbar} is the only
+analysis-specific correction currently derived.
+It is applied as an event weight multiplying the per-event product of the
+generator weight, the PID weight and, for the combined run fit, the
+run-dependent factor.
+
+The fake-$D$ normalisation is a special case and is the one place where a
+double application is plausible, so it is stated explicitly here.
+The run-dependent factor ($0.87$ for Run~1, $1.0$ for Run~2) is a
+\emph{fixed input} to the generic-$B\bar{B}$ tuning, where it holds the
+fake-$D$ component at its externally determined level while the
+generic-$B\bar{B}$ families are fitted.
+It is deliberately not applied when the fit templates are built: in the fit
+the fake-$D$ normalisation is a free parameter determined by the $D$-mass
+sideband channel (Sec.~\ref{sec:fit:modifiers}).
+Applying the factor in both places would count it twice.
 
 \subsection{Correction ordering and double-application safeguards}
 \label{sec:corrections:order}

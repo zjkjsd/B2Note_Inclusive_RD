@@ -38,7 +38,26 @@ momentum-scale and energy-loss corrections.
 LightGBM, sysvar/SysVar) used to produce the results in this note; no
 lockfile currently exists}
 
+\subsection{Ntuple production and offline samples}
+\label{sec:data:ntuples}
+The steering script of Sec.~\ref{sec:reconstruction} writes four trees per
+input sample: \texttt{B0\_e} and \texttt{B0\_mu} for the nominal
+reconstruction, and \texttt{B0\_wc\_e} and \texttt{B0\_wc\_mu} for the
+wrong-charge sample.
+The wrong-charge trees are written only for on-resonance input, so the
+off-resonance sample has no wrong-charge counterpart.
+Offline, the trees are combined per run period and channel into the
+\texttt{MC\_<channel>\_comb} and \texttt{Data\_<channel>\_comb} trees consumed
+by the BDT and by the generic-$B\bar{B}$ tuning.
+\AnalysisTBD{the combination step that produces those trees, including the
+BDT application and the definition of \texttt{p\_D\_l}, is currently performed
+in notebooks rather than in library code; record the nominal producing
+artifact}
+
 \subsection{Sample overlap}
 \label{sec:data:overlap}
 \AnalysisTBD{explicit statement of which MC samples are used where, and the
-rule preventing overlap between generic and signal-enriched samples}
+rule preventing overlap between generic and signal-enriched samples.  This
+matters because the generic-MC luminosity factor of $0.25$ above does not
+apply to the signal-enriched samples, so any study mixing the two must state
+which factor applies to which component}

@@ -8,9 +8,10 @@ tracking and PID efficiency; fit bias and finite-template effects}
 
 \subsection{Generic-$B\bar{B}$ composition}
 \label{sec:syst:bbbar}
-The proposed treatment is to propagate the covariance of the tuned family
-weights (Sec.~\ref{sec:bbbar}) into the fit as constrained nuisance
-parameters.
+The treatment is to propagate the covariance of the tuned family weights
+(Sec.~\ref{sec:bbbar}) into the fit as \texttt{normsys} constraints on the
+generic-$B\bar{B}$ normalisations, replacing the free normalisation factors
+of the current workspace (Sec.~\ref{sec:fit:modifiers}).
 Because the family weights are strongly correlated, assigning one independent
 constrained parameter per family would discard that correlation.
 The intended construction is instead to diagonalise the covariance matrix and
@@ -26,7 +27,10 @@ $\sim 10^{8}$) with two eigenvalues consistent with zero, so the construction
 would assign essentially no uncertainty to two entire hadronic families.
 The method is sound and the tooling exists
 (\texttt{scripts/bbbar\_eigen\_systematics.py}); it requires a fit with an
-interior minimum}
+interior minimum.  Whether that is achievable by relaxing the bounds, or
+requires merging the degenerate families, is the question posed in
+Sec.~\ref{sec:bbbar:degeneracy} and answered by
+\texttt{scripts/scan\_bbbar\_bounds.py}}
 
 \subsection{Continuum normalisation}
 \label{sec:syst:continuum}

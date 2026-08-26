@@ -11,6 +11,13 @@ First structured draft. The note previously consisted of the unmodified
 Belle II note template.
 
 Added:
+- Section 7.6 (Constraining power of the tuning region): all eight stored
+  BBbar fits sit on a parameter bound, always on an unmeasured n-body weight
+  and never on the measured-hadronic weight, with unmeasured-family
+  correlations of 0.64-0.93. Argues that the tuning region cannot separate
+  the unmeasured families, and marks the scan that would confirm it.
+- Section 8 (Signal Extraction), documenting the generated workspace and the
+  decision to constrain rather than float the generic-BBbar normalisations.
 - Section 3 (Event Reconstruction), drafted from
   `Recon_scripts/2_Reconstruction.py`, with a complete cut-to-code table.
 - Section 4 (Truth Classification), drafted from
@@ -20,6 +27,8 @@ Added:
 - Result-status macros `\AnalysisTBD`, `\PreliminaryResult`, `\Superseded`,
   `\InProgress`.
 - The provenance convention and `scripts/check_provenance.py`.
+- Sections 2 and 6 filled in: ntuple layout, the generic-MC luminosity
+  factor and its scope, and the fake-D single-application rule.
 
 Changed:
 - `note.tex` now typesets `body.tex`, not the template's `instructions.tex`.
