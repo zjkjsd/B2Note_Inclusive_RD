@@ -27,6 +27,13 @@ Added:
 - Result-status macros `\AnalysisTBD`, `\PreliminaryResult`, `\Superseded`,
   `\InProgress`.
 - The provenance convention and `scripts/check_provenance.py`.
+- Sections 5 (MVA) and 10 (Validation and box opening) drafted, and the four
+  appendices filled with the actual variable lists, selection strings and
+  PDG groupings rather than placeholders.
+- Recorded two decisions: the [-5,5] normalisation bounds are deliberate,
+  to let the minimiser traverse the negative region so the reported minimum
+  is global rather than boundary-pushed; and the continuum constraint is
+  one-sided +15%/-0%, superseding the symmetric value in earlier docs.
 - Sections 2 and 6 filled in: ntuple layout, the generic-MC luminosity
   factor and its scope, and the fake-D single-application rule.
 

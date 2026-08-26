@@ -1,44 +1,107 @@
+% PROVENANCE (section-level)
+%   status      : CODE_FACT unless marked otherwise
+%   produced-by : 4_LightGBM_Multiclass_Training.py; 2_LightGBM_Tuner.py;
+%                 3_LightGBM_Binary_Training.py; utilities.py (training
+%                 variable lists lines 5-29, working points lines 81-83)
+%   commit      : dd520a5
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : offline_cut (Eq. offline-cut)
+%   corrections : none applied at training time
+% =========================================================================
 \section{Multivariate Background Suppression}
 \label{sec:mva}
 
-A four-class LightGBM classifier separates signal from the three dominant
-background topologies.
-The output probabilities \texttt{sig\_prob}, \texttt{fakeD\_prob},
-\texttt{continuum\_prob} and \texttt{combinatorial\_prob} are used for the
-final event selection and to define control regions.
+A four-class LightGBM classifier separates correctly reconstructed signal-like
+candidates from the three dominant background topologies.
+Its four output probabilities --- \texttt{sig\_prob}, \texttt{fakeD\_prob},
+\texttt{continuum\_prob} and \texttt{combinatorial\_prob} --- define both the
+final event selection and several of the control regions of
+Sec.~\ref{sec:validation}.
+
+\subsection{Target classes}
+\label{sec:mva:classes}
+
+The four classes correspond to the truth categories of
+Sec.~\ref{sec:truth}: correctly reconstructed signal-like candidates,
+fake-$D$ candidates, continuum events, and combinatorial candidates in which
+the $D$ and the lepton come from different $B$ mesons.
+Choosing these four rather than a single signal-versus-background
+discriminant is what allows the same classifier to define the fake-$D$ and
+combinatorial-enriched control regions used later.
+\AnalysisTBD{the exact mapping from the truth categories of
+Sec.~\ref{sec:truth} to the four training targets, and the composition and
+size of the training sample, from
+\texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb}.  The mapping is currently
+defined in a notebook rather than in library code}
 
 \subsection{Training configuration}
 \label{sec:mva:training}
-Training uses \texttt{4\_LightGBM\_Multiclass\_Training.py} with an 80/20
-train/validation split (\texttt{random\_state=0}) and event weights.
-\AnalysisTBD{the four target-class definitions and the composition of the
-training sample, from \texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb};
-and the hyper-parameter values in use, which are hard-coded rather than taken
-from the Optuna study}
 
-The separate tuner \texttt{2\_LightGBM\_Tuner.py} performs an Optuna study
-for the \emph{binary} off-resonance data/MC check only; its study is not
-consumed by the four-class training, which uses hard-coded parameters.
-It therefore does not tune the final classifier.
+Training uses \texttt{4\_LightGBM\_Multiclass\_Training.py} with a gradient
+boosted decision tree (\texttt{gbdt}) and the \texttt{multiclass} objective
+over four classes, optimising multi-class log-loss and monitoring
+\texttt{auc\_mu}.
+The sample is split 80/20 into training and validation subsets with a fixed
+random seed, and per-event training weights are applied.
+The training and validation subsets are disjoint by construction, being
+complementary subsets of the same frame.
+\AnalysisTBD{demonstrate that the sample used to train the classifier does not
+overlap with the sample used to build the fit templates.  A disjoint
+train/validation split within one frame does not by itself establish
+independence from the templates}
+
+The hyper-parameters are hard-coded in the training script rather than taken
+from a tuning study.
+The separate tuner, \texttt{2\_LightGBM\_Tuner.py}, runs an Optuna study for
+the \emph{binary} off-resonance data/MC check of
+\texttt{3\_LightGBM\_Binary\_Training.py}; its study is not consumed by the
+four-class training, and its default \texttt{multiclass} objective has no
+matching \texttt{num\_class} configuration.
+It therefore does not tune the final classifier in its current form.
+\AnalysisTBD{state the hyper-parameter values used for the nominal model and
+how they were chosen, or record that they were set by hand}
 
 \subsection{Input variables}
 \label{sec:mva:inputs}
-The training variables are the continuum-suppression, $D$-vertex and
-$B$-kinematic variables listed in \texttt{utilities.training\_variables}.
-Variables are deliberately excluded on two grounds, both recorded as source
-comments: correlation with the fit observables
-(\texttt{thrustBm}, \texttt{KSFWV1}, \texttt{KSFWV2}, \texttt{KSFWV11},
-\texttt{KSFWV12}), and known data/MC mismodelling
-(\texttt{R2}, \texttt{thrustOm}, \texttt{cosTBz}, \texttt{KSFWV8},
-\texttt{KSFWV14}--\texttt{KSFWV18}, \texttt{D\_vtxReChi2},
-\texttt{B0\_vtxReChi2}, \texttt{B0\_TagVReChi2IP}).
-Excluding variables correlated with $\mmiss$ and $\pdl$ is required so that
-the classifier does not sculpt the fit observables.
-\AnalysisTBD{quantitative demonstration that the retained variables do not
-sculpt $\mmiss$ or $\pdl$, in the bins used by the fit}
+
+The training variables are defined in
+\texttt{utilities.training\_variables} and fall into three groups:
+continuum-suppression variables (a subset of the KSFW moments and
+\texttt{cosTBTO}), $D$-vertex and Dalitz variables
+(\texttt{D\_A1FflightDistanceSig\_IP} and the two two-body invariant-mass
+combinations of the $D$ daughters), and $B$-level variables
+(\texttt{B0\_CMS\_cos\_angle\_0\_1}, \texttt{B0\_D\_l\_DisSig},
+$M_{\mathrm{bc}}^{\mathrm{ROE}}$ and $\Delta E^{\mathrm{ROE}}$).
+
+Variables are excluded on two distinct grounds, both recorded as comments in
+the source, and the distinction matters:
+\begin{itemize}
+  \item \textbf{Correlation with the fit observables}:
+        \texttt{thrustBm}, \texttt{KSFWV1}, \texttt{KSFWV2},
+        \texttt{KSFWV11} and \texttt{KSFWV12} are excluded because they
+        correlate with $\mmiss$ or $\pdl$.
+        Including them would let the selection sculpt the very distributions
+        the fit uses, biasing the extracted yields.
+  \item \textbf{Data/MC mismodelling}: \texttt{R2}, \texttt{thrustOm},
+        \texttt{cosTBz}, \texttt{KSFWV8}, \texttt{KSFWV14}--\texttt{KSFWV18},
+        \texttt{D\_vtxReChi2}, \texttt{B0\_vtxReChi2} and
+        \texttt{B0\_TagVReChi2IP} are excluded because they are known to be
+        mismodelled.
+        A classifier trained on a mismodelled variable transfers that
+        mismodelling into the selection efficiency.
+\end{itemize}
+The commented-out variable lists retained in \texttt{utilities.py} correspond
+to earlier configurations that included these variables; they are superseded
+and are not the nominal input set.
+
+\AnalysisTBD{quantitative demonstration that the \emph{retained} variables do
+not sculpt $\mmiss$ or $\pdl$, evaluated in the bins used by the final fit.
+The exclusions above are motivated by source comments, not by a documented
+correlation study}
 
 \subsection{Working point}
 \label{sec:mva:wp}
+
 The nominal signal selection is \texttt{lgb\_tight}:
 \begin{equation}
   \texttt{sig\_prob} > 0.5,\quad
@@ -47,15 +110,25 @@ The nominal signal selection is \texttt{lgb\_tight}:
   \texttt{combinatorial\_prob} < 0.6 .
   \label{eq:lgb-tight}
 \end{equation}
-A looser selection, \texttt{lgb\_loose}, is used for preliminary studies and
-as a file-size filter, and was chosen by inspection rather than optimised.
-\texttt{lgb\_tight} was optimised with a figure of merit.
-\AnalysisTBD{not done: the signal selection should be optimised on the
-$R(D)$ sensitivity, equivalently on the $B \to D \tau \nu$ yield uncertainty,
-rather than on a generic figure of merit.  State the figure of merit
-currently used and the scan that produced Eq.~\eqref{eq:lgb-tight}}
+It was optimised using a figure of merit.
+Two further selections exist and are not the nominal signal selection:
+\texttt{lgb\_loose}, used for preliminary studies and as a file-size filter
+and chosen by inspection; and \texttt{lgb\_comb}, which selects a
+combinatorial-enriched region.
+
+\AnalysisTBD{not done: the signal selection should be optimised on the $R(D)$
+sensitivity --- equivalently, on the uncertainty of the
+$B \to D \tau \nu$ yield from the full fit --- rather than on a generic figure
+of merit, because the two need not have the same optimum once the sideband
+channel and the constrained backgrounds are included.  Record the figure of
+merit currently used and the scan that produced Eq.~\eqref{eq:lgb-tight}}
 
 \subsection{Validation}
 \label{sec:mva:validation}
-\AnalysisTBD{data/MC comparison of every BDT input variable and of the four
-output probabilities, in an unblinded control region}
+
+\AnalysisTBD{data/MC comparison of every retained input variable and of the
+four output probabilities, in an unblinded control region, with the producing
+artifact recorded}
+\AnalysisTBD{classifier performance: ROC or efficiency-versus-purity curves
+per class, and the selection efficiency for signal and normalisation
+separately, since $R(D)$ depends on their ratio rather than on either alone}

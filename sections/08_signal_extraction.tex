@@ -116,10 +116,32 @@ cannot be propagated.  This constraint can only be set once a tuning fit
 reaches an interior minimum}
 
 \paragraph{Parameter bounds.}
-Every normalisation parameter, the signal included, is generated with bounds
-$[-5, 5]$, which permits negative yields.
-\AnalysisTBD{confirm whether the lower bound is intentional; if not, restrict
-the normalisations to non-negative values}
+Every normalisation parameter is generated with bounds $[-5, 5]$, which
+permits negative values.
+This is deliberate (\texttt{ANALYSIS\_DECISION}).
+The intent is not that a negative yield is physical, but that the minimiser
+should be free to traverse the negative region so that the reported minimum is
+the global one, rather than a value pushed against a boundary at zero.
+A parameter constrained at zero cannot be distinguished from a parameter whose
+true minimum lies below it, and a best-fit value that sits on a physical
+boundary carries no meaningful parabolic uncertainty --- the same pathology
+documented for the generic-$B\bar{B}$ weights in
+Sec.~\ref{sec:bbbar:degeneracy}.
+Allowing the fit to explore negative values and observing that the minimum
+lands in the positive region is therefore evidence, whereas forcing
+positivity and observing a positive result is not.
+
+The freedom is intended for the free \texttt{normfactor} parameters only.
+Constrained parameters are not affected: a \texttt{normsys} modifier is
+parameterised by a nuisance parameter with its own Gaussian constraint and an
+interpolated response, so the $[-5,5]$ range does not apply to it in the same
+way.
+\AnalysisTBD{once the generic-$B\bar{B}$ families move from
+\texttt{normfactor} to \texttt{normsys} (above), confirm that no constrained
+component is left with an unconstrained $[-5,5]$ normalisation, and state
+what is done if a free normalisation returns a negative best-fit value ---
+whether the result is reported as-is, or the fit is repeated with a
+positivity requirement as a cross-check}
 
 \paragraph{MC statistical uncertainty.}
 All samples in a channel share a single \texttt{staterror} modifier name,

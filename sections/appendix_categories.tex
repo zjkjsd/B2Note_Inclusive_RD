@@ -1,4 +1,72 @@
+% PROVENANCE (section-level)
+%   status      : CODE_FACT
+%   produced-by : utilities.py lines 73-79 (DecayMode_new), 93-122 (PDG
+%                 lists), 125-275 (measured modes, replacement map);
+%                 bbbar_reweighting.py lines 19-25 (PDG corrections)
+%   commit      : dd520a5
+%   sample      : n/a (definitions)
+%   selection   : n/a
+%   corrections : n/a
 \section{Decay-Category Definitions}
 \label{app:categories}
-\AnalysisTBD{full PDG-code lists defining each truth category and each
-generic-$B\bar{B}$ family}
+
+\sloppy
+
+\subsection{Truth categories and their integer codes}
+\label{app:categories:codes}
+
+The categories of Sec.~\ref{sec:truth} are stamped with the integer codes of
+\texttt{utilities.DecayMode\_new}, which are the interface between
+classification, template construction and the workspace.
+The codes are not contiguous with respect to the categories actually used:
+codes 15 and 16 (\texttt{gap\_pi}, \texttt{gap\_eta}) are defined but never
+assigned, because the two gap modes are merged into code 17 before the
+dictionary is returned.
+
+\subsection{PDG-code groupings}
+\label{app:categories:pdg}
+
+The charm states are grouped as follows, with both charge states in each
+list:
+\begin{description}
+  \item[$D$, $D^{*}$ charged] $\pm411$, $\pm413$
+  \item[$D$, $D^{*}$ neutral] $\pm421$, $\pm423$
+  \item[$D^{**}$ narrow] $\pm10413$, $\pm10423$, $\pm415$, $\pm425$
+  \item[$D^{**}$ broad] $\pm10411$, $\pm10421$, $\pm20413$, $\pm20423$
+  \item[$D_{s}$ family] $\pm431$, $\pm433$, $\pm10431$, $\pm20433$,
+        $\pm10433$, $\pm435$
+  \item[Charm baryons] $\Lambda_{c}$, $\Sigma_{c}$, $\Xi_{c}$, $\Omega_{c}$
+  \item[Double charm] $\psi$ states, $\Xi_{cc}$, $\Omega_{cc}$
+\end{description}
+The narrow/broad $D^{**}$ split is used at classification time and then
+undone when the templates are built (Sec.~\ref{sec:truth:merging}).
+
+\subsection{Generic-$B\bar{B}$ families}
+\label{app:categories:bbbar}
+
+Each generic-$B\bar{B}$ candidate is assigned a decay-mode identifier from
+the product of the generated daughter PDG codes of the relevant $B$, and
+placed in exactly one family:
+\texttt{BBbar\_semileptonic} if any daughter is a lepton;
+otherwise \texttt{BBbar\_measured\_hadronic} if the identifier appears in the
+measured-mode list;
+otherwise \texttt{BBbar\_unmeasured:$n$-body}, with $n$ the generated
+daughter multiplicity clipped below at 2 and capped at $5+$.
+
+Four measured modes carry an additional branching-fraction correction, the
+ratio of the PDG value to the value used in the simulation, applied to
+$D_{s1}(2536)$ modes.
+\AnalysisTBD{record the source and version of the PDG values used for these
+four ratios}
+
+\subsection{Mode replacement}
+\label{app:categories:replacement}
+
+An optional many-to-one map merges configured non-resonant 3- and 4-body
+modes into resonant 2-body states before tuning, preserving the total yield
+of the affected modes by rescaling the surviving mode by
+$(N_{\mathrm{old}} + N_{\mathrm{new}})/N_{\mathrm{new}}$.
+It is disabled in all results shown in this note.
+\AnalysisTBD{full listing of the replacement map with the physics
+justification for each entry, and a statement of whether enabling it is
+intended for the nominal analysis}

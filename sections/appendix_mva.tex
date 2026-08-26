@@ -1,4 +1,19 @@
 \section{MVA Diagnostics}
 \label{app:mva}
-\AnalysisTBD{ROC curves, learning curves, input-variable distributions and
-correlation matrices}
+
+\AnalysisTBD{ROC or efficiency-versus-purity curves for each of the four
+classes, on the validation subset}
+\AnalysisTBD{training and validation loss curves, to show the model is not
+overtrained}
+\AnalysisTBD{distributions of every retained input variable, data versus MC,
+in an unblinded control region}
+\AnalysisTBD{input-variable correlation matrix, and the correlation of each
+input with $\mmiss$ and $\pdl$ in the fit bins.  This is the quantitative
+evidence for the exclusions listed in
+Appendix~\ref{app:selections:excluded}}
+\AnalysisTBD{signal and normalisation selection efficiency separately as a
+function of the working point, since $R(D)$ depends on their ratio}
+
+Diagnostics for the earlier XGBoost and random-forest models retained in the
+analysis repository are not reproduced here: those models are superseded by
+the LightGBM four-class model of Sec.~\ref{sec:mva}.

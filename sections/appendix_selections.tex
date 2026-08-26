@@ -1,3 +1,86 @@
-\section{Exhaustive Variable and Selection Lists}
+% PROVENANCE (section-level)
+%   status      : CODE_FACT
+%   produced-by : utilities.py lines 5-29 (training variables), 81-87
+%                 (working points, offline cut, D* veto)
+%   commit      : dd520a5
+%   sample      : n/a (definitions)
+%   selection   : n/a
+%   corrections : n/a
+\section{Variable and Selection Reference}
 \label{app:selections}
-\AnalysisTBD{full ntuple variable list and the complete selection chain}
+
+This appendix records the exact variable lists and selection strings used by
+the analysis, so that the prose in the main text can be checked against them.
+Selections applied during reconstruction are tabulated in
+Table~\ref{tab:recon-cuts} and are not repeated here.
+
+\sloppy
+
+\subsection{Classifier input variables}
+\label{app:selections:mva}
+
+\begin{description}
+  \item[Continuum suppression]
+    \texttt{B0\_cosTBTO}, \texttt{B0\_KSFWV3}, \texttt{B0\_KSFWV4},
+    \texttt{B0\_KSFWV5}, \texttt{B0\_KSFWV6}, \texttt{B0\_KSFWV7},
+    \texttt{B0\_KSFWV9}, \texttt{B0\_KSFWV10}, \texttt{B0\_KSFWV13},
+    \texttt{B0\_KSFWV17}
+  \item[$D$ vertex and Dalitz]
+    \texttt{D\_A1FflightDistanceSig\_IP}, \texttt{D\_daughterInvM\_1\_2},
+    \texttt{D\_daughterInvM\_0\_1}
+  \item[$B$ level]
+    \texttt{B0\_CMS\_cos\_angle\_0\_1}, \texttt{B0\_D\_l\_DisSig},
+    \texttt{B0\_roeMbc\_my\_mask}, \texttt{B0\_roeDeltae\_my\_mask}
+  \item[Spectators (carried, not trained on)]
+    \texttt{\_\_weight\_\_}, \texttt{D\_CMS\_p}, \texttt{ell\_CMS\_p}
+\end{description}
+
+The two spectator momenta are the components of the second fit observable,
+$\pdl$ (Sec.~\ref{sec:recon:b}); carrying them as spectators keeps them
+available downstream without exposing them to the classifier.
+
+\subsection{Excluded variables}
+\label{app:selections:excluded}
+
+\begin{description}
+  \item[Excluded: correlated with the fit observables]
+    \texttt{B0\_thrustBm}, \texttt{B0\_KSFWV1}, \texttt{B0\_KSFWV2},
+    \texttt{B0\_KSFWV11}, \texttt{B0\_KSFWV12}
+  \item[Excluded: data/MC mismodelling]
+    \texttt{B0\_R2}, \texttt{B0\_thrustOm}, \texttt{B0\_cosTBz},
+    \texttt{B0\_KSFWV8}, \texttt{B0\_KSFWV14}, \texttt{B0\_KSFWV15},
+    \texttt{B0\_KSFWV16}, \texttt{B0\_KSFWV18}, \texttt{D\_vtxReChi2},
+    \texttt{B0\_vtxReChi2}, \texttt{B0\_TagVReChi2IP}
+\end{description}
+
+\subsection{Selection strings}
+\label{app:selections:cuts}
+
+\begin{description}
+  \item[\texttt{offline\_cut}]
+    \texttt{B0\_roeMbc\_my\_mask > 5}, \texttt{-4 < B0\_roeDeltae\_my\_mask < 1},
+    \texttt{B0\_dr < 0.1}, \texttt{ell\_p < 4}
+  \item[\texttt{lgb\_tight} (nominal signal selection)]
+    \texttt{sig\_prob > 0.5}, \texttt{fakeD\_prob < 0.06},
+    \texttt{continuum\_prob < 0.4}, \texttt{combinatorial\_prob < 0.6}
+  \item[\texttt{lgb\_loose} (preliminary studies, file-size filter)]
+    \texttt{sig\_prob > 0.2}, \texttt{fakeD\_prob < 0.15},
+    \texttt{continuum\_prob < 0.5}, \texttt{combinatorial\_prob < 0.6}
+  \item[\texttt{lgb\_comb} (combinatorial-enriched region)]
+    \texttt{fakeD\_prob < 0.15}, \texttt{continuum\_prob < 0.5},
+    \texttt{combinatorial\_prob > 0.5}
+  \item[\texttt{Dst\_veto\_cut}]
+    \texttt{DstVeto\_massDiff\_0 < 0.135} or
+    \texttt{0.145 < DstVeto\_massDiff\_0}
+  \item[Generic-$B\bar{B}$ tuning region]
+    \texttt{1.855 < D\_M < 1.885}, \texttt{fakeD\_prob < 0.1},
+    \texttt{sig\_prob < 0.1}, plus \texttt{offline\_cut} without
+    \texttt{ell\_p < 4}
+\end{description}
+
+Note that three different selections are referred to as ``the BDT sideband''
+in different places: \texttt{lgb\_comb}, the generic-$B\bar{B}$ tuning region
+above, and the combinatorial-enhanced definition in earlier documentation.
+They are not the same region.
+\AnalysisTBD{adopt one name per region and use it consistently across the
+code and this note}
