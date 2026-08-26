@@ -162,25 +162,45 @@ Every fit therefore contains at least one near-degenerate pair.
   \end{tabular}
 \end{table}
 
-Two explanations are consistent with this pattern.
-Either the parameter bounds are simply too tight, in which case relaxing them
-gives an interior minimum; or the tuning region cannot separate the
-unmeasured families, in which case the likelihood is flat along at least one
-direction and relaxing the bounds only lets the minimum slide further before
-pinning again.
+Three explanations are consistent with this pattern, and they call for
+different responses.
+\begin{enumerate}
+  \item The parameter bounds are simply too tight, in which case relaxing
+        them gives an interior minimum and a usable covariance.
+  \item The tuning region cannot separate the unmeasured families, in which
+        case the likelihood is flat along at least one direction and relaxing
+        the bounds only lets the minimum slide further before pinning again.
+        The remedy is to merge the families the region cannot separate, or to
+        add an observable that separates them.
+  \item The constrained optimum is genuine: the data prefer a weight at or
+        below zero for one or more unmeasured families, so the optimum lies
+        outside the allowed range.  Relaxing the bounds does not help and
+        merging families does not either; the question becomes why a decay
+        family is preferred at a non-physical rate, which points at the
+        family definition or at the simulation rather than at the fit.
+\end{enumerate}
+
+Cases 2 and 3 are not distinguished by the deviance alone: if the optimum lies
+below every relaxed lower bound, the deviance improvement between successive
+relaxations tends to zero as that bound tends to zero, which mimics a flat
+direction.  They are separated by profiling a pinned weight inward while
+re-minimising the others --- flat for a genuine degeneracy, rising for a
+constrained optimum.  A one-parameter scan does not suffice, because moving one
+weight along a degenerate direction while holding the others fixed also raises
+the objective.
 That the measured-hadronic weight --- the one family with an external
-constraint on its composition --- never pins, while the unconstrained
-families repeatedly do, favours the second explanation: the observables in
-the tuning region appear not to distinguish the unmeasured $n$-body families
-from one another.
-If that is confirmed, the remedy is to merge the families that the region
-cannot separate, or to add an observable that separates them, rather than to
-widen the bounds.
-\InProgress{the two explanations are distinguished by
+constraint on its composition --- never pins, while the unconstrained families
+repeatedly do, disfavours the first explanation and is consistent with either
+the second or the third.
+The strong correlations of Table~\ref{tab:bbbar-correlations} point towards
+the second, but they do not exclude the third, and the distinction matters
+because the two call for opposite responses.
+\InProgress{the three explanations are distinguished by
 \texttt{scripts/scan\_bbbar\_bounds.py}, which re-runs the minimisation over a
-sequence of bound relaxations and reports where the minimum lands and how far
-the deviance moves.  The argument above is an inference from fit metadata
-across eight fits, not the result of that scan}
+sequence of bound relaxations, profiles each pinned weight inward, and reports
+which of the three applies.  Everything above is an inference from the
+metadata of eight stored fits, not the result of that scan; no conclusion
+about merging families should be drawn until it has been run}
 
 \subsection{Validation}
 \label{sec:bbbar:validation}

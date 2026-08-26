@@ -11,6 +11,11 @@ First structured draft. The note previously consisted of the unmodified
 Belle II note template.
 
 Added:
+- Section 7.6 now poses the generic-BBbar problem as a three-way question,
+  not two-way: bounds too tight, families degenerate, or a data-preferred
+  weight outside the physical range. The last mimics a flat direction in the
+  deviance and calls for the opposite response, so no merging decision should
+  be made before the profile scan distinguishes them.
 - Section 7.6 (Constraining power of the tuning region): all eight stored
   BBbar fits sit on a parameter bound, always on an unmeasured n-body weight
   and never on the measured-hadronic weight, with unmeasured-family
