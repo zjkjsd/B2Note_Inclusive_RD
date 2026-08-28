@@ -57,8 +57,12 @@ Added:
   to let the minimiser traverse the negative region so the reported minimum
   is global rather than boundary-pushed; and the continuum constraint is
   one-sided +15%/-0%, superseding the symmetric value in earlier docs.
-- Sections 2 and 6 filled in: ntuple layout, the generic-MC luminosity
-  factor and its scope, and the fake-D single-application rule.
+- Sections 2 and 6 written out in full. Section 2 covers the data and MC
+  samples, the three distinct basf2 release roles, the ntuple and offline
+  sample naming, and the event-weight chain. Section 6 separates corrections
+  that are applied, applied only in validation plots, implemented but never
+  called, and not implemented at all, with a table that lists the
+  "not applied" cases deliberately.
 
 Changed:
 - `note.tex` now typesets `body.tex`, not the template's `instructions.tex`.
