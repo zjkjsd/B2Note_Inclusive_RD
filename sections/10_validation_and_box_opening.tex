@@ -1,0 +1,114 @@
+\section{Validation and Box-Opening Strategy}
+\label{sec:validation}
+
+The $D$-mass signal region is blinded.
+Every region in this section is a cross-check: none of them enters the
+likelihood of Sec.~\ref{sec:fit}, which uses only the $D$-mass signal region
+and the $D$-mass sideband.
+
+\subsection{Control regions}
+\label{sec:validation:regions}
+
+% PROVENANCE
+%   status      : ANALYSIS_DECISION
+%   produced-by : utilities.py (Dst_veto_cut line 87, lgb_comb line 83,
+%                 offline_cut line 85); Recon_scripts/2_Reconstruction.py
+%                 (wrong-charge sample, lines 470-556)
+%   commit      : dd520a5
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : per row
+%   corrections : PID; generic-MC luminosity 0.25
+\begin{table}[htbp]
+  \centering
+  \caption{Control regions and their intended tests. None enters the fit.}
+  \label{tab:control-regions}
+  \small
+  \begin{tabular}{p{0.30\textwidth} p{0.62\textwidth}}
+    \hline
+    Region & Intended test \\
+    \hline
+    $q^{2} < 3$ &
+      $B \to D \ell \nu$ dominant. Tests the modelling of the two fit
+      observables where the normalisation mode is enhanced \\
+    $D^{*}$ veto region, $0.135 < \Delta M < 0.145$ &
+      $B \to D^{*} \ell \nu$ dominant. Tests the largest signal-like
+      background. Currently limited by the missing slow-$\pi^{0}$ efficiency
+      correction (Sec.~\ref{sec:recon:dstveto}) \\
+    $\Upsilon(4S)$ off-resonance &
+      Continuum modelling and its normalisation. The only region with no
+      $B\bar{B}$ contribution at all \\
+    Combinatorial-enriched region (\texttt{lgb\_comb}) &
+      Generic-$B\bar{B}$ modelling. Note that this is \emph{not} the region in
+      which the weights were fitted; see
+      Appendix~\ref{app:selections:naming} \\
+    Wrong-charge sample &
+      Intended as a generic-$B\bar{B}$ cross-check independent of the tuning
+      region; see the caveat below \\
+    $D$-mass sidebands &
+      Fake-$D$ modelling. Unlike the others this region is also a fit
+      channel, so it is not an independent check of the fit \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Two of these regions require a caveat that materially affects what they can
+be used to conclude.
+
+\paragraph{The wrong-charge sample.}
+It was intended as an independent validation of the tuned
+generic-$B\bar{B}$ weights, on the reasoning that reversing the lepton charge
+removes the signal while retaining the background.
+Its background composition is however not the same as that of the tuning
+region: the fraction of hadronic relative to semileptonic $B$ decays differs,
+and the hadronic decay multiplicity spectrum differs as well.
+Since the tuned weights are organised precisely by decay family and by
+multiplicity (Sec.~\ref{sec:bbbar:hierarchy}), a sample with a different
+composition in those variables does not test the weights so much as test a
+different mixture of them.
+Agreement in the wrong-charge sample would therefore not establish that the
+weights generalise, and disagreement would not establish that they fail.
+\AnalysisTBD{identify a validation region whose composition in decay family
+and multiplicity matches the tuning region, or determine the reweighting
+needed to make the wrong-charge sample comparable.  Until then the tuned
+weights have no independent validation, which is the principal open item of
+Sec.~\ref{sec:bbbar}}
+
+\paragraph{The $D$-mass sideband.}
+Because it is a fit channel, agreement there after the fit is a
+self-consistency check rather than a prediction, and should not be presented
+as validation of the fake-$D$ model.
+
+\subsection{Closure criteria}
+\label{sec:validation:closure}
+
+\AnalysisTBD{the prefit and postfit closure criteria that must be met in each
+region before unblinding, stated quantitatively and in advance}
+\AnalysisTBD{split-sample comparison between the $e$ and $\mu$ channels, and
+between Run~1 and Run~2, with the criterion for consistency stated in advance}
+
+\subsection{Box-opening strategy}
+\label{sec:validation:unblinding}
+
+\AnalysisTBD{the unblinding plan and its preconditions.  A staged (10\%)
+unblinding is under discussion; record whether it is adopted, what it is
+intended to test, and what would be done if the staged sample disagreed with
+expectation.  A staged unblinding that cannot lead to a defined action is not
+a test}
+
+\subsection{Known open issues}
+\label{sec:validation:issues}
+
+The following are known and unresolved at the pinned commit.
+\begin{itemize}
+  \item $E_{\mathrm{cms}}$ and experiment-level data/MC discrepancies in
+        several Run~1 and Run~2 experiments, hypothesised to originate from
+        background-overlay run mismatches.
+  \item A fixed, non-run-dependent $B\bar{B}$ cross section in MC16rd despite
+        the $E_{\mathrm{cms}}$ drift across the data-taking period.
+  \item Slow-$\pi^{0}$ efficiency corrections for the $D^{*}$ veto region,
+        pending an updated MC16rd table.
+\end{itemize}
+\AnalysisTBD{sources for the first two items, and an assessment of whether
+either affects the fit observables in the bins used by the fit.  Both are
+currently recorded from status material rather than from an artifact in the
+analysis repository}

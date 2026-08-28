@@ -1,0 +1,106 @@
+# Change log
+
+Each released version of the note is pinned to an analysis commit in
+`zjkjsd/inclusive_R_D`, tracked here and by the `external-code` submodule.
+
+## Version 0.1 (draft) — unreleased
+
+Pinned analysis commit: `dd520a5` ("start tracking gitignore").
+
+First structured draft. The note previously consisted of the unmodified
+Belle II note template.
+
+Added:
+- Figure 1, the analysis flow, and the two ordering constraints it makes
+  explicit: the classifier is trained after the offline selection, and the
+  generic-BBbar weights are derived in a classifier-defined region.
+- Appendix: Open Items, consolidating the 80 markers by section and by what
+  would close each, with the artifacts ranked by how much they unblock.
+- A region-nomenclature table. Three different selections had been called
+  "the BDT sideband"; two are in active use for different purposes and the
+  third matches neither and is marked superseded.
+- scripts/check_build.py, which validates its own patterns against the log
+  before reporting a count.
+- Sections 7 and 9 no longer cite the BBbar diagnostic scripts as if they were
+  part of the analysis: they were held back from the analysis-repo PR and live
+  on a separate branch, unvalidated and never run on real ntuples. The note
+  now says so rather than pointing at paths that do not exist at the pinned
+  commit.
+- Section 7.6 now poses the generic-BBbar problem as a three-way question,
+  not two-way: bounds too tight, families degenerate, or a data-preferred
+  weight outside the physical range. The last mimics a flat direction in the
+  deviance and calls for the opposite response, so no merging decision should
+  be made before the profile scan distinguishes them.
+- Section 7.6 (Constraining power of the tuning region): all eight stored
+  BBbar fits sit on a parameter bound, always on an unmeasured n-body weight
+  and never on the measured-hadronic weight, with unmeasured-family
+  correlations of 0.64-0.93. Argues that the tuning region cannot separate
+  the unmeasured families, and marks the scan that would confirm it.
+- Section 8 (Signal Extraction), documenting the generated workspace and the
+  decision to constrain rather than float the generic-BBbar normalisations.
+- Section 3 records two reconstruction findings raised while writing that
+  narrative. The electron momentum cut is applied before the bremsstrahlung
+  correction deliberately, to keep every candidate inside the coverage of the
+  PID tables, which the performance group produces without brems correction;
+  the note now gives that justification rather than the diagnostic one. And
+  the tight ROE track mask mis-parses: basf2 binds "and" more tightly than
+  "or", so the acceptance and pValue requirements apply only to the lowest-pT
+  branch. Fixing it requires reprocessing and invalidates ROE-derived results.
+- Section 3 gains narrative for every selection that previously appeared only
+  in the cut table: track quality, hadron and lepton identification,
+  bremsstrahlung recovery, the vertex fits, the D* veto photon requirements,
+  the three-stage ROE mask construction, and the tag-side requirements. The
+  table is unchanged in scope and remains the literal code reference.
+- Section 3 (Event Reconstruction), drafted from
+  `Recon_scripts/2_Reconstruction.py`, with a complete cut-to-code table.
+- Section 4 (Truth Classification), drafted from
+  `utilities.classify_mc_dict()`, including an explicit exclusivity and
+  exhaustiveness discussion.
+- Skeletons with stable labels for Sections 1, 2, 5–12 and four appendices.
+- Result-status macros `\AnalysisTBD`, `\PreliminaryResult`, `\Superseded`,
+  `\InProgress`.
+- The provenance convention and `scripts/check_provenance.py`.
+- Sections 5 (MVA) and 10 (Validation and box opening) drafted, then Section 5
+  and the appendices filled from the stored artifacts: the LightGBM
+  hyper-parameters and training schedule, the four target-class definitions,
+  the recorded train/validation metrics for the three stored models, and the
+  anatomy of the generated pyhf workspaces in Fit_toys/.
+- Recorded that the stored workspaces are superseded: they are single-channel,
+  constrain fake-D at +-5% where the current generator floats it, fix the
+  continuum normalisation, and contain no generic-BBbar templates at all.
+- Corrected a misidentified state: PDG 10431 is D_s0*(2317)+, not D_s1(2536).
+  The four branching-fraction corrections apply to D_s0*(2317) modes and
+  reduce the generator rates by factors of 7 to 19.
+- Recorded two decisions: the [-5,5] normalisation bounds are deliberate,
+  to let the minimiser traverse the negative region so the reported minimum
+  is global rather than boundary-pushed; and the continuum constraint is
+  one-sided +15%/-0%, superseding the symmetric value in earlier docs.
+- Sections 2 and 6 written out in full. Section 2 covers the data and MC
+  samples, the three distinct basf2 release roles, the ntuple and offline
+  sample naming, and the event-weight chain. Section 6 separates corrections
+  that are applied, applied only in validation plots, implemented but never
+  called, and not implemented at all, with a table that lists the
+  "not applied" cases deliberately.
+
+Changed:
+- Corrected the LaTeX build reporting. A hand-rolled grep for overfull boxes
+  had a double-escaped pattern that matched nothing, so several commits
+  reported a clean build that was not clean. The true count at the time was
+  15 boxes, worst 130pt. All are now fixed and the check is a script that
+  fails loudly if its patterns stop matching.
+- `note.tex` now typesets `body.tex`, not the template's `instructions.tex`.
+- `AGENTS.md`: source hierarchy no longer refers to a manifest or results
+  registry (see the Provenance section for what replaced them); the
+  "preserve the inclusive B decay rate" safeguard was removed as unphysical
+  for this analysis.
+- `docs/ANALYSIS_CONTEXT.md` removed; the analysis repository's copy, reached
+  through the submodule, is the single source.
+
+Removed:
+- Journal drivers and template scaffolding not used by a B2Note
+  (`prd.tex`, `prl.tex`, `jhep.tex`, `epjc.tex`, `draft.tex`, `pacs.tex`,
+  `svjour.cls`, `svepj.clo`, `jheppub.sty`, `JHEP.bst`, `wordcount.*`,
+  `create_paper`, `addref`, template fork screenshots, Jupyter checkpoints).
+
+Overleaf helpers (`update`, `connect_overleaf`, `sync_from_overleaf`) are
+retained.

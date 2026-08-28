@@ -11,14 +11,47 @@ number, plot, or method is preliminary.
 When sources disagree, use this precedence:
 
 1. Explicit instructions in the current task.
-2. Approved entries in analysis_snapshot/results_registry.yaml.
-3. Decisions recorded in analysis_snapshot/source_manifest.yaml and
-   the analysis repository documentation.
-4. Current executable analysis code at the pinned commit.
-5. Reference B2Notes, for organization and methodological examples only.
-6. Inference.
+2. The analysis repository's `docs/ANALYSIS_CONTEXT.md` at the pinned commit,
+   available here through the `external-code` submodule.
+3. Current executable analysis code at the pinned commit.
+4. Reference B2Notes in `docs/`, for organization and methodological
+   examples only.  Their selections, correction factors, uncertainties and
+   conclusions are never inputs to this analysis.
+5. Inference.
 
 Never silently resolve a disagreement. Report it and insert a marked TODO.
+
+There is deliberately no separate manifest or results-registry file. A second
+copy of the analysis state is a second thing to keep in sync, and it will
+drift. Provenance lives next to the content it describes instead; see
+"Provenance" below.
+
+## Provenance
+
+Every figure, table, or quoted number in the note carries a provenance
+comment block immediately above it in the LaTeX source:
+
+```latex
+% PROVENANCE
+%   status      : CODE_FACT | ANALYSIS_DECISION | VALIDATED_RESULT |
+%                 PRELIMINARY_RESULT | PLANNED
+%   produced-by : <path in the analysis repository>
+%   commit      : <analysis commit SHA>
+%   sample      : <data/MC scope, run period, channel>
+%   selection   : <named selection or configuration>
+%   corrections : <list>
+\begin{figure}...
+```
+
+Sections whose claims all share one source may carry a single section-level
+block at the top of the file instead.
+
+`scripts/check_provenance.py` enforces this: it walks every `figure` and
+`table` environment and fails if the block above it is missing or incomplete.
+Run it before committing.
+
+The submodule pin is the single analysis-state anchor. `CHANGELOG.md` records
+which analysis commit each note version corresponds to.
 
 ## Scientific safeguards
 
@@ -32,6 +65,11 @@ Never silently resolve a disagreement. Report it and insert a marked TODO.
 - Treat signal-region data as blinded unless the task explicitly says otherwise.
 - Preserve the distinction between family normalization and internal decay
   composition in generic-BB background modeling.
+- Do not require the generic-BB reweighting to preserve the inclusive B decay
+  rate. The data/MC normalization genuinely differs in the tuning region, and
+  forcing the total to stay fixed would push that discrepancy into the
+  composition, which is the quantity being measured. Require instead that the
+  resulting normalization change be validated in an independent region.
 - Check that truth categories are mutually exclusive and exhaustive.
 - Check for double application of corrections or overlapping MC samples.
 
@@ -41,8 +79,9 @@ Never silently resolve a disagreement. Report it and insert a marked TODO.
 - Put detailed diagnostic plots and large tables in appendices.
 - State the dataset, channel, run period, selection, weight configuration,
   and source commit for every numerical result.
-- Use \AnalysisTBD{} for missing content and \PreliminaryResult{} for
-  non-final values.
+- Use \AnalysisTBD{} for missing content, \PreliminaryResult{} for non-final
+  values, \InProgress{} for known-incomplete work actively being addressed,
+  and \Superseded{} for retained but obsolete material.
 - Do not remove TODO markers without evidence that the item is resolved.
 
 ## Workflow

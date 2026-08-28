@@ -1,0 +1,93 @@
+\section{Introduction and Analysis Overview}
+\label{sec:intro}
+The Belle~II physics programme and detector are described in
+Refs.~\cite{Kou:2018nap,Abe:2010gxa}.
+\AnalysisTBD{physics motivation for $R(D)$, the current experimental and
+theoretical status, and why an inclusive-tagging approach is complementary
+to FEI-based measurements}
+
+\subsection{Analysis signature}
+\label{sec:intro:signature}
+The signal-side $B$ is reconstructed as $B^{0} \to D^{-} \ell^{+}$ with
+$D^{-} \to K^{+} \pi^{-} \pi^{-}$; the tag-side $B$ is represented by the
+rest of the event rather than by an exclusive tag reconstruction
+(Sec.~\ref{sec:reconstruction}).
+Signal and normalisation yields are extracted from a two-dimensional binned
+likelihood fit in $\mmiss$ and $\pdl$, performed simultaneously in a
+$D$-mass signal region and a $D$-mass sideband (Sec.~\ref{sec:fit}).
+The dominant experimental challenge is the generic-$B\bar{B}$ background,
+which is treated in Sec.~\ref{sec:bbbar}.
+
+\subsection{Analysis flow}
+\label{sec:intro:flow}
+
+Figure~\ref{fig:analysis-flow} summarises the chain from detector output to
+the extracted yields.
+Each stage is described in the section named beside it.
+
+% PROVENANCE
+%   status      : CODE_FACT (the chain as implemented)
+%   produced-by : Recon_scripts/2_Reconstruction.py;
+%                 4_LightGBM_Multiclass_Training.py; utilities.py
+%                 (classify_mc_dict, apply_pid_corrections,
+%                 create_templates_new, create_workspace);
+%                 5_BBbkg_weights_optuna_minuit.py
+%   commit      : dd520a5
+%   sample      : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
+%   selection   : n/a (whole chain)
+%   corrections : n/a (the figure names where each is applied)
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    node distance = 5.5mm,
+    box/.style = {draw, rounded corners=2pt, align=center,
+                  text width=62mm, inner sep=4pt, font=\small},
+    side/.style = {align=left, font=\scriptsize\itshape, text width=38mm},
+    arr/.style  = {-{Stealth[length=2mm]}, thick},
+  ]
+    \node[box] (rec) {Grid reconstruction\\
+      $B^{0} \to D^{-}\ell^{+}$, $D^{-} \to K^{+}\pi^{-}\pi^{-}$;
+      ROE built as the tag side};
+    \node[box, below=of rec] (off) {Offline selection\\
+      \texttt{offline\_cut}; $D^{*}$ veto applied here};
+    \node[box, below=of off] (bdt) {Four-class LightGBM classifier\\
+      \texttt{sig}, \texttt{fakeD}, \texttt{continuum},
+      \texttt{combinatorial} probabilities};
+    \node[box, below=of bdt] (tru) {Truth classification of simulation\\
+      signal, normalisation, feed-down, backgrounds};
+    \node[box, below=of tru] (cor) {Corrections\\
+      tracking and PID first, then generic-$B\bar{B}$ reweighting};
+    \node[box, below=of cor] (tem) {Template construction\\
+      2D in $\mmiss$ and $\pdl$, per category};
+    \node[box, below=of tem] (fit) {Simultaneous binned likelihood fit\\
+      $D$-mass signal region $+$ $D$-mass sideband};
+
+    \foreach \a/\b in {rec/off, off/bdt, bdt/tru, tru/cor, cor/tem, tem/fit}
+      \draw[arr] (\a) -- (\b);
+
+    \node[side, right=5mm of rec] {Sec.~\ref{sec:reconstruction}};
+    \node[side, right=5mm of off] {Sec.~\ref{sec:recon:offline}};
+    \node[side, right=5mm of bdt] {Sec.~\ref{sec:mva}};
+    \node[side, right=5mm of tru] {Sec.~\ref{sec:truth}};
+    \node[side, right=5mm of cor] {Sec.~\ref{sec:corrections},
+                                   Sec.~\ref{sec:bbbar}};
+    \node[side, right=5mm of tem] {Sec.~\ref{sec:fit:templates}};
+    \node[side, right=5mm of fit] {Sec.~\ref{sec:fit}};
+  \end{tikzpicture}
+  \caption{The analysis chain as implemented at the pinned commit. The
+  classifier is trained after the offline selection and is therefore defined
+  only within it; the generic-$B\bar{B}$ reweighting is derived in a region
+  defined by the classifier output, so it sits after that stage rather than
+  with the collaboration-recommended corrections.}
+  \label{fig:analysis-flow}
+\end{figure}
+
+Two features of the ordering are worth stating explicitly, because they
+constrain what can be changed independently.
+The classifier is trained after the offline selection, so its outputs are
+defined only inside that selection and a change to the offline cut invalidates
+the training.
+And the generic-$B\bar{B}$ reweighting is derived in a region defined by the
+classifier output, so it depends on the classifier in a way the
+collaboration-recommended corrections do not: retraining the classifier
+requires re-deriving those weights.

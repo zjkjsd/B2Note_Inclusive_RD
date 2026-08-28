@@ -1,0 +1,133 @@
+% PROVENANCE (section-level)
+%   status      : CODE_FACT (workspace contents) / SUPERSEDED (the stored
+%                 workspaces relative to the current generator)
+%   produced-by : Fit_toys/2dws_{SR,SB}_e_MC16rd_*.json (generated pyhf
+%                 workspaces); utilities.py create_workspace (1397-1553)
+%   commit      : dd520a5
+%   sample      : MC16rd, e channel
+%   selection   : D-mass signal region or sideband, per file
+%   corrections : not recorded in the workspace files
+\section{Fit-Parameter Tables and Alternative Binnings}
+\label{app:fit}
+
+\subsection{Anatomy of the stored example workspaces}
+\label{app:fit:stored}
+
+Four generated \texttt{pyhf} workspaces are stored under \texttt{Fit\_toys/}.
+They are the only concrete realisations of the statistical model in the
+repository, so their contents are tabulated here --- with the important
+caveat, established below, that they do \emph{not} correspond to the nominal
+fit of Sec.~\ref{sec:fit}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Contents of the stored workspaces. Each file contains a single
+  channel; the signal region and the sideband are separate files rather than
+  two channels of one model.}
+  \label{tab:stored-workspaces}
+  \small
+  \begin{tabular}{l c c c}
+    \hline
+    File & Channels & Samples & Bins \\
+    \hline
+    \texttt{2dws\_SR\_e\_MC16rd\_normsys}    & 1 & 6 & 310 \\
+    \texttt{2dws\_SR\_e\_MC16rd\_fakeD}      & 1 & 7 & 378 \\
+    \texttt{2dws\_SB\_e\_MC16rd\_fakeD}      & 1 & 7 & 378 \\
+    \texttt{2dws\_SR\_e\_MC16rd\_fakeD\_cont}& 1 & 8 & 403 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The bin counts are the flattened two-dimensional bins surviving the population
+threshold, so they also record how much of the $\mmiss \times \pdl$ plane is
+retained: 310 to 403 bins out of a full grid.
+
+The most complete file, \texttt{2dws\_SR\_e\_MC16rd\_fakeD\_cont}, contains
+the samples and modifiers of Table~\ref{tab:stored-modifiers}, with
+$49\,221$ observed entries in its single channel.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Samples and modifiers of
+  \texttt{2dws\_SR\_e\_MC16rd\_fakeD\_cont.json}. All normalisation parameters
+  carry bounds $[-5,5]$.}
+  \label{tab:stored-modifiers}
+  \small
+  \begin{tabular}{l l l}
+    \hline
+    Sample & Modifiers & Constraint \\
+    \hline
+    $D\tau\nu$ & \texttt{normfactor}, \texttt{staterror} & free (POI) \\
+    $D\ell\nu$ & \texttt{normfactor}, \texttt{staterror} & free \\
+    $D^{*}\ell\nu$ & \texttt{normfactor}, \texttt{staterror} & free \\
+    $D^{**}\ell\nu + \text{gap}$ & \texttt{normfactor}, \texttt{staterror} & free \\
+    $D^{*}\tau\nu$ & \texttt{normsys}, \texttt{staterror} & $\pm 10\%$ \\
+    $D^{**}\tau\nu$ & \texttt{normsys}, \texttt{staterror} & $\pm 30\%$ \\
+    \texttt{bkg\_fakeD} & \texttt{normsys}, \texttt{staterror} & $\pm 5\%$ \\
+    \texttt{bkg\_continuum} & \texttt{staterror} only & normalisation fixed \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The parameter of interest is the $B \to D \tau \nu$ normalisation,
+\texttt{\$D$\backslash$tau$\backslash$nu\$\_norm}, consistent with
+Sec.~\ref{sec:fit:poi}.
+The MC statistical uncertainty is carried by one \texttt{staterror} parameter
+shared across samples within a channel, \texttt{mcStat\_ch0}, except for
+fake-$D$, which has its own \texttt{fakeD\_Stat\_ch0}.
+
+\subsection{Differences from the current generator}
+\label{app:fit:superseded}
+
+The stored workspaces were produced by an earlier version of
+\texttt{create\_workspace} and differ from what the pinned commit generates in
+four respects.
+They are therefore \Superseded{examples only; they are not the nominal model
+and no number should be taken from them}.
+
+\begin{enumerate}
+  \item \textbf{Channels.} Each stored file has one channel. The nominal fit
+        is the simultaneous signal-region plus $D$-mass-sideband fit of
+        Sec.~\ref{sec:fit:observables}, which the current generator builds as
+        two channels of one workspace.
+  \item \textbf{Fake-$D$.} Constrained here by a $\pm 5\%$ \texttt{normsys};
+        free \texttt{normfactor} in the current generator. Note that neither
+        matches the $\pm 3.5\%$ recorded in the analysis context document, so
+        three different treatments exist in the record.
+  \item \textbf{Continuum.} Fixed here through the parameter configuration;
+        constrained by a one-sided $+15\%/-0\%$ \texttt{normsys} in the
+        current generator (Sec.~\ref{sec:syst:continuum}).
+  \item \textbf{Generic $B\bar{B}$.} Absent entirely from every stored
+        workspace. The dominant background of Sec.~\ref{sec:bbbar} has no
+        template in any stored realisation of the model.
+\end{enumerate}
+
+\AnalysisTBD{regenerate a workspace from the pinned commit, including the
+sideband channel and the generic-$B\bar{B}$ templates, and replace
+Tables~\ref{tab:stored-workspaces} and~\ref{tab:stored-modifiers} with its
+contents.  Until then this note documents an obsolete realisation of its own
+fit model}
+
+\subsection{Tables still required}
+\label{app:fit:todo}
+
+\AnalysisTBD{complete parameter table for the regenerated workspace:
+initial values, bounds, constraint terms and which parameters are fixed,
+extracted from the workspace rather than transcribed from the generator}
+\AnalysisTBD{correlation matrix of the fitted parameters from an Asimov fit,
+and the expected uncertainty on the parameter of interest}
+\AnalysisTBD{alternative binnings and the stability of the extracted yields
+against them, including the effect of the population threshold that sets the
+bin counts of Table~\ref{tab:stored-workspaces}}
+\AnalysisTBD{complete postfit projections in both channels and both fit
+observables, after box opening}
+
+\subsection{Toy studies}
+\label{app:fit:toys}
+
+The toy machinery is \texttt{utilities.toy\_utils} together with
+\texttt{Fit\_toys/FitToys\_b2luigi.py}, which drives ensembles through
+\texttt{b2luigi}.
+\AnalysisTBD{pull distributions and linearity scans from that machinery,
+reported separately from any result on data.  No toy study output is stored in
+the repository at the pinned commit}

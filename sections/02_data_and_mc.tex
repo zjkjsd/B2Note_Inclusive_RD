@@ -1,0 +1,140 @@
+% PROVENANCE (section-level)
+%   status      : CODE_FACT unless marked otherwise
+%   produced-by : Recon_scripts/2_Reconstruction.py (global tags, ntuple
+%                 trees); 5_BBbkg_weights_optuna_minuit.py lines 93, 809-824
+%                 (luminosity scale, sample and tree naming); README.md and
+%                 docs/ANALYSIS_CONTEXT.md of the analysis repository
+%   commit      : dd520a5
+%   sample      : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
+%   selection   : n/a
+%   corrections : n/a
+\section{Data, Simulated Samples, and Software Versions}
+\label{sec:data}
+
+\subsection{Data samples}
+\label{sec:data:data}
+
+The analysis uses Proc16 and Prompt16 data, covering both Run~1 and Run~2, and
+is evaluated separately for the $e$ and $\mu$ channels throughout.
+The run periods are kept separate rather than merged from the outset because
+several inputs are run dependent: the PID correction tables
+(Sec.~\ref{sec:corrections:recommended}), the fake-$D$ normalisation, and the
+generic-$B\bar{B}$ weights themselves (Sec.~\ref{sec:bbbar:rundep}).
+Where a combined result is wanted, the run periods are corrected separately
+and only then concatenated, so that the run dependence survives the
+combination.
+
+Both on-resonance ($\Upsilon(4S)$) and off-resonance samples are processed.
+The off-resonance sample contains no $B\bar{B}$ events and is therefore the
+only control sample in which the continuum background can be studied without a
+$B\bar{B}$ component to subtract (Sec.~\ref{sec:validation}).
+The wrong-charge reconstruction is run only for on-resonance input
+(Sec.~\ref{sec:recon:wc}), so the off-resonance sample has no wrong-charge
+counterpart.
+
+\AnalysisTBD{integrated luminosity per run period and per channel, with the
+producing artifact.  The figure of approximately $490$\,fb$^{-1}$ quoted in the
+analysis context document has no recorded source and is not used anywhere in
+the code}
+
+\subsection{Simulated samples}
+\label{sec:data:mc}
+
+Simulation is the MC16rd campaign.
+Generic MC16rd is produced at four times the data luminosity, so a factor of
+$0.25$ is applied whenever an absolute normalisation is compared with data
+(\texttt{CODE\_FACT}: \texttt{LUMINOSITY\_SCALE = \{"all\_mc": 0.25\}}).
+This factor is specific to generic MC; the signal-enriched samples have their
+own scaling, and mixing the two in one comparison requires applying the correct
+factor to each component.
+\AnalysisTBD{the scale factor for the signal-enriched samples, where it is
+applied, and the generated sample sizes.  Until this is recorded, any study
+combining generic and signal-enriched MC cannot be reproduced}
+
+\AnalysisTBD{list of MC16rd sub-samples used (mixed, charged, continuum
+flavours, signal-enriched) with their generated event counts and equivalent
+luminosities}
+
+\subsection{Software versions}
+\label{sec:data:software}
+
+Three release names appear in the analysis chain and they play different
+roles, so they are distinguished here explicitly.
+
+Data and simulation are produced and processed with the basf2 \emph{main}
+release \texttt{release-08-00-08}.
+The main release contains all basf2 packages and is what is used for data
+taking, MC production and data processing.
+
+The analysis-level reconstruction of Sec.~\ref{sec:reconstruction} is run with
+the basf2 \emph{light} release \texttt{light-2505-deimos}, a subset of the main
+release containing the packages needed for physics analysis.
+This is the nominal analysis release for this note.
+The next major production update is expected to use
+\texttt{light-2607-kasei}.
+
+Release names appearing inside global-tag names --- for example
+\texttt{pid\_nn\_release08\_v1} and
+\texttt{tracking\_release08\_20260119\_EnergyMomentumScale} --- refer to the
+release used when those payloads were prepared.
+They are not the release used for this analysis and should not be read as such.
+
+Global tags used are the analysis global tag returned by
+\texttt{getAnalysisGlobaltag()}, \texttt{pid\_nn\_release08\_v1} for the
+neural-network identifiers, and
+\texttt{tracking\_release08\_20260119\_EnergyMomentumScale} for the track
+momentum-scale and energy-loss payloads.
+
+\AnalysisTBD{versions of the offline Python stack --- \texttt{pyhf},
+\texttt{cabinetry}, \texttt{iminuit}, \texttt{LightGBM}, \texttt{optuna},
+\texttt{uproot} and the systematics-corrections framework --- used to produce
+the results in this note.  No pinned environment or lockfile exists, so the
+offline results are not currently reproducible from the repository alone}
+
+\subsection{Ntuple production and offline samples}
+\label{sec:data:ntuples}
+
+The steering script writes four trees per input sample: \texttt{B0\_e} and
+\texttt{B0\_mu} for the nominal reconstruction, and \texttt{B0\_wc\_e} and
+\texttt{B0\_wc\_mu} for the wrong-charge sample, the latter two only for
+on-resonance input.
+
+Offline, the grid output is combined per run period and channel into files of
+the form \texttt{4S\_<period>\_deimos\_BDT\_<channel>\_3.root}, containing the
+trees \texttt{MC\_<channel>\_comb} and \texttt{Data\_<channel>\_comb}.
+These are the files consumed by the generic-$B\bar{B}$ tuning and by the
+plotting notebooks.
+That combination step also applies the classifier of Sec.~\ref{sec:mva} and
+constructs \texttt{p\_D\_l}, one of the two fit observables.
+
+\AnalysisTBD{the combination step is performed in notebooks rather than in
+library code, so the step that applies the classifier and defines a fit
+observable has no citable producing artifact.  Record it, or move it into
+\texttt{utilities.py}}
+
+\subsection{Event weights and normalisation}
+\label{sec:data:weights}
+
+Every weighted MC histogram in the analysis is filled with the product of up to
+four per-event columns: a base weight \texttt{\_\_weight\_\_}, the PID
+correction weight, the generic-$B\bar{B}$ category weight, and a run-dependent
+factor used when run periods are combined.
+The luminosity factor of Sec.~\ref{sec:data:mc} multiplies the product.
+Each column is included only if it is present in the frame, so a missing
+column is silently treated as unity rather than raising.
+
+\AnalysisTBD{the origin of \texttt{\_\_weight\_\_} in the nominal chain is
+undocumented.  It is read as the base weight by the generic-$B\bar{B}$ tuning
+but is assigned nowhere in the current code; the only assignments are in
+\texttt{Old\_scripts/}, where it was a class-balancing weight for an earlier
+classifier.  Since a missing column is silently skipped, establish whether it
+is present in the current ntuples and what it contains}
+
+\subsection{Sample overlap}
+\label{sec:data:overlap}
+
+\AnalysisTBD{explicit statement of which MC samples are used where, and the
+rule preventing overlap between generic and signal-enriched samples.  This
+matters both for the luminosity factors above and for the classifier of
+Sec.~\ref{sec:mva}, whose training sample must not overlap with the sample
+used to build the fit templates}

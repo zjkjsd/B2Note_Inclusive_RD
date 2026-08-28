@@ -1,0 +1,183 @@
+% =========================================================================
+% PROVENANCE (section-level)
+%   status      : CODE_FACT unless marked otherwise
+%   produced-by : utilities.py :: classify_mc_dict()  (lines 519-635)
+%                 utilities.py :: DecayMode_new       (line 73)
+%                 utilities.py :: create_templates_new (lines 1073-1273)
+%   commit      : dd520a5
+%   scope       : MC16rd, Run 1 + Run 2, e and mu channels
+% =========================================================================
+\section{Truth Classification and Simulated Sample Composition}
+\label{sec:truth}
+
+Every simulated candidate is assigned to exactly one truth category by
+\texttt{utilities.classify\_mc\_dict()}.
+The categories are the samples from which the fit templates of
+Sec.~\ref{sec:fit} are built, so their definitions, their ordering, and their
+completeness are part of the statistical model rather than bookkeeping.
+
+\subsection{Classification variables}
+\label{sec:truth:vars}
+
+The decision tree uses four truth quantities:
+\texttt{D\_mcErrors}, the MC-matching error flags of the $D$ candidate;
+the lepton MC PDG code (\texttt{ell\_BFbrems\_mcPDG} in the electron channel,
+i.e.\ the \emph{pre}-bremsstrahlung-correction match, and
+\texttt{ell\_mcPDG} in the muon channel);
+\texttt{B0\_isContinuumEvent}; and the MC PDG codes of the $B^{0}$ candidate
+and of its first two generated daughters.
+
+Two derived predicates organise the tree:
+\begin{align}
+  \mathrm{trueD} &\equiv \texttt{D\_mcErrors} = 0, \\
+  \mathrm{fakeD} &\equiv 0 < \texttt{D\_mcErrors} < 512, \\
+  \mathrm{fakeTracks} &\equiv \texttt{D\_mcErrors} = 512 ,
+\end{align}
+where $512$ is the clone/fake-track bit.
+True and fake leptons are separated by whether the matched lepton PDG code
+has the absolute value expected for the channel.
+
+\subsection{Decision tree and precedence}
+\label{sec:truth:tree}
+
+The categories are assigned in the order below.
+Fake-object categories take precedence over every category built from a true
+$D$ and a true lepton, and, importantly, they are assigned \emph{without} a
+requirement on \texttt{B0\_isContinuumEvent}: a continuum event containing a
+fake $D$ is classified as \texttt{bkg\_fakeD}, not as \texttt{bkg\_continuum}.
+The continuum flag is used only to separate the categories that already have
+a true $D$ and a true lepton.
+
+\begin{enumerate}
+  \item \texttt{bkg\_fakeD} --- $0 < \texttt{D\_mcErrors} < 512$.
+        The $K\pi\pi$ combination does not come from a real $D^{\pm}$.
+  \item \texttt{bkg\_fakeL} --- trueD and the lepton is not a true lepton of
+        the channel flavour.
+  \item \texttt{bkg\_fakeTracks} --- $\texttt{D\_mcErrors} = 512$: one of the
+        $D$ daughters is a clone or fake track.
+\end{enumerate}
+
+The remaining candidates have a true $D$ and a true lepton (denoted TDT$\ell$)
+and are split by the origin of the pair:
+
+\begin{enumerate}\setcounter{enumi}{3}
+  \item \texttt{bkg\_continuum} --- $\texttt{B0\_isContinuumEvent} = 1$:
+        the event is $e^{+}e^{-} \to q\bar{q}$ rather than
+        $\Upsilon(4S) \to B\bar{B}$.
+  \item \texttt{bkg\_combinatorial} --- $\texttt{B0\_mcPDG} = 300553$:
+        the $D$ and the lepton are both real but come from \emph{different}
+        $B$ mesons of the same $B\bar{B}$ event.
+  \item \texttt{bkg\_hadronicB\_secondaryL} --- a single, non-continuum $B$
+        decay in which the lepton is \emph{not} a direct daughter of the
+        reconstructed $B$ and does not come from a $\tau$ of that $B$.
+        This is the double-charm/secondary-lepton family: hadronic decays
+        such as $B \to D D_{(s)} X$ in which one charm meson decays
+        semileptonically and supplies the lepton.
+  \item Signal-like decays (\texttt{signals}) --- $|\texttt{B0\_mcPDG}| \in
+        \{511, 521\}$ \emph{and} the lepton is either a direct daughter of
+        that $B$ or the daughter of a $\tau$ from that $B$.
+  \item \texttt{bkg\_other\_TDT$\ell$} --- explicit catch-all: any TDT$\ell$
+        candidate matched by none of items 4--7.
+\end{enumerate}
+
+The signal-like sample is then subdivided by the generated first two
+daughters of the $B$:
+
+\begin{enumerate}\setcounter{enumi}{8}
+  \item $B \to D \tau \nu$ (signal) and $B \to D \ell \nu$ (normalisation),
+        identified by the PDG-code product of the first two daughters;
+  \item $B \to D^{*} \tau \nu$ and $B \to D^{*} \ell \nu$;
+  \item $B \to D^{**} \tau \nu$, and $B \to D^{**} \ell \nu$ split into
+        narrow ($D_{1}, D_{2}^{*}$) and broad ($D_{0}^{*}, D_{1}'$) states;
+  \item semileptonic ``gap'' modes, identified by a charged $D^{(*)}$
+        together with a $\pi$ or an $\eta$, merged into a single
+        \texttt{$D\ell\nu$\_gap} category;
+  \item \texttt{bkg\_other\_signal} --- explicit catch-all: any signal-like
+        candidate matched by none of items 9--12.
+\end{enumerate}
+
+Each category is finally stamped with an integer code from
+\texttt{DecayMode\_new}, which is the interface used by the downstream
+template and workspace code.
+
+\subsection{Are the categories mutually exclusive and exhaustive?}
+\label{sec:truth:closure}
+
+\paragraph{Exclusivity.}
+The three fake categories are disjoint by construction, because they
+partition disjoint ranges of \texttt{D\_mcErrors} and the fake-lepton
+category additionally requires $\texttt{D\_mcErrors} = 0$.
+Among the TDT$\ell$ categories, exclusivity is \emph{inherited from an
+invariant of the MC truth record} rather than enforced by the queries
+themselves: \texttt{bkg\_continuum} places no requirement on
+\texttt{B0\_mcPDG}, while \texttt{bkg\_combinatorial} and the signal-like
+selection place no requirement on \texttt{B0\_isContinuumEvent}.
+These definitions are disjoint precisely because
+$\texttt{B0\_isContinuumEvent} = 1$ is a necessary and sufficient condition
+for a continuum event, so that \texttt{B0\_mcPDG} is meaningful only when the
+flag is zero, and a candidate with $|\texttt{B0\_mcPDG}| \in \{511,521\}$ or
+$\texttt{B0\_mcPDG} = 300553$ necessarily has the flag equal to zero
+(\texttt{ANALYSIS\_DECISION}).
+The categories are therefore exclusive, but the guarantee is a property of
+the simulation, not of the code; a change in the meaning of either variable
+would silently break it.
+
+\paragraph{Exhaustiveness.}
+The TDT$\ell$ and signal-like branches are exhaustive by construction,
+because each terminates in an explicit catch-all
+(\texttt{bkg\_other\_TDT$\ell$} and \texttt{bkg\_other\_signal}) built as the
+complement of the categories above it.
+The fake branch has no such catch-all.
+Candidates with $\texttt{D\_mcErrors} > 512$ --- that is, the clone/fake-track
+bit set together with any other mismatch bit, or any higher bit --- satisfy
+none of trueD, fakeD or fakeTracks, and are therefore assigned to no category
+at all.
+Such candidates are expected to be absent or negligible in MC16rd
+\AnalysisTBD{to be confirmed: run
+\texttt{scripts/validate\_truth\_categories.py} over one MC16rd file and
+report the number of unclassified candidates and their
+\texttt{D\_mcErrors} spectrum.  Until then, exhaustiveness of the fake branch
+is an assumption}
+
+\paragraph{Categories excluded from the fit.}
+Three classified categories are dropped before the templates are built
+(\texttt{create\_templates\_new}, default
+\texttt{sample\_to\_exclude}): \texttt{bkg\_fakeTracks},
+\texttt{bkg\_other\_TDT$\ell$} and \texttt{bkg\_other\_signal}.
+The classification is therefore exhaustive in a stronger sense than the fit
+model is: the two catch-alls exist to make the classification complete, and
+are then excluded from the likelihood.
+\AnalysisTBD{quantify the yield of the three excluded categories in the
+signal region and in the $D$-mass sideband, and either justify neglecting
+them or assign a systematic uncertainty for doing so}
+
+\subsection{Category merging in the fit templates}
+\label{sec:truth:merging}
+
+Two merges happen between classification and template construction, so the
+category list of Sec.~\ref{sec:truth:tree} is not identical to the sample
+list of Sec.~\ref{sec:fit}:
+the narrow and broad $D^{**}\ell\nu$ categories are summed into a single
+$D^{**}\ell\nu$ template; and when the gap-mode sample weight is set to zero
+the combined template is relabelled $D^{**}\ell\nu + \text{gap}$, which folds
+the gap modes into the $D^{**}$ template rather than dropping them.
+\AnalysisTBD{state which of these configurations is nominal, and what
+information is lost by merging narrow and broad $D^{**}$ given that they have
+different form factors and different $\mmiss$ shapes}
+
+\subsection{Generic-$B\bar{B}$ subdivision}
+\label{sec:truth:bbbar}
+
+The two generic-$B\bar{B}$ categories --- \texttt{bkg\_combinatorial} and
+\texttt{bkg\_hadronicB\_secondaryL} --- are further subdivided for the
+purpose of the reweighting described in Sec.~\ref{sec:bbbar}.
+That subdivision is a property of the reweighting, not of the truth
+classification, and is documented there.
+
+\subsection{Sample composition}
+\label{sec:truth:composition}
+
+\AnalysisTBD{table of expected yields and fractions per category, in the
+signal region and in the $D$-mass sideband, separately for Run 1 and Run 2
+and for the $e$ and $\mu$ channels, at the nominal working point.  Producing
+artifact and commit to be recorded in the provenance block above the table}
