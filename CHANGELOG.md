@@ -11,6 +11,16 @@ First structured draft. The note previously consisted of the unmodified
 Belle II note template.
 
 Added:
+- Figure 1, the analysis flow, and the two ordering constraints it makes
+  explicit: the classifier is trained after the offline selection, and the
+  generic-BBbar weights are derived in a classifier-defined region.
+- Appendix: Open Items, consolidating the 80 markers by section and by what
+  would close each, with the artifacts ranked by how much they unblock.
+- A region-nomenclature table. Three different selections had been called
+  "the BDT sideband"; two are in active use for different purposes and the
+  third matches neither and is marked superseded.
+- scripts/check_build.py, which validates its own patterns against the log
+  before reporting a count.
 - Sections 7 and 9 no longer cite the BBbar diagnostic scripts as if they were
   part of the analysis: they were held back from the analysis-repo PR and live
   on a separate branch, unvalidated and never run on real ntuples. The note
@@ -73,6 +83,11 @@ Added:
   "not applied" cases deliberately.
 
 Changed:
+- Corrected the LaTeX build reporting. A hand-rolled grep for overfull boxes
+  had a double-escaped pattern that matched nothing, so several commits
+  reported a clean build that was not clean. The true count at the time was
+  15 boxes, worst 130pt. All are now fixed and the check is a script that
+  fails loudly if its patterns stop matching.
 - `note.tex` now typesets `body.tex`, not the template's `instructions.tex`.
 - `AGENTS.md`: source hierarchy no longer refers to a manifest or results
   registry (see the Provenance section for what replaced them); the

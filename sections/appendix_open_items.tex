@@ -1,0 +1,136 @@
+% PROVENANCE (section-level)
+%   status      : ANALYSIS_DECISION (the classification is a working
+%                 judgement, not an approved plan)
+%   produced-by : the AnalysisTBD and InProgress markers in sections/*.tex
+%   commit      : dd520a5
+%   sample      : n/a (bookkeeping)
+%   selection   : n/a
+%   corrections : n/a
+\section{Open Items}
+\label{app:open}
+
+This appendix consolidates the open items marked throughout the note.
+Its purpose is to make visible which single input would close the most of
+them, so that effort can be spent in the order that unblocks the most work.
+
+Every item is marked in place with \AnalysisTBD{} or \InProgress{}; nothing
+here is new, and nothing here is a claim about the analysis.
+
+\subsection{Distribution of open items}
+\label{app:open:counts}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Open items by section and by what would close them. ``Artifact''
+  means a plot, table or fit that must be produced by running the analysis
+  code; ``decision'' means a choice for the analyst; ``external'' means
+  information held outside the two repositories.}
+  \label{tab:open-items}
+  \small
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.34\textwidth} c c c c}
+    \hline
+    Section & Artifact & Decision & External & Total \\
+    \hline
+    1 Introduction              & 0 & 1 & 0 & 1 \\
+    2 Data and simulation       & 4 & 1 & 2 & 7 \\
+    3 Reconstruction            & 6 & 4 & 2 & 12 \\
+    4 Truth classification      & 3 & 1 & 0 & 4 \\
+    5 Classifier                & 5 & 3 & 0 & 8 \\
+    6 Corrections               & 1 & 4 & 1 & 6 \\
+    7 Generic $B\bar{B}$        & 3 & 1 & 0 & 4 \\
+    8 Signal extraction         & 4 & 3 & 0 & 7 \\
+    9 Systematics               & 2 & 2 & 0 & 4 \\
+    10 Validation, box opening  & 2 & 3 & 0 & 5 \\
+    11 Results                  & 1 & 0 & 0 & 1 \\
+    12 Summary                  & 0 & 1 & 0 & 1 \\
+    Appendix: selections        & 0 & 1 & 0 & 1 \\
+    Appendix: categories        & 0 & 1 & 2 & 3 \\
+    Appendix: classifier        & 6 & 1 & 0 & 7 \\
+    Appendix: fit               & 5 & 1 & 0 & 6 \\
+    Appendix: open items        & 0 & 3 & 0 & 3 \\
+    \hline
+    Total                       & 42 & 31 & 7 & 80 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The totals are generated from the markers in the source and match them
+exactly; the split into the three columns is a working judgement.
+\AnalysisTBD{the classification into artifact, decision and external in
+Table~\ref{tab:open-items} is a working judgement made while writing, not an
+approved plan.  Correct it where the intended route to closing an item
+differs}
+
+\subsection{Artifacts that would close the most items}
+\label{app:open:artifacts}
+
+\begin{enumerate}
+  \item \textbf{Run the truth-category validation on one MC16rd file.}
+        Closes the \texttt{D\_mcErrors} $> 512$ question of
+        Sec.~\ref{sec:truth:closure}, the yield of the three categories
+        excluded from the templates, and part of the composition table of
+        Sec.~\ref{sec:truth:composition}.
+        It is the cheapest item on this list.
+  \item \textbf{Regenerate one workspace from the pinned commit.}
+        Replaces the superseded tables of Appendix~\ref{app:fit:stored} and
+        settles the channel, sample and modifier description of
+        Sec.~\ref{sec:fit:modifiers}, which currently documents an obsolete
+        realisation of the model.
+  \item \textbf{Produce the per-category yield table} in the signal region and
+        the sideband, per run period and channel.
+        Closes items in Sec.~\ref{sec:truth}, Sec.~\ref{sec:fit} and
+        Sec.~\ref{sec:data}.
+  \item \textbf{Produce the classifier diagnostics} of
+        Appendix~\ref{app:mva:todo}, in particular the correlation of each
+        retained input with $\mmiss$ and $\pdl$ in the fit bins, which is the
+        only quantitative evidence that the selection does not sculpt the fit
+        observables.
+  \item \textbf{Obtain a generic-$B\bar{B}$ fit with an interior minimum.}
+        This is the precondition for the systematic of
+        Sec.~\ref{sec:syst:bbbar} and for constraining the family
+        normalisations in Sec.~\ref{sec:fit:modifiers}.
+\end{enumerate}
+
+\subsection{Decisions required}
+\label{app:open:decisions}
+
+The following are choices rather than measurements, and each is referenced at
+the point in the note where it applies.
+\begin{itemize}
+  \item Which stored classifier model is nominal
+        (Sec.~\ref{sec:mva:training}).
+  \item Whether the generic-$B\bar{B}$ normalisations are fixed or constrained
+        in the signal-region fit, and how the constraint width is obtained
+        (Sec.~\ref{sec:fit:modifiers}).
+  \item The treatment of form factors and of branching fractions outside the
+        generic-$B\bar{B}$ families (Sec.~\ref{sec:corrections:missing}).
+  \item The prefit and postfit closure criteria, and the box-opening plan
+        (Sec.~\ref{sec:validation:closure},
+        Sec.~\ref{sec:validation:unblinding}).
+  \item Whether mode replacement is enabled in the nominal analysis
+        (Appendix~\ref{app:categories:replacement}).
+  \item Whether the reconstruction-level defects recorded in
+        Sec.~\ref{sec:recon:b} are corrected before the next production, and
+        what is regenerated if they are.
+\end{itemize}
+
+\subsection{Items that invalidate existing material if resolved}
+\label{app:open:invalidating}
+
+Two open items are not additive: resolving them changes material already
+written.
+\begin{itemize}
+  \item \textbf{The rest-of-event track mask} (Sec.~\ref{sec:recon:b}).
+        Correcting it changes which tracks enter the ROE, and therefore
+        $M_{\mathrm{bc}}^{\mathrm{ROE}}$, $\Delta E^{\mathrm{ROE}}$, the ROE
+        charge and multiplicity, and $\mmiss$.
+        Since $\mmiss$ is a fit observable and the ROE multiplicity enters the
+        generic-$B\bar{B}$ tuning objective, every ROE-derived number in this
+        note predates the fix.
+  \item \textbf{The classifier} (Sec.~\ref{sec:mva}).
+        The generic-$B\bar{B}$ tuning region is defined by classifier output,
+        so retraining requires re-deriving the family weights.
+\end{itemize}
+Work that depends on either should be sequenced after them rather than
+before.

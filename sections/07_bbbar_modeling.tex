@@ -82,8 +82,9 @@ together with the offline requirements of Eq.~\eqref{eq:offline-cut} except
 $p_{\ell} < 4$ (Sec.~\ref{sec:recon:offline}).
 Note that Eq.~\eqref{eq:bbbar-region} is a \emph{signal-region} $D$-mass
 selection with the signal and fake-$D$ classifier outputs suppressed; it is
-not the combinatorial-enhanced BDT sideband, and it places no requirement on
-\texttt{combinatorial\_prob} or \texttt{continuum\_prob}.
+not the combinatorial-enriched region of \texttt{lgb\_comb}, and it places no
+requirement on \texttt{combinatorial\_prob} or \texttt{continuum\_prob}
+(Appendix~\ref{app:selections:naming}).
 
 \subsection{Run dependence}
 \label{sec:bbbar:rundep}
@@ -145,9 +146,10 @@ Every fit therefore contains at least one near-degenerate pair.
   Every fit reported \texttt{has\_parameters\_at\_limit = true}.}
   \label{tab:bbbar-correlations}
   \small
-  \begin{tabular}{l c c l}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth} c c >{\raggedright\arraybackslash}p{0.26\textwidth}}
     \hline
-    Fit & $\max|\rho|$ unmeasured pairs & $\max|\rho|$ measured & Pinned \\
+    Fit & $\max|\rho|$ unmeas. & $\max|\rho|$ meas. & Pinned \\
     \hline
     \texttt{kin-2d-plus-roe run1 $e$} & 0.77 & 0.77 & 2-body, 4-body \\
     \texttt{kin-2d run1+run2 $e$}     & 0.77 & 0.72 & 4-body \\

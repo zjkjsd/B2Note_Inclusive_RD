@@ -78,9 +78,51 @@ available downstream without exposing them to the classifier.
     \texttt{ell\_p < 4}
 \end{description}
 
-Note that three different selections are referred to as ``the BDT sideband''
-in different places: \texttt{lgb\_comb}, the generic-$B\bar{B}$ tuning region
-above, and the combinatorial-enhanced definition in earlier documentation.
-They are not the same region.
-\AnalysisTBD{adopt one name per region and use it consistently across the
-code and this note}
+\subsection{Region nomenclature}
+\label{app:selections:naming}
+
+Three different selections have been referred to as ``the BDT sideband''.
+They are not the same region, and two of them are in active use for different
+purposes.
+This note uses the names in Table~\ref{tab:region-names} and no others.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Names used in this note for the classifier-defined regions. The
+  third row is a description that matches neither region in the code.}
+  \label{tab:region-names}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.24\textwidth} >{\raggedright\arraybackslash}p{0.35\textwidth} >{\raggedright\arraybackslash}p{0.31\textwidth}}
+    \hline
+    Name used here & Selection & Purpose \\
+    \hline
+    Generic-$B\bar{B}$ tuning region &
+      \texttt{1.855<D\_M<1.885}, \texttt{fakeD\_prob<0.1},
+      \texttt{sig\_prob<0.1} &
+      The region in which the family weights are \emph{fitted}
+      (Sec.~\ref{sec:bbbar:tuning}) \\
+    Combinatorial-enriched region (\texttt{lgb\_comb}) &
+      \texttt{fakeD\_prob<0.15}, \texttt{continuum\_prob<0.5},
+      \texttt{combinatorial\_prob>0.5} &
+      The region in which the generic-$B\bar{B}$ data/simulation
+      \emph{comparisons} are made \\
+    ``Combinatorial-enhanced BDT sideband'' &
+      \texttt{combinatorial\_prob>0.6}, \texttt{sig\_prob<0.1},
+      \texttt{fakeD\_prob<0.1}, \texttt{continuum\_prob<0.4} &
+      \Superseded{appears only in the analysis context document; matches
+      neither selection in the code} \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The distinction between the first two rows matters for
+Sec.~\ref{sec:bbbar:validation}: the weights are fitted in one region and
+plotted in another, so the generic-$B\bar{B}$ comparison plots are not simply
+a refit of the region they were derived in.
+\AnalysisTBD{state whether the comparisons in the combinatorial-enriched
+region are intended as an independent check of the tuned weights or as a
+display of the tuning itself.  The two regions differ in their
+\texttt{sig\_prob} and \texttt{combinatorial\_prob} requirements and in
+whether the $D$-mass signal window is applied, so they do not contain the same
+events}

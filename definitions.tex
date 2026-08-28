@@ -1,6 +1,8 @@
 % Packages
 \usepackage{graphicx} % Include figure files
 \usepackage{epstopdf} % Allow to include eps files
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
 \usepackage{array}
 \usepackage{dcolumn} % Align table columns on decimal point
 \usepackage{xcolor} % Color support
@@ -46,3 +48,8 @@
 % Shorthand used throughout for the two fit observables.
 \newcommand{\mmiss}{M_{\mathrm{miss}}^{2}}
 \newcommand{\pdl}{|\vec{p}^{\,*}_{D}| + |\vec{p}^{\,*}_{\ell}|}
+
+% Long literal code strings resist normal line breaking.  emergencystretch
+% lets TeX stretch a paragraph rather than overrun the margin, without the
+% global looseness of \sloppy.
+\setlength{\emergencystretch}{3em}

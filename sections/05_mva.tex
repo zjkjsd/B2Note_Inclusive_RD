@@ -25,6 +25,7 @@ The four training targets are assigned in
 \texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb} as
 \begin{center}
 \begin{tabular}{c l l}
+  % narrow content; kept simple
   \hline
   Target & Class & Output probability \\
   \hline
@@ -139,17 +140,21 @@ correlation study}
 
 The nominal signal selection is \texttt{lgb\_tight}:
 \begin{equation}
-  \texttt{sig\_prob} > 0.5,\quad
-  \texttt{fakeD\_prob} < 0.06,\quad
-  \texttt{continuum\_prob} < 0.4,\quad
-  \texttt{combinatorial\_prob} < 0.6 .
+  \begin{aligned}
+    &\texttt{sig\_prob} > 0.5, \qquad
+     \texttt{fakeD\_prob} < 0.06, \\
+    &\texttt{continuum\_prob} < 0.4, \qquad
+     \texttt{combinatorial\_prob} < 0.6 .
+  \end{aligned}
   \label{eq:lgb-tight}
 \end{equation}
 It was optimised using a figure of merit.
-Two further selections exist and are not the nominal signal selection:
-\texttt{lgb\_loose}, used for preliminary studies and as a file-size filter
-and chosen by inspection; and \texttt{lgb\_comb}, which selects a
-combinatorial-enriched region.
+Two further selections exist and are not the nominal signal selection.
+\texttt{lgb\_loose} is used for preliminary studies and as a file-size filter,
+and was chosen by inspection.
+\texttt{lgb\_comb} defines the combinatorial-enriched region, in which the
+generic-$B\bar{B}$ data/simulation comparisons of Sec.~\ref{sec:validation}
+are made.
 
 \AnalysisTBD{not done: the signal selection should be optimised on the $R(D)$
 sensitivity --- equivalently, on the uncertainty of the
