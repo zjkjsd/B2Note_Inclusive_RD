@@ -63,14 +63,32 @@ identifier to be meaningful.
 $0.6$~GeV$/c$ is not documented; record the working points and their
 efficiencies}
 
-The lepton momentum requirement is applied to the \emph{pre}-bremsstrahlung
-momentum: the $p > 0.3$~GeV$/c$ cut is made on \texttt{e+:uncorrected} before
-\texttt{correctBremsBelle} builds the corrected list.
-An electron that would pass the threshold only after photon recovery is
-therefore already removed.
-\AnalysisTBD{confirm that applying the electron momentum requirement before
-the bremsstrahlung correction is intended, and quantify the efficiency
-difference against applying it afterwards}
+The electron momentum requirement is deliberately applied to the
+\emph{pre}-bremsstrahlung momentum: the $p > 0.3$~GeV$/c$ cut is made on
+\texttt{e+:uncorrected}, and \texttt{correctBremsBelle} then builds the
+corrected list from the survivors (\texttt{ANALYSIS\_DECISION}).
+The reason is PID-table coverage.
+The collaboration's \texttt{electronIDNN} efficiency and fake-rate tables are
+produced \emph{without} bremsstrahlung correction, so they must be evaluated
+at the uncorrected momentum, which is why the analysis stores and uses the
+\texttt{BFbrems\_} quantities for the PID weights.
+Bremsstrahlung recovery only adds energy, so
+$p_{\mathrm{corrected}} \geq p_{\mathrm{uncorrected}}$; cutting on the
+corrected momentum would therefore admit candidates whose uncorrected momentum
+lies below the threshold, and potentially below the lowest momentum bin of the
+correction tables, where the correction is undefined.
+Cutting on the uncorrected momentum guarantees that every selected candidate
+lies inside the table coverage.
+
+The cost is a small efficiency loss for genuine electrons whose measured
+pre-correction momentum dipped below the threshold through bremsstrahlung.
+That loss depends on how well bremsstrahlung is modelled rather than on
+identification efficiency, so it is not covered by the PID correction.
+\AnalysisTBD{record the lowest momentum bin edge of the electron efficiency
+table.  If it lies below $0.3$~GeV$/c$, the reconstruction-level requirement
+can be loosened to that edge and the analysis threshold applied offline
+instead, recovering the electrons currently lost; both \texttt{ell\_BFbrems\_p}
+and \texttt{ell\_p} are stored, so that choice costs no reprocessing}
 
 \paragraph{Bremsstrahlung recovery.}
 Electron candidates are corrected with \texttt{correctBremsBelle} using
@@ -226,18 +244,34 @@ $\texttt{fakePhotonSuppression} > 0.1$.
 Curl tracks are tagged separately with \texttt{tagCurlTracks} on a list of all
 tracks.
 
-Two observations on the tight mask that should be checked before the next
-production:
-\AnalysisTBD{the tight track requirement includes
-\texttt{nCDCHits>=0}, which is satisfied by every track and therefore has no
-effect.  Confirm whether a nonzero threshold was intended}
-\AnalysisTBD{the tight track requirement is written as
-\texttt{A and B and C and [$p_{T}<0.15$ and \ldots] or [\ldots] or \ldots}\@.
-If \texttt{and} binds more tightly than \texttt{or} in the basf2 cut parser,
-this applies the quality requirements \texttt{A}, \texttt{B} and \texttt{C}
-only to the lowest $p_{T}$ branch, leaving tracks above $0.15$~GeV$/c$ with no
-\texttt{pValue} or acceptance requirement.  Verify the parsed expression in
-basf2 and add explicit brackets either way}
+Two defects in the tight mask were identified while documenting it, and both
+require a new reconstruction campaign to correct.
+
+First, the intended requirement is that the acceptance and track-fit quality
+apply to \emph{every} track, with only the impact-parameter requirement
+depending on $p_{T}$.
+The cut is written as
+\texttt{A and B and C and [$p_{T}<0.15$ and \ldots] or [\ldots] or \ldots},
+without brackets around the $p_{T}$ chain.
+In the basf2 cut grammar \texttt{and} binds more tightly than \texttt{or}
+(\texttt{b2parser}: \texttt{disjunction ::= conjunction | disjunction OR
+conjunction}), so this parses as
+\texttt{[A and B and C and [$p_{T}<0.15$ and \ldots]] or [\ldots] or \ldots}
+and the acceptance and \texttt{pValue} requirements are applied only to the
+lowest $p_{T}$ branch.
+Tracks above $0.15$~GeV$/c$ enter the ROE with no acceptance or fit-quality
+requirement at all.
+Bracketing the disjunction restores the intended behaviour.
+
+Second, the leading \texttt{nCDCHits>=0} is satisfied by every track and has no
+effect.
+
+\AnalysisTBD{both defects change the ROE composition, and therefore
+$M_{\mathrm{bc}}^{\mathrm{ROE}}$, $\Delta E^{\mathrm{ROE}}$, the ROE charge and
+multiplicity, and $\mmiss$.  Everything in this note derived from ROE
+quantities --- including the generic-$B\bar{B}$ weights of
+Sec.~\ref{sec:bbbar}, which are tuned partly on the ROE multiplicity ---
+predates the fix and will need regenerating once the samples are reproduced}
 
 The tag-side vertex is obtained with \texttt{TagV} using the same mask, with a
 tube constraint, the \texttt{standard\_PXD} track-finding type, no required

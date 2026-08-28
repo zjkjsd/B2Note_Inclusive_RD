@@ -28,6 +28,14 @@ Added:
   the unmeasured families, and marks the scan that would confirm it.
 - Section 8 (Signal Extraction), documenting the generated workspace and the
   decision to constrain rather than float the generic-BBbar normalisations.
+- Section 3 records two reconstruction findings raised while writing that
+  narrative. The electron momentum cut is applied before the bremsstrahlung
+  correction deliberately, to keep every candidate inside the coverage of the
+  PID tables, which the performance group produces without brems correction;
+  the note now gives that justification rather than the diagnostic one. And
+  the tight ROE track mask mis-parses: basf2 binds "and" more tightly than
+  "or", so the acceptance and pValue requirements apply only to the lowest-pT
+  branch. Fixing it requires reprocessing and invalidates ROE-derived results.
 - Section 3 gains narrative for every selection that previously appeared only
   in the cut table: track quality, hadron and lepton identification,
   bremsstrahlung recovery, the vertex fits, the D* veto photon requirements,
