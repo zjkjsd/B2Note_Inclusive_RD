@@ -28,6 +28,11 @@ Added:
   the unmeasured families, and marks the scan that would confirm it.
 - Section 8 (Signal Extraction), documenting the generated workspace and the
   decision to constrain rather than float the generic-BBbar normalisations.
+- Section 3 gains narrative for every selection that previously appeared only
+  in the cut table: track quality, hadron and lepton identification,
+  bremsstrahlung recovery, the vertex fits, the D* veto photon requirements,
+  the three-stage ROE mask construction, and the tag-side requirements. The
+  table is unchanged in scope and remains the literal code reference.
 - Section 3 (Event Reconstruction), drafted from
   `Recon_scripts/2_Reconstruction.py`, with a complete cut-to-code table.
 - Section 4 (Truth Classification), drafted from
