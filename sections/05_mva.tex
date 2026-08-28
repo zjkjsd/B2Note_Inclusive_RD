@@ -21,30 +21,57 @@ Sec.~\ref{sec:validation}.
 \subsection{Target classes}
 \label{sec:mva:classes}
 
-The four classes correspond to the truth categories of
-Sec.~\ref{sec:truth}: correctly reconstructed signal-like candidates,
-fake-$D$ candidates, continuum events, and combinatorial candidates in which
-the $D$ and the lepton come from different $B$ mesons.
-Choosing these four rather than a single signal-versus-background
-discriminant is what allows the same classifier to define the fake-$D$ and
-combinatorial-enriched control regions used later.
-\AnalysisTBD{the exact mapping from the truth categories of
-Sec.~\ref{sec:truth} to the four training targets, and the composition and
-size of the training sample, from
-\texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb}.  The mapping is currently
-defined in a notebook rather than in library code}
+The four training targets are assigned in
+\texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb} as
+\begin{center}
+\begin{tabular}{c l l}
+  \hline
+  Target & Class & Output probability \\
+  \hline
+  0 & correctly reconstructed signal-like & \texttt{sig\_prob} \\
+  1 & fake $D$ & \texttt{fakeD\_prob} \\
+  2 & continuum & \texttt{continuum\_prob} \\
+  3 & combinatorial & \texttt{combinatorial\_prob} \\
+  \hline
+\end{tabular}
+\end{center}
+and correspond to the truth categories of Sec.~\ref{sec:truth}.
+Choosing four classes rather than a single signal-versus-background
+discriminant is what allows one classifier to serve three purposes: the signal
+selection of Eq.~\eqref{eq:lgb-tight}, the fake-$D$ suppression that defines
+the generic-$B\bar{B}$ tuning region (Eq.~\eqref{eq:bbbar-region}), and the
+combinatorial-enriched control region of Sec.~\ref{sec:validation}.
+A binary classifier would have required a separate training for each.
+\AnalysisTBD{the composition and size of the training sample per class, and
+the definition of \texttt{training\_weight}.  Both are set in the notebook
+rather than in library code, so they have no citable producing artifact}
 
 \subsection{Training configuration}
 \label{sec:mva:training}
 
-Training uses \texttt{4\_LightGBM\_Multiclass\_Training.py} with a gradient
-boosted decision tree (\texttt{gbdt}) and the \texttt{multiclass} objective
+Training uses \texttt{4\_LightGBM\_Multiclass\_Training.py} with gradient
+boosted decision trees (\texttt{gbdt}) and the \texttt{multiclass} objective
 over four classes, optimising multi-class log-loss and monitoring
 \texttt{auc\_mu}.
 The sample is split 80/20 into training and validation subsets with a fixed
 random seed, and per-event training weights are applied.
-The training and validation subsets are disjoint by construction, being
-complementary subsets of the same frame.
+The two subsets are disjoint by construction, being complementary subsets of
+the same frame.
+
+Training proceeds in two stages: 15 boosting rounds at a fixed learning rate
+of $0.5$, followed by 10 further rounds in which the learning rate decays as
+$0.5 \times 0.99^{i}$, with early stopping after 3 and 2 rounds without
+improvement respectively.
+The large initial learning rate with few rounds, followed by a decaying tail,
+trades some final accuracy for a very small ensemble.
+The nominal model carries 100 trees, four per boosting iteration.
+The full hyper-parameter set is given in Table~\ref{tab:mva-hyperparameters}.
+
+The training phase space can be read back from the stored model: the recorded
+feature ranges show $M_{\mathrm{bc}}^{\mathrm{ROE}} > 5$~GeV$/c^{2}$ and
+$-4 < \Delta E^{\mathrm{ROE}} < 1$~GeV, so the classifier was trained after
+the offline requirements of Eq.~\eqref{eq:offline-cut} and is only defined
+within them.
 \AnalysisTBD{demonstrate that the sample used to train the classifier does not
 overlap with the sample used to build the fit templates.  A disjoint
 train/validation split within one frame does not by itself establish
@@ -58,8 +85,16 @@ the \emph{binary} off-resonance data/MC check of
 four-class training, and its default \texttt{multiclass} objective has no
 matching \texttt{num\_class} configuration.
 It therefore does not tune the final classifier in its current form.
-\AnalysisTBD{state the hyper-parameter values used for the nominal model and
-how they were chosen, or record that they were set by hand}
+\AnalysisTBD{the hyper-parameters of Table~\ref{tab:mva-hyperparameters} are
+hard-coded.  Record whether they were tuned, scanned by hand, or inherited
+from an earlier configuration}
+
+Three trained models are stored, \texttt{lgbm\_multiclass\_v1} through
+\texttt{v3}, with 50, 34 and 25 recorded boosting rounds; only \texttt{v3}
+matches the two-stage schedule above.
+\AnalysisTBD{state which stored model is the nominal one and what distinguishes
+the three versions.  The selection working point of
+Eq.~\eqref{eq:lgb-tight} is only meaningful with respect to a named model}
 
 \subsection{Input variables}
 \label{sec:mva:inputs}

@@ -10,8 +10,6 @@
 \section{Decay-Category Definitions}
 \label{app:categories}
 
-\sloppy
-
 \subsection{Truth categories and their integer codes}
 \label{app:categories:codes}
 
@@ -26,47 +24,96 @@ dictionary is returned.
 \subsection{PDG-code groupings}
 \label{app:categories:pdg}
 
-The charm states are grouped as follows, with both charge states in each
-list:
+The charm states are grouped as follows, with both charge states in each list:
 \begin{description}
   \item[$D$, $D^{*}$ charged] $\pm411$, $\pm413$
   \item[$D$, $D^{*}$ neutral] $\pm421$, $\pm423$
-  \item[$D^{**}$ narrow] $\pm10413$, $\pm10423$, $\pm415$, $\pm425$
-  \item[$D^{**}$ broad] $\pm10411$, $\pm10421$, $\pm20413$, $\pm20423$
+  \item[$D^{**}$ narrow] $\pm10413$ ($D_{1}$), $\pm10423$ ($D_{1}^{0}$),
+        $\pm415$ ($D_{2}^{*}$), $\pm425$ ($D_{2}^{*0}$)
+  \item[$D^{**}$ broad] $\pm10411$ ($D_{0}^{*}$), $\pm10421$ ($D_{0}^{*0}$),
+        $\pm20413$ ($D_{1}'$), $\pm20423$ ($D_{1}'^{0}$)
   \item[$D_{s}$ family] $\pm431$, $\pm433$, $\pm10431$, $\pm20433$,
         $\pm10433$, $\pm435$
   \item[Charm baryons] $\Lambda_{c}$, $\Sigma_{c}$, $\Xi_{c}$, $\Omega_{c}$
   \item[Double charm] $\psi$ states, $\Xi_{cc}$, $\Omega_{cc}$
 \end{description}
-The narrow/broad $D^{**}$ split is used at classification time and then
-undone when the templates are built (Sec.~\ref{sec:truth:merging}).
+The narrow/broad $D^{**}$ split follows the standard division into the two
+$j_{q} = 3/2$ states, which are narrow, and the two $j_{q} = 1/2$ states,
+which are broad.
+It is used at classification time and then undone when the templates are
+built (Sec.~\ref{sec:truth:merging}).
 
 \subsection{Generic-$B\bar{B}$ families}
 \label{app:categories:bbbar}
 
-Each generic-$B\bar{B}$ candidate is assigned a decay-mode identifier from
-the product of the generated daughter PDG codes of the relevant $B$, and
-placed in exactly one family:
-\texttt{BBbar\_semileptonic} if any daughter is a lepton;
+Each generic-$B\bar{B}$ candidate is assigned a decay-mode identifier from the
+product of the generated daughter PDG codes of the relevant $B$, and placed in
+exactly one family: \texttt{BBbar\_semileptonic} if any daughter is a lepton;
 otherwise \texttt{BBbar\_measured\_hadronic} if the identifier appears in the
-measured-mode list;
-otherwise \texttt{BBbar\_unmeasured:$n$-body}, with $n$ the generated
-daughter multiplicity clipped below at 2 and capped at $5+$.
+measured-mode list; otherwise \texttt{BBbar\_unmeasured:$n$-body}, with $n$ the
+generated daughter multiplicity clipped below at 2 and capped at $5+$.
+
+The measured-mode list is organised into four blocks --- single-charm and
+double-charm, each for mixed and charged $B$ --- and contains 75 active
+entries, with a further 48 entries commented out.
+\AnalysisTBD{the commented-out entries are modes that were considered and
+excluded from the measured list.  Record why, since every excluded mode moves
+from the externally constrained family to a freely fitted $n$-body family and
+so changes what the tuning is allowed to absorb}
+
+Because a generated decay may contain a radiated photon, the list is extended
+by \texttt{measured\_pdg\_rad}, each entry multiplied by the photon PDG code
+22, so that the radiative counterpart of a measured mode is still recognised
+as measured rather than falling into an unmeasured $n$-body family.
+
+\subsection{Branching-fraction corrections}
+\label{app:categories:bf}
 
 Four measured modes carry an additional branching-fraction correction, the
-ratio of the PDG value to the value used in the simulation, applied to
-$D_{s1}(2536)$ modes.
-\AnalysisTBD{record the source and version of the PDG values used for these
-four ratios}
+ratio of the PDG value to the value used in the simulation.
+All four are $D_{s0}^{*}(2317)^{+}$ modes, and all four corrections are large.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Branching-fraction corrections applied to measured
+  generic-$B\bar{B}$ modes, from \texttt{bbbar\_reweighting.PDG\_CORRECTIONS}.}
+  \label{tab:bf-corrections}
+  \small
+  \begin{tabular}{l c c}
+    \hline
+    Mode & Ratio (PDG / generator) & Reduction \\
+    \hline
+    $D_{s0}^{*}(2317)^{+} D^{-}$        & 0.142 & $\times 7.0$ \\
+    $D_{s0}^{*}(2317)^{+} D^{*-}$       & 0.085 & $\times 11.8$ \\
+    $D_{s0}^{*}(2317)^{+} \bar{D}^{0}$  & 0.104 & $\times 9.6$ \\
+    $D_{s0}^{*}(2317)^{+} \bar{D}^{*0}$ & 0.053 & $\times 19.0$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+These reduce the simulated rates by factors of 7 to 19, so they are not small
+adjustments: the generator substantially overproduces these modes.
+\AnalysisTBD{record the source and version of the PDG values, and the
+generator values they replace.  Corrections of this size should also carry an
+uncertainty, which is not currently propagated}
 
 \subsection{Mode replacement}
 \label{app:categories:replacement}
 
-An optional many-to-one map merges configured non-resonant 3- and 4-body
-modes into resonant 2-body states before tuning, preserving the total yield
-of the affected modes by rescaling the surviving mode by
+An optional many-to-one map merges ten configured non-resonant modes into
+resonant ones before tuning, preserving the total yield of the affected modes
+by rescaling the surviving mode by
 $(N_{\mathrm{old}} + N_{\mathrm{new}})/N_{\mathrm{new}}$.
-It is disabled in all results shown in this note.
-\AnalysisTBD{full listing of the replacement map with the physics
-justification for each entry, and a statement of whether enabling it is
-intended for the nominal analysis}
+The pattern is consistent: a $D_{s}^{(*)}$ recoiling against a non-resonant
+$D + n\pi$ system is replaced by the same $D_{s}^{(*)}$ recoiling against the
+$D^{**}$ resonance of matching multiplicity and charge, for example
+$D_{s} D \pi \pi \to D_{s} D_{1}$ and $D_{s} D \pi^{0} \to D_{s} D_{2}^{*}$.
+The intent is to move strength that the generator produces non-resonantly into
+the resonant states that are actually observed.
+
+Mode replacement is \emph{disabled} in every result shown in this note
+(\texttt{replaceFalse}).
+\AnalysisTBD{state whether enabling mode replacement is intended for the
+nominal analysis, and what the ten replacements do to the fitted family
+weights.  Since replacement moves events between $n$-body families, and those
+families are exactly what the tuning fits, this choice is not a detail}

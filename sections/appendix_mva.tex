@@ -1,19 +1,107 @@
+% PROVENANCE (section-level)
+%   status      : CODE_FACT
+%   produced-by : 4_LightGBM_Multiclass_Training.py (hyper-parameters,
+%                 schedule); BDTs/LightGBM/eval_result_v{1,2,3}.json (metrics);
+%                 BDTs/LightGBM/lgbm_multiclass_v3.txt (model header)
+%   commit      : dd520a5
+%   sample      : MC16rd training sample, e and mu
+%   selection   : offline_cut (Eq. offline-cut)
+%   corrections : none applied at training time
 \section{MVA Diagnostics}
 \label{app:mva}
 
+\subsection{Hyper-parameters}
+\label{app:mva:hyper}
+
+\begin{table}[htbp]
+  \centering
+  \caption{LightGBM configuration of the four-class classifier, hard-coded in
+  \texttt{4\_LightGBM\_Multiclass\_Training.py} at commit \texttt{dd520a5}.}
+  \label{tab:mva-hyperparameters}
+  \small
+  \begin{tabular}{l l l}
+    \hline
+    Parameter & Value & Role \\
+    \hline
+    \texttt{boosting\_type} & \texttt{gbdt} & gradient boosted trees \\
+    \texttt{objective} & \texttt{multiclass}, \texttt{num\_class} 4 & four-class output \\
+    \texttt{metric} & \texttt{multi\_logloss}, \texttt{auc\_mu} & monitored each round \\
+    \texttt{learning\_rate} & 0.5, then $0.5 \times 0.99^{i}$ & large, then decaying \\
+    \texttt{num\_boost\_round} & 15 then 10 & two stages \\
+    \texttt{early\_stopping} & 3 then 2 rounds & per stage \\
+    \texttt{num\_leaves} & 49 & tree capacity \\
+    \texttt{min\_child\_samples} & 1000 & leaf occupancy floor \\
+    \texttt{bagging\_fraction} & 0.7, \texttt{bagging\_freq} 5 & row subsampling \\
+    \texttt{feature\_fraction} & 0.7 & column subsampling \\
+    \texttt{lambda\_l1}, \texttt{lambda\_l2} & 1, 1 & regularisation \\
+    \texttt{seed} & 0 & reproducibility \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The combination of \texttt{min\_child\_samples} $=1000$ with only 49 leaves
+and 25 boosting rounds gives a deliberately small, heavily regularised model.
+That is a reasonable choice for a classifier whose output defines control
+regions as well as the signal selection, since a sharply overtrained
+discriminant would sculpt those regions differently in data and simulation.
+\AnalysisTBD{this reading of the configuration is inference, not a documented
+motivation; confirm or replace it}
+
+\subsection{Training and validation metrics}
+\label{app:mva:metrics}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Recorded metrics for the three stored models, first and last
+  boosting round, from \texttt{BDTs/LightGBM/eval\_result\_v*.json}.}
+  \label{tab:mva-metrics}
+  \small
+  \begin{tabular}{l c c c c c}
+    \hline
+    Model & Rounds & \multicolumn{2}{c}{multi-class log-loss} & \multicolumn{2}{c}{\texttt{auc\_mu}} \\
+          &        & train & validation & train & validation \\
+    \hline
+    \texttt{v1} & 50 & 0.771 & 0.894 & 0.923 & 0.909 \\
+    \texttt{v2} & 34 & 0.777 & 0.808 & 0.922 & 0.915 \\
+    \texttt{v3} & 25 & 0.796 & 0.805 & 0.918 & 0.916 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The train--validation gap narrows monotonically from \texttt{v1} to
+\texttt{v3}: the log-loss gap falls from $0.123$ to $0.009$ and the
+\texttt{auc\_mu} gap from $0.014$ to $0.002$.
+\texttt{v1} shows the clearest sign of overtraining and \texttt{v3} essentially
+none, which is consistent with \texttt{v3} being the model produced by the
+current two-stage schedule.
+\AnalysisTBD{confirm that \texttt{v3} is the nominal model, and that
+\texttt{v1} and \texttt{v2} are retained only as history}
+
+\subsection{Input variables}
+\label{app:mva:inputs}
+
+The stored model header lists 17 input features, matching
+\texttt{utilities.training\_variables} exactly; they are enumerated in
+Appendix~\ref{app:selections:mva}, and the variables excluded from training
+in Appendix~\ref{app:selections:excluded}.
+
+\subsection{Diagnostics still required}
+\label{app:mva:todo}
+
 \AnalysisTBD{ROC or efficiency-versus-purity curves for each of the four
-classes, on the validation subset}
-\AnalysisTBD{training and validation loss curves, to show the model is not
-overtrained}
-\AnalysisTBD{distributions of every retained input variable, data versus MC,
-in an unblinded control region}
-\AnalysisTBD{input-variable correlation matrix, and the correlation of each
-input with $\mmiss$ and $\pdl$ in the fit bins.  This is the quantitative
-evidence for the exclusions listed in
-Appendix~\ref{app:selections:excluded}}
+classes on the validation subset}
+\AnalysisTBD{learning curves per round, from the stored evaluation histories}
+\AnalysisTBD{distributions of every retained input variable, data versus
+simulation, in an unblinded control region}
+\AnalysisTBD{correlation matrix of the inputs, and the correlation of each
+input with $\mmiss$ and $\pdl$ in the bins used by the fit.  This is the
+quantitative evidence for the exclusions listed in
+Appendix~\ref{app:selections:excluded}, which currently rest on source
+comments alone}
 \AnalysisTBD{signal and normalisation selection efficiency separately as a
-function of the working point, since $R(D)$ depends on their ratio}
+function of the working point, since $R(D)$ depends on their ratio rather
+than on either alone}
 
 Diagnostics for the earlier XGBoost and random-forest models retained in the
-analysis repository are not reproduced here: those models are superseded by
-the LightGBM four-class model of Sec.~\ref{sec:mva}.
+analysis repository are not reproduced here: those are superseded by the
+LightGBM four-class model of Sec.~\ref{sec:mva}.

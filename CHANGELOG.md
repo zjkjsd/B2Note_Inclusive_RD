@@ -50,9 +50,17 @@ Added:
 - Result-status macros `\AnalysisTBD`, `\PreliminaryResult`, `\Superseded`,
   `\InProgress`.
 - The provenance convention and `scripts/check_provenance.py`.
-- Sections 5 (MVA) and 10 (Validation and box opening) drafted, and the four
-  appendices filled with the actual variable lists, selection strings and
-  PDG groupings rather than placeholders.
+- Sections 5 (MVA) and 10 (Validation and box opening) drafted, then Section 5
+  and the appendices filled from the stored artifacts: the LightGBM
+  hyper-parameters and training schedule, the four target-class definitions,
+  the recorded train/validation metrics for the three stored models, and the
+  anatomy of the generated pyhf workspaces in Fit_toys/.
+- Recorded that the stored workspaces are superseded: they are single-channel,
+  constrain fake-D at +-5% where the current generator floats it, fix the
+  continuum normalisation, and contain no generic-BBbar templates at all.
+- Corrected a misidentified state: PDG 10431 is D_s0*(2317)+, not D_s1(2536).
+  The four branching-fraction corrections apply to D_s0*(2317) modes and
+  reduce the generator rates by factors of 7 to 19.
 - Recorded two decisions: the [-5,5] normalisation bounds are deliberate,
   to let the minimiser traverse the negative region so the reported minimum
   is global rather than boundary-pushed; and the continuum constraint is
