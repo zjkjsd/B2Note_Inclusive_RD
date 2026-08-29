@@ -9,6 +9,7 @@
 *.toc
 *.synctex.gz
 note.pdf
+docs/*.pdf
 
 # Editor / notebook cruft
 .ipynb_checkpoints/
