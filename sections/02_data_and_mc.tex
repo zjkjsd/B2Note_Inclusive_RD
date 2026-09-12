@@ -4,7 +4,7 @@
 %                 trees); 5_BBbkg_weights_optuna_minuit.py lines 93, 809-824
 %                 (luminosity scale, sample and tree naming); README.md and
 %                 docs/ANALYSIS_CONTEXT.md of the analysis repository
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
 %   selection   : n/a
 %   corrections : n/a
@@ -32,28 +32,80 @@ The wrong-charge reconstruction is run only for on-resonance input
 (Sec.~\ref{sec:recon:wc}), so the off-resonance sample has no wrong-charge
 counterpart.
 
-\AnalysisTBD{integrated luminosity per run period and per channel, with the
-producing artifact.  The figure of approximately $490$\,fb$^{-1}$ quoted in the
-analysis context document has no recorded source and is not used anywhere in
-the code}
+\PreliminaryResult{integrated luminosity of $365$\,fb$^{-1}$ for Run~1 and
+$125$\,fb$^{-1}$ processed so far for Run~2, for a combined total of
+approximately $490$\,fb$^{-1}$; Run~2 data taking is ongoing.  These are the
+analyst's luminosity-accounting figures and are not yet split by channel, nor
+tied to a citable producing artifact (a standard Belle~II luminosity-tool
+output) or used anywhere in the analysis code}
+\AnalysisTBD{per-channel ($e$, $\mu$) integrated luminosity, and the
+producing artifact for the two run-period totals above}
 
 \subsection{Simulated samples}
 \label{sec:data:mc}
 
-Simulation is the MC16rd campaign.
-Generic MC16rd is produced at four times the data luminosity, so a factor of
-$0.25$ is applied whenever an absolute normalisation is compared with data
-(\texttt{CODE\_FACT}: \texttt{LUMINOSITY\_SCALE = \{"all\_mc": 0.25\}}).
-This factor is specific to generic MC; the signal-enriched samples have their
-own scaling, and mixing the two in one comparison requires applying the correct
-factor to each component.
-\AnalysisTBD{the scale factor for the signal-enriched samples, where it is
-applied, and the generated sample sizes.  Until this is recorded, any study
-combining generic and signal-enriched MC cannot be reproduced}
+Simulation is the MC16rd campaign, of two distinct kinds that are not
+interchangeable.
+
+\emph{Generic MC} decays particles according to their measured branching
+fractions, so that it simulates real data as a whole; it is produced at four
+times the data luminosity, so a factor of $0.25$ is applied whenever an
+absolute normalisation is compared with data
+(\texttt{CODE\_FACT}: \texttt{LUMINOSITY\_SCALE = \{"all\_mc": 0.25\}} in
+\texttt{Old\_scripts/}; the current notebooks apply the same $0.25$ literal
+per call rather than through that shared constant).
+
+\emph{Signal-enriched MC} instead forces the decay of interest and is
+produced mode by mode with a large number of events (of order $3\times10^{7}$
+for a single mode), which supports the detailed studies that require high
+statistics but cannot itself be compared directly to data, since it contains
+no real background events.
+Three signal-enriched samples are used in this analysis, all with a
+$B^{0}\bar{B}^{0}$ event and the charged-$D$ final state used in the signal
+reconstruction:
+\begin{itemize}
+  \item one $B \to D\tau\nu$ mode (neutral $B$, charged $D$);
+  \item one $B \to D^{*}\tau\nu$ mode (neutral $B$, charged $D^{*}$; the
+        neutral $D^{*}$ does not decay to a charged $D$ and so does not
+        contribute to this final state);
+  \item eight $B \to D^{**}\tau\nu$ modes: four with a neutral $B$ and a
+        charged $D^{**}$, and four with a charged $B$ and a neutral
+        $D^{**}$, since both charge combinations of $D^{**}$ decay to a
+        charged $D$.
+\end{itemize}
+These three signal-enriched samples feed the $Pyhf$ fit templates of
+Sec.~\ref{sec:fit:templates}; in addition, the $B\to D\tau\nu$ sample supplies
+the signal class of the BDT training (Sec.~\ref{sec:mva:classes}).
+\AnalysisTBD{production identifiers and generated event counts for the three
+signal-enriched samples, and confirmation of the eight individual
+$D^{**}\tau\nu$ modes making up the third sample}
+
+At the current development stage, generic MC is used for every study except
+the BDT training, where both generic MC (the three background classes) and
+signal-enriched MC (the signal class) are used (Sec.~\ref{sec:mva:classes}).
+Signal-enriched MC is needed only for the sensitivity estimate and the final
+$Pyhf$ fit (Sec.~\ref{sec:fit}, Sec.~\ref{sec:results}), so the generic-MC
+factor of $0.25$ is the one that appears in most data/MC agreement checks at
+this stage.
+When a signal-enriched sample is used to build a fit template, its scale
+factor is derived rather than fixed at $0.25$: if a sample of $B$ generated
+events, after reconstruction and truth-based selection of correctly
+reconstructed candidates (Sec.~\ref{sec:truth}), gives $B$ correctly
+reconstructed events, and the same mode has $A$ correctly reconstructed
+events in generic MC, the signal-enriched sample's effective scale factor is
+$0.25 \times A / B$ --- i.e.\ it is normalised to reproduce the same
+correctly reconstructed yield that the (lower-statistics) generic MC would
+give at the data luminosity.
+\AnalysisTBD{record $A$ and $B$, and the resulting scale factor, for each of
+the three signal-enriched samples once they are used to build fit templates.
+Mixing generic and signal-enriched MC in one comparison requires applying the
+correct factor to each component, and using the same signal-enriched sample
+both for BDT training and for building its own fit template raises the
+sample-overlap question of Sec.~\ref{sec:data:overlap} and
+Sec.~\ref{sec:mva:training} in a concrete form once that transition happens}
 
 \AnalysisTBD{list of MC16rd sub-samples used (mixed, charged, continuum
-flavours, signal-enriched) with their generated event counts and equivalent
-luminosities}
+flavours) with their generated event counts and equivalent luminosities}
 
 \subsection{Software versions}
 \label{sec:data:software}
@@ -89,7 +141,12 @@ momentum-scale and energy-loss payloads.
 \texttt{cabinetry}, \texttt{iminuit}, \texttt{LightGBM}, \texttt{optuna},
 \texttt{uproot} and the systematics-corrections framework --- used to produce
 the results in this note.  No pinned environment or lockfile exists, so the
-offline results are not currently reproducible from the repository alone}
+offline results are not currently reproducible from the repository alone.
+This is deliberately deferred rather than overlooked: the analysis, including
+which software will ultimately be used, is still under active development, and
+pinning versions now would be redundant with the churn expected before the
+final result.  It should be recorded once the fit strategy is closer to
+frozen (Sec.~\ref{sec:summary})}
 
 \subsection{Ntuple production and offline samples}
 \label{sec:data:ntuples}
@@ -107,10 +164,10 @@ plotting notebooks.
 That combination step also applies the classifier of Sec.~\ref{sec:mva} and
 constructs \texttt{p\_D\_l}, one of the two fit observables.
 
-\AnalysisTBD{the combination step is performed in notebooks rather than in
+\InProgress{the combination step is performed in notebooks rather than in
 library code, so the step that applies the classifier and defines a fit
-observable has no citable producing artifact.  Record it, or move it into
-\texttt{utilities.py}}
+observable has no citable producing artifact.  Moving it into
+\texttt{utilities.py} is planned but not yet done}
 
 \subsection{Event weights and normalisation}
 \label{sec:data:weights}
@@ -123,18 +180,37 @@ The luminosity factor of Sec.~\ref{sec:data:mc} multiplies the product.
 Each column is included only if it is present in the frame, so a missing
 column is silently treated as unity rather than raising.
 
-\AnalysisTBD{the origin of \texttt{\_\_weight\_\_} in the nominal chain is
-undocumented.  It is read as the base weight by the generic-$B\bar{B}$ tuning
-but is assigned nowhere in the current code; the only assignments are in
-\texttt{Old\_scripts/}, where it was a class-balancing weight for an earlier
-classifier.  Since a missing column is silently skipped, establish whether it
-is present in the current ntuples and what it contains}
+\InProgress{\texttt{\_\_weight\_\_} is being retired as a name: it has been
+reused for several unrelated purposes across the analysis history (including
+the class-balancing role in \texttt{Old\_scripts/}), and a single generically
+named column that means different things in different contexts is exactly
+the kind of silent ambiguity Sec.~\ref{sec:corrections:order} warns about.
+The intended replacement is one distinctly named column per correction, so
+that a column's name states what it contains rather than requiring the
+reader to know which chain produced it.  This has not yet been implemented in
+\texttt{utilities.py}}
 
 \subsection{Sample overlap}
 \label{sec:data:overlap}
 
-\AnalysisTBD{explicit statement of which MC samples are used where, and the
-rule preventing overlap between generic and signal-enriched samples.  This
-matters both for the luminosity factors above and for the classifier of
-Sec.~\ref{sec:mva}, whose training sample must not overlap with the sample
-used to build the fit templates}
+At the current development stage, generic MC is used for template building
+and for three of the four BDT training classes (\texttt{bkg\_fakeD},
+\texttt{bkg\_continuum}, \texttt{bkg\_combinatorial}); the fourth,
+signal-like training class alone is drawn from the $B \to D\tau\nu$
+signal-enriched sample (Sec.~\ref{sec:data:mc}, Sec.~\ref{sec:mva:classes}).
+Since the fit templates are currently also built from generic MC, this
+signal-enriched sample and the template-building sample do not yet overlap.
+
+That changes once signal-enriched MC is used to build the signal and
+normalisation templates for the final fit, as intended
+(Sec.~\ref{sec:data:mc}): the same $B \to D\tau\nu$ sample would then supply
+both the signal class of the BDT training and its own fit template, and the
+disjoint train/validation split used within the training sample
+(Sec.~\ref{sec:mva:training}) does not by itself establish that the template
+is independent of the classifier that selects it.
+\AnalysisTBD{state and enforce an explicit rule preventing overlap between
+the BDT training sample and the sample used to build the signal-enriched fit
+templates once that transition happens --- for example, reserving the
+training/validation events and building the templates only from the
+remaining events of each signal-enriched sample --- and record where in the
+code that split is made}

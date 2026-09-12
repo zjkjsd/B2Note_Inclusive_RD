@@ -3,6 +3,77 @@
 Each released version of the note is pinned to an analysis commit in
 `zjkjsd/inclusive_R_D`, tracked here and by the `external-code` submodule.
 
+## Version 0.2 (draft) — unreleased
+
+Pinned analysis commit: `ad2f2ec` ("add comments in utilities.py"), moved
+forward from `dd520a5`.
+
+This update closes or narrows a large fraction of the open items recorded
+against `dd520a5`, from analyst answers cross-checked against the analysis
+repository at the new pinned commit. Affected sections: 1, 2, 3, 4, 5, 6, 7,
+8, 9, 11, and the appendices on selections, categories and the classifier.
+Section 7 in particular required a substantive rewrite rather than a
+narrowing: the `BBbkg_weights/` results it described (eight
+single-run-period fits, several under a superseded `poisson-2d` objective
+name) no longer exist in the repository and have been replaced by six
+regenerated `run1+run2` fits with MINOS enabled. See the Open Items appendix
+for the updated open-item count (83, up from 80 -- several TBDs were
+narrowed to a stated plan and reclassified as in-progress, and the BBbar
+rewrite added new, more specific open items even as it closed others).
+
+Added or closed:
+- Section 1: physics motivation for R(D)/R(D*), why R(D) is more sensitive
+  than R(D*) to charged-Higgs-like couplings, and why inclusive tagging is
+  complementary to (not a refinement of) the existing FEI-based
+  measurements. Two external ICHEP-2026-preliminary status figures added,
+  with provenance recorded from their embedded PDF metadata.
+- Section 2: the three signal-enriched MC samples (D tau nu, D* tau nu,
+  eight D** tau nu modes) and their role in template building versus BDT
+  training; the generic/signal-enriched MC luminosity-scaling relationship;
+  a preliminary Run 1/Run 2 luminosity figure; the sample-overlap risk that
+  arises once signal-enriched MC is used for both BDT training and its own
+  fit template.
+- Section 3: motivation for the hadron- and lepton-identification working
+  points (Belle II PID convention, not a scan); the electron and muon
+  momentum thresholds; the nominal best-candidate method (`vtx`) and the
+  resulting multiplicity of 1; confirmed the p_lepton<4 omission from the
+  BBbar tuning region is intentional and small in effect. Table 1's
+  Motivation column removed in favour of the narrative above it, per
+  request.
+- Section 4: resolved the merged-D**/gap-mode template configuration; the
+  distinction between the two placeholder catch-all categories (expected
+  empty) and bkg_fakeTracks (populated, excluded pending a fit treatment);
+  a preliminary BDT-class sample-size reference point, flagging a run-period
+  inconsistency between the signal-enriched and generic-MC input globs found
+  while checking it.
+- Section 5: BDT training-class sizes and the training_weight=1 scheme; v3
+  confirmed nominal; history of the hyperparameter tuning and the tuner's
+  current binary-only limitation.
+- Section 6: the correction tables are now version-controlled in the
+  repository (MC16_sys_tables/); disposition of pi0_eff50_corr.csv (MC15rd,
+  testing only) and the unused slow_pi0/ folder;
+  create_naive_data_mc_correction kept deliberately for now; form-factor and
+  tracking-efficiency corrections deferred as minor; a concrete proposal for
+  extending the branching-fraction correction beyond the generic-BBbar
+  families, which requires a new generator-level branch identifying the
+  companion-B decay mode for every event.
+- Section 7: rewritten against the six regenerated run1+run2 BBbar-weight
+  fits with MINOS enabled. kinematic-2d (no ROE term) adopted as nominal;
+  MINOS found to give a usable width for three of five family weights but
+  not to resolve the persistent 2-body/4-body pinning.
+- Section 8: the planned 2D MC histogram and binning-in-utilities.py items;
+  the R(D)-as-POI question deferred with a proposed intermediate step; a
+  partial MINOS-based width for the generic-BBbar normsys (three of five
+  families); the MC-statistical-uncertainty sharing scheme confirmed as
+  intended for same-production templates, with the signal-enriched-MC case
+  flagged as an unquantified approximation.
+- Section 9: confirmed the fake-D normalisation is no longer a systematic
+  (determined in situ by the sideband channel); updated the BBbar
+  eigen-systematic obstacle with the regenerated fit's HESSE/MINOS
+  discrepancy and covariance condition number.
+- Section 11: recorded the analyst's preliminary ~12% sensitivity figure as
+  indicative, pending the Asimov study of Section 8.
+
 ## Version 0.1 (draft) — unreleased
 
 Pinned analysis commit: `dd520a5` ("start tracking gitignore").

@@ -18,19 +18,27 @@ The intended construction is instead to diagonalise the covariance matrix and
 use its eigenvectors as a small set of uncorrelated nuisance parameters, each
 varying all five family weights coherently by
 $\sqrt{\lambda_{i}}\, \hat{v}_{i}$.
-\InProgress{this cannot be applied to the currently stored fit.  Two
-obstacles, both consequences of the minimum sitting on a parameter bound
-(Sec.~\ref{sec:bbbar:results}): the stored HESSE errors and the stored
-covariance matrix disagree by up to three orders of magnitude for the two
-at-limit parameters, and the covariance is near-singular (condition number
-$\sim 10^{8}$) with two eigenvalues consistent with zero, so the construction
-would assign essentially no uncertainty to two entire hadronic families.
+\InProgress{this still cannot be applied to the nominal fit.  Two obstacles,
+both consequences of the minimum sitting on a parameter bound
+(Sec.~\ref{sec:bbbar:results}), persist in the regenerated \texttt{run1+run2}
+result: for the nominal \texttt{kinematic-2d}, $e$-channel fit, the HESSE and
+MINOS uncertainties disagree by up to six orders of magnitude for the two
+at-limit parameters (unmeasured 2- and 4-body), while agreeing to within
+$\mathcal{O}(10\%)$ for the three parameters that are not pinned; and the
+covariance is still near-singular (condition number $\approx 1.9\times10^{6}$,
+two eigenvalues below $3\times10^{-7}$), so the eigenvector construction would
+still assign essentially no uncertainty to two entire hadronic families.
+Enabling MINOS (Sec.~\ref{sec:bbbar:results}) has therefore not removed this
+obstacle, though it does mean a partial version of this construction ---
+restricted to the measured-hadronic, 3-body and 5+-body directions, which are
+not pinned in the nominal fit --- may already be usable while the 2-body and
+4-body degeneracy remains open.
 The method is sound and is implemented in
-\texttt{scripts/bbbar\_eigen\_systematics.py}, which postdates the commit
-pinned by this note; it requires a fit with an interior minimum.  Whether that is achievable by relaxing the bounds, requires
-merging families the tuning region cannot separate, or reflects a
-data-preferred weight outside the physical range, is the three-way question
-posed in Sec.~\ref{sec:bbbar:degeneracy}}
+\texttt{scripts/bbbar\_eigen\_systematics.py}; it requires a fit with an
+interior minimum in all five directions.  Whether that is achievable by
+relaxing the bounds, requires merging families the tuning region cannot
+separate, or reflects a data-preferred weight outside the physical range, is
+the three-way question posed in Sec.~\ref{sec:bbbar:degeneracy}}
 
 \subsection{Continuum normalisation}
 \label{sec:syst:continuum}
@@ -44,8 +52,12 @@ resulting value, its producing artifact, and the commit}
 
 \subsection{Fake-$D$ normalisation}
 \label{sec:syst:faked}
-\AnalysisTBD{the analysis context document records a candidate $\pm 3.5\%$
-prior from the $D$-mass sideband, but no such constraint exists in the
-workspace generator, where fake-$D$ is an unconstrained normalisation.
-Confirm whether the sideband channel is intended to determine this
-normalisation in situ, in which case the prior is unnecessary}
+Confirmed: the fake-$D$ normalisation is no longer treated as a systematic.
+An earlier stage of the analysis considered a candidate $\pm 3.5\%$ prior from
+the $D$-mass sideband (recorded in the analysis context document), but the
+current, intended treatment is that the $D$-mass sideband channel of the
+simultaneous fit (Sec.~\ref{sec:fit:observables}) determines the fake-$D$
+normalisation in situ, as a free, unconstrained \texttt{normfactor}
+(Sec.~\ref{sec:fit:modifiers}), which is why fake-$D$ does not appear in this
+systematics section: fitting it removes the need for an external prior on
+it.

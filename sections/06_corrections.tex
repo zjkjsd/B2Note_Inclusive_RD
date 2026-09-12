@@ -1,11 +1,11 @@
 % PROVENANCE (section-level)
 %   status      : CODE_FACT unless marked otherwise
 %   produced-by : Recon_scripts/2_Reconstruction.py (tracking corrections);
-%                 utilities.py apply_pid_corrections (380-448),
-%                 apply_pi0_eff_correction (333-379),
-%                 create_naive_data_mc_correction (277-320);
+%                 utilities.py apply_pid_corrections (381-449),
+%                 apply_pi0_eff_correction (334-380),
+%                 create_naive_data_mc_correction (278-321);
 %                 5_BBbkg_weights_optuna_minuit.py (BBbar weights, fake-D)
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
 %   selection   : n/a (applies to the whole chain)
 %   corrections : the section is itself the list
@@ -49,10 +49,21 @@ quantities (\texttt{ell\_BFbrems\_}), because the collaboration produces the
 same reason the electron momentum requirement is applied before the correction
 (Sec.~\ref{sec:recon:fsp}).
 
-\AnalysisTBD{the PID table versions and their provenance.  The tables are read
-from absolute user-specific paths outside the repository, so the corrections
-applied to any given result cannot currently be identified from the repository
-alone}
+\InProgress{the correction tables themselves are now version-controlled in
+the analysis repository, under \texttt{MC16\_sys\_tables/MC16\_pid\_tables/}
+(one efficiency or fake-rate CSV per particle species, run period and, for
+the electron and muon tables, control channel), and this is the set of
+tables read by \texttt{apply\_pid\_corrections()} and by every current
+script and notebook that applies a PID correction.
+The code nonetheless reads them through an absolute, user-specific path
+(\texttt{/home/belle/zhangboy/inclusive\_R\_D/MC16\_sys\_tables/\ldots}) that
+happens to point back into this same repository rather than through a
+path relative to the repository root, so the correction actually applied to
+a given result is identifiable by inspecting the repository at the commit
+used, but is not yet reproducible by another user without editing the path.
+\AnalysisTBD{parameterise the table path so it does not depend on one user's
+directory layout, and record the provenance (production campaign, validity
+range) of the tables themselves, most of which is not yet in the repository}}
 
 \subsection{Analysis-specific corrections}
 \label{sec:corrections:specific}
@@ -90,35 +101,79 @@ Candidates falling outside the table binning receive a neutral weight of unity
 and are reported.
 The correction awaits an updated MC16rd table, which is why the $D^{*}$ veto
 region is not yet used quantitatively (Sec.~\ref{sec:recon:dstveto}).
+The table currently passed to it by the normalisation plotting notebooks,
+\texttt{MC16\_sys\_tables/pi0\_eff50\_corr.csv}, is derived from MC15rd data
+and simulation rather than MC16rd; it is used only as a testing input for the
+$D^{*}$-veto data/MC agreement check, since the analysis data and simulation
+are Proc16 and MC16rd.
+A second folder, \texttt{MC16\_sys\_tables/slow\_pi0/}, is not used anywhere
+in the analysis at the pinned commit.
 
 \paragraph{Naive binned data/MC ratio.}
 \texttt{utilities.create\_naive\_data\_mc\_correction()} builds a per-bin
 data/MC ratio in a single variable.
-It is defined but called nowhere in the repository at the pinned commit.
-\AnalysisTBD{decide whether this helper is intended for future use or should
-be removed.  A binned data/MC ratio applied to a variable correlated with the
-fit observables would bias the fit, so if it is retained its intended scope
-should be stated}
+It is defined but called nowhere in the repository at the pinned commit,
+and is now marked as such by a comment in the source
+(\texttt{utilities.py}, above \texttt{create\_naive\_data\_mc\_correction}).
+It is being kept for now on the chance it is useful later, rather than
+removed (\texttt{ANALYSIS\_DECISION}); a binned data/MC ratio applied to a
+variable correlated with the fit observables would bias the fit, so if it is
+eventually called, its intended scope should be stated at that point.
+\AnalysisTBD{remove this helper if it remains unused, or state its intended
+scope once it is}
 
 \subsection{Corrections not implemented}
 \label{sec:corrections:missing}
 
-\AnalysisTBD{form-factor reweighting is not implemented at the pinned commit.
+\InProgress{form-factor reweighting is not implemented at the pinned commit.
 The signal, normalisation and $D^{**}$ templates therefore carry the generator
-form factors.  State the intended treatment --- for example reweighting to a
-current parameterisation with HAMMER --- or the justification for omitting it.
-This is listed as a systematic in Sec.~\ref{sec:syst}, so it cannot remain
-unaddressed}
+form factors.  The intended treatment is reweighting to a current
+parameterisation with HAMMER, as used in other Belle~II semileptonic
+analyses; implementation is deferred because the correction is considered
+minor for this analysis, and its systematic effect has been manageable in
+other Belle~II analyses using the same method
+(\texttt{ANALYSIS\_DECISION}).  This is listed as a systematic in
+Sec.~\ref{sec:syst}, so a HAMMER-based implementation is still required
+before that systematic can be evaluated rather than assumed small}
 
-\AnalysisTBD{branching-fraction updates are applied only inside the
+\InProgress{no tracking-efficiency correction or its uncertainty is applied
+beyond the momentum-scale and energy-loss payloads.  This is considered minor
+for a four-track final state, since the Belle~II tracking-efficiency
+correction and its associated uncertainty are both small
+(\texttt{ANALYSIS\_DECISION}); implementation is deferred rather than
+omitted outright, and the resulting systematic is expected to be
+correspondingly small once evaluated}
+
+\InProgress{branching-fraction updates are applied only inside the
 generic-$B\bar{B}$ reweighting, where four measured $D_{s0}^{*}(2317)$ modes
-carry a PDG-to-generator ratio (Appendix~\ref{app:categories}).  No branching-fraction
-correction is applied to the signal, normalisation, $D^{*}$, $D^{**}$ or gap
-templates.  State whether that is intended}
-
-\AnalysisTBD{no tracking-efficiency correction or its uncertainty is applied
-beyond the momentum-scale and energy-loss payloads.  Confirm whether a
-tracking-efficiency correction is required for a four-track final state}
+carry a PDG-to-generator ratio (Appendix~\ref{app:categories}).
+This is not intended: the branching-fraction correction should in principle
+apply to every event, not only the generic-$B\bar{B}$ background, since the
+mismodelled $D_{s0}^{*}(2317)$ modes can equally occur in the ROE-side $B$ of
+a signal-like event.
+The obstacle is that the four corrected modes are identified from the
+generated PDG codes of the $B$ that supplies the reconstructed $D$ and of the
+$B$ that supplies the reconstructed lepton (Sec.~\ref{sec:truth:vars}), which
+for a signal-like event (\texttt{signals}, Sec.~\ref{sec:truth:tree}) are the
+\emph{same} $B$ --- the one that decays $B \to D^{(*,**)}\tau/\ell\,\nu$.  The
+ROE-side companion $B$, whose hadronic decay is the one that could be a
+mismodelled $D_{s0}^{*}(2317)$ mode, currently has no stored generator-level
+decay identifier at all: the ntuple only records ancestor information for the
+$B$'s that supply the reconstructed $D$ and lepton.
+One route to close this gap is to extend the generator-level bookkeeping so
+that, for every event, the decay-mode identifier of \emph{both} generated $B$
+mesons is stored, in the same form already used for the
+$B\bar{B}$-background hierarchy of Sec.~\ref{sec:bbbar:hierarchy} --- for
+example by identifying the two $B$ daughters of the generated
+$\Upsilon(4S)$ directly, independently of which one supplies the
+reconstructed $D$ and lepton, rather than only classifying the already-matched
+$B$'s.  For a signal-like event, the companion $B$ so identified is exactly
+the ROE-side $B$, and the existing measured-mode list and PDG-correction
+table (Appendix~\ref{app:categories:bf}) could then be applied to it exactly
+as they currently are to the generic-$B\bar{B}$ families.  This requires a
+new generator-level branch and therefore a reprocessing pass; it does not
+require new truth-matching logic beyond what \texttt{bbbar\_reweighting.py}
+already implements for the other side of the same problem.}
 
 \subsection{Correction ordering and safeguards}
 \label{sec:corrections:order}
@@ -134,7 +189,7 @@ number.
 %                 (apply_pid_corrections, apply_pi0_eff_correction,
 %                 create_templates_new, create_workspace);
 %                 5_BBbkg_weights_optuna_minuit.py
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
 %   selection   : n/a (applies to the whole chain)
 %   corrections : the table is itself the list
@@ -170,6 +225,11 @@ different columns, or if a column is multiplied in twice.
 The weakness of this design is the complement: because a column absent from
 the frame is silently skipped rather than raising, a correction can be
 \emph{omitted} without any diagnostic.
-\AnalysisTBD{make a missing weight column an error rather than a silent unity,
-or record per-result which weight columns were actually present.  The base
-weight of Sec.~\ref{sec:data:weights} is the case where this matters most}
+\InProgress{the intended fix is for the MC data frame to carry one distinctly
+named column per correction (Sec.~\ref{sec:data:weights}), and for the
+histogram-filling and result-producing functions to print, or otherwise
+record, which weight columns were actually present for a given result ---
+raising an error if a correction expected to be applied is absent.  Neither
+is implemented yet.  The base weight of Sec.~\ref{sec:data:weights} is the
+case where this matters most, since it is the column most likely to be
+silently absent or reused for the wrong purpose}
