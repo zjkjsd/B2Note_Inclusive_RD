@@ -95,6 +95,39 @@ analysis:
   method for the MC-statistics systematic as a candidate for this analysis's
   own toy machinery.
 
+Further cross-checked against four more sibling Belle II reference notes
+recovered from this repository's own git history (docs/B2N_*.pdf, not
+tracked in git per .gitignore) -- again organisational/methodological
+context only, no numbers imported:
+- Section 3: added a plot-layout template (efficiency/fake-rate vs. cut
+  value, per particle species) for the planned PID working-point plots, from
+  the inclusive B -> Xu l nu / |Vub| note; added a three-step ROE-mask
+  optimisation template (FOM scan, data/MC tie-break, robustness re-check)
+  for if the mask is ever re-optimised, from the B -> tau nu note.
+- Section 5: added a two-stage BDT-input/fit-variable data-MC-agreement
+  check (pre-training input check, post-selection fit-variable check in a
+  sideband) from the semileptonic-tag R(D)/R(D*) note; added an alternative
+  to the planned classifier working-point optimisation -- building
+  decorrelation from the fit variables into the training objective itself,
+  rather than checking it afterward -- from the B -> tau nu note.
+- Section 7: cited the B -> K(*) nu nu-bar note's response to a
+  shape-degenerate background grouping (external/PDG constraint per group,
+  rather than continued in-situ fitting) as a concrete precedent for one of
+  the three explanations in the degeneracy discussion; cited its
+  independent-validation experience (needed one relaxed normalisation to
+  reach acceptable closure) as context for interpreting an imperfect
+  validation result here.
+- Section 8: cited the semileptonic-tag R(D)/R(D*) note's stated reasons for
+  moving from per-bin-per-template to per-bin ("lite Beeston-Barlow")
+  MC-statistical nuisance parameters as independent support for this
+  analysis's existing per-channel \texttt{staterror} choice; added a
+  concrete toy/pull/linearity-check template (toy count, pull definition,
+  linearity-scan range, tornado plot) drawn from several sibling notes'
+  fit-validation sections.
+- Appendix (fit): added a modifier-taxonomy table structure (type,
+  constraint, region, sidedness) as a template for the still-required
+  complete fit-parameter table.
+
 ## Version 0.1 (draft) — unreleased
 
 Pinned analysis commit: `dd520a5` ("start tracking gitignore").

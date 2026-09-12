@@ -160,7 +160,15 @@ correlation study.  Two-dimensional plots of each fit variable against the
 classifier inputs, and --- more importantly, since it is the quantity
 actually applied as a selection --- against the classifier output
 probabilities, are planned to make this visible directly rather than only
-through a correlation coefficient (Appendix~\ref{app:mva:todo})}
+through a correlation coefficient (Appendix~\ref{app:mva:todo}).
+As an organisational reference only: a sibling Belle~II semileptonic-tag
+$R(D^{(*)})$ note dropped a candidate BDT input after finding data/MC
+mismodelling in a low-statistics bin of its own pre-training check, and
+separately checked its two \emph{fit} variables for data/MC shape agreement
+in sideband regions after the full selection, not only before training.
+Both checks --- pre-training input agreement, and post-selection fit-variable
+agreement in a sideband --- are worth adopting here as a two-stage plan, in
+addition to the planned correlation study}
 
 \subsection{Working point}
 \label{sec:mva:wp}
@@ -188,7 +196,15 @@ sensitivity --- equivalently, on the uncertainty of the
 $B \to D \tau \nu$ yield from the full fit --- rather than on a generic figure
 of merit, because the two need not have the same optimum once the sideband
 channel and the constrained backgrounds are included.  Record the figure of
-merit currently used and the scan that produced Eq.~\eqref{eq:lgb-tight}}
+merit currently used and the scan that produced Eq.~\eqref{eq:lgb-tight}.
+As an organisational reference only: a sibling Belle~II note (semileptonic
+tagging, $B \to \tau\nu$) built its BDT hyper-parameter search around a dual
+objective, simultaneously maximising a separation figure of merit and
+minimising the trained output's correlation with its fit variables, rather
+than optimising selection and checking decorrelation as two separate later
+steps.  Building the decorrelation requirement into the training objective
+itself, alongside an eventual $R(D)$-sensitivity figure of merit, is an
+alternative worth considering to the current two-step approach}
 
 \subsection{Validation}
 \label{sec:mva:validation}

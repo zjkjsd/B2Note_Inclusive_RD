@@ -113,7 +113,12 @@ fit model}
 
 \AnalysisTBD{complete parameter table for the regenerated workspace:
 initial values, bounds, constraint terms and which parameters are fixed,
-extracted from the workspace rather than transcribed from the generator}
+extracted from the workspace rather than transcribed from the generator.
+As an organisational template only: sibling Belle~II \texttt{pyhf}-based
+notes tabulate this per sample/parameter as modifier type
+(\texttt{normfactor}/\texttt{normsys}/\texttt{histosys}/\texttt{staterror}),
+constraint width, which region(s) it applies in, and whether the response is
+one- or two-sided --- a structure this table could follow directly}
 \AnalysisTBD{correlation matrix of the fitted parameters from an Asimov fit,
 and the expected uncertainty on the parameter of interest}
 \AnalysisTBD{alternative binnings and the stability of the extracted yields
@@ -130,4 +135,6 @@ The toy machinery is \texttt{utilities.toy\_utils} together with
 \texttt{b2luigi}.
 \AnalysisTBD{pull distributions and linearity scans from that machinery,
 reported separately from any result on data.  No toy study output is stored in
-the repository at the pinned commit}
+the repository at the pinned commit.  See Sec.~\ref{sec:fit:validation} for
+the planned methodology, including an organisational template drawn from
+sibling analyses}

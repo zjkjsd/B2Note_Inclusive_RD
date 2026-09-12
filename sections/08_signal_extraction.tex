@@ -186,7 +186,16 @@ the number of independent MC productions contributing to that bin, not one.
 relative to generic MC (Sec.~\ref{sec:data:mc}), one shared \texttt{staterror}
 per channel per bin is treated as a good approximation even once
 signal-enriched MC enters the templates, rather than splitting it by
-production.  This approximation has not been quantified}
+production.  This approximation has not been quantified.
+As an organisational reference only: a sibling Belle~II semileptonic-tag
+$R(D^{(*)})$ note deliberately moved \emph{away} from one MC-statistical
+nuisance parameter per bin per template, to a single constrained
+per-bin parameter summed in quadrature over samples --- the ``lite
+Beeston-Barlow'' method, which is what a single shared \texttt{staterror}
+per channel per bin already is here --- citing an otherwise linearly growing,
+poorly constrained parameter count as the reason to avoid the finer-grained
+alternative.  That is independent support for the current per-channel choice,
+though it does not by itself address the mixed-production case above}
 
 \subsection{Fit validation}
 \label{sec:fit:validation}
@@ -196,4 +205,20 @@ linearity tests, each reported separately from any result on data.  The
 machinery exists in \texttt{utilities.pyhf\_utils} and
 \texttt{utilities.toy\_utils} and in \texttt{Fit\_toys/FitToys\_b2luigi.py};
 producing and recording the nominal study, including the results and plots of
-Sec.~\ref{sec:results}, is planned but not yet done}
+Sec.~\ref{sec:results}, is planned but not yet done.
+As an organisational template only, drawn from several sibling Belle~II
+semileptonic-tag notes rather than as numbers to reproduce: a toy study
+generates $O(10^{3})$ Poisson-fluctuated pseudo-datasets around the Asimov
+best fit (auxiliary measurements fluctuated too, for the nuisance
+parameters), refits each with every parameter free, and reports the fitted
+$B\to D\tau\nu$-normalisation pull, $(\hat\theta - \theta_{\rm true}) /
+\hat\sigma_{\hat\theta}$, fit to a Gaussian --- mean consistent with $0$ and
+width consistent with $1$ is the pass criterion.  A linearity check repeats
+this at several injected normalisation values spanning a wide range (for
+example corresponding to $R(D)$ from about half to double its expected
+value) and fits the mean fitted value against the injected value, requiring
+close to unit slope and zero intercept.  Per-nuisance-parameter pull plots
+and a full correlation matrix are produced alongside, and a
+tornado/ranking plot of each nuisance parameter's impact on the parameter of
+interest is a useful addition once systematics enter the fit
+(Sec.~\ref{sec:syst})}
