@@ -74,6 +74,27 @@ Added or closed:
 - Section 11: recorded the analyst's preliminary ~12% sensitivity figure as
   indicative, pending the Asimov study of Section 8.
 
+Also added, from cross-checking a sibling Belle II analysis note supplied as
+an organisational reference (the hadronic-FEI R(D*)/R(D) measurement,
+BELLE2-NOTE-PH-2024-056) -- used only for methodological context, per
+AGENTS.md; no number, selection or conclusion from it is an input to this
+analysis:
+- Section 6: cited the HAMMER form-factor parameterisations (BLPRXP for
+  B -> D(*) l/tau nu, BLR for B -> D** l/tau nu) that sibling note uses, as an
+  external example to weigh when this analysis makes its own form-factor
+  decision; noted its GenMCTagTool-based approach to generator-level
+  hadronic-B decay-mode tagging as a possible reusable precedent for the
+  companion-B branching-fraction correction proposed in the same section.
+- Section 4: noted, as external context only, that the same sibling note
+  (and another Belle II analysis it cites) independently found its own
+  gap-mode yield substantially below the generic-MC expectation -- different
+  final state, not evidence about this analysis, but relevant precedent
+  should the same pattern appear here.
+- Section 9: cross-checked the completeness of this note's systematics
+  category list against that note's, and noted its bootstrap-resampling
+  method for the MC-statistics systematic as a candidate for this analysis's
+  own toy machinery.
+
 ## Version 0.1 (draft) — unreleased
 
 Pinned analysis commit: `dd520a5` ("start tracking gitignore").

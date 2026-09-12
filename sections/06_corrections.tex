@@ -134,7 +134,16 @@ minor for this analysis, and its systematic effect has been manageable in
 other Belle~II analyses using the same method
 (\texttt{ANALYSIS\_DECISION}).  This is listed as a systematic in
 Sec.~\ref{sec:syst}, so a HAMMER-based implementation is still required
-before that systematic can be evaluated rather than assumed small}
+before that systematic can be evaluated rather than assumed small.
+As an organisational reference only (\texttt{ANALYSIS\_CONTEXT}, not an input
+to this analysis): the Belle~II hadronic-FEI $R(D^{(*)})$ measurement
+(internal note BELLE2-NOTE-PH-2024-056) reweights with HAMMER using the
+BLPRXP parameterisation~\cite{Bernlochner:2022ywh} for
+$B\to D^{(*)}(\ell/\tau)\nu$ and the BLR
+parameterisation~\cite{Bernlochner:2017jka,Bernlochner:2016bci} for
+$B\to D^{**}(\ell/\tau)\nu$.  Whether the same choice is appropriate here is
+a decision for this analysis to make independently, not something inherited
+from that note}
 
 \InProgress{no tracking-efficiency correction or its uncertainty is applied
 beyond the momentum-scale and energy-loss payloads.  This is considered minor
@@ -173,7 +182,16 @@ table (Appendix~\ref{app:categories:bf}) could then be applied to it exactly
 as they currently are to the generic-$B\bar{B}$ families.  This requires a
 new generator-level branch and therefore a reprocessing pass; it does not
 require new truth-matching logic beyond what \texttt{bbbar\_reweighting.py}
-already implements for the other side of the same problem.}
+already implements for the other side of the same problem.
+As an organisational reference only, not an input to this analysis: the
+Belle~II hadronic-FEI $R(D^{(*)})$ note (BELLE2-NOTE-PH-2024-056) categorises
+every hadronic-$B$-decay candidate by a generator-level decay-mode identifier
+obtained from a tool it calls \texttt{GenMCTagTool}, applied independently of
+which final-state particles were reconstructed or matched as signal --- the
+same category of tool this note's companion-$B$ identifier would need. It is
+worth checking whether that tool, or an equivalent already used elsewhere at
+Belle~II, can be reused here rather than writing new generator-matching code
+from scratch.}
 
 \subsection{Correction ordering and safeguards}
 \label{sec:corrections:order}

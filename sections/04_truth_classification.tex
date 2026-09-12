@@ -188,10 +188,28 @@ components' normalisations summed --- effectively treating the gap as
 $B \to D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$.
 This is a shape substitution motivated by a lack of a trusted alternative,
 not a physics statement that the gap is exhausted by $D^{**}\ell\nu$.
+Belle~II has separately produced dedicated signal-enriched MC for the
+$D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$ gap-mode hypothesis specifically; it
+is intended for the systematic study of this substitution and for the final
+template building, but is not yet used at the pinned commit.
 \AnalysisTBD{what information is lost by merging the narrow and broad
 $D^{**}$ categories, given that they have different form factors and
 different $\mmiss$ shapes, and by extension what is lost by using the broad
-$D^{**}\ell\nu$ shape for the gap modes as well}
+$D^{**}\ell\nu$ shape for the gap modes as well; incorporate the dedicated
+gap-mode signal MC once it is used}
+
+As external context only (not an input to this analysis): the generic-MC
+mismodelling of the gap and adjacent hadronic-$B$-decay components is not
+unique to this note.  The Belle~II hadronic-FEI $R(D^{(*)})$ note
+(BELLE2-NOTE-PH-2024-056) reports, in both a control sideband and the final
+fit to data, that its own gap-mode yield comes out substantially lower than
+the generic-MC expectation, and cites a further Belle~II analysis making the
+same observation in its own control region.  That is a different final
+state and a different definition of ``gap mode,'' so it is not evidence
+about the size or direction of any effect in this analysis; it does mean
+that a generic-MC gap-mode component significantly overshooting data would
+not be a novel or suspicious finding on its own, were it to occur here once
+the signal region is examined.
 
 \subsection{Generic-$B\bar{B}$ subdivision}
 \label{sec:truth:bbbar}
