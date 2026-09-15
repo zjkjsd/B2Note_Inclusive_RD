@@ -2,7 +2,7 @@
 %   status      : ANALYSIS_DECISION (the classification is a working
 %                 judgement, not an approved plan)
 %   produced-by : the AnalysisTBD and InProgress markers in sections/*.tex
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : n/a (bookkeeping)
 %   selection   : n/a
 %   corrections : n/a
@@ -13,8 +13,10 @@ This appendix consolidates the open items marked throughout the note.
 Its purpose is to make visible which single input would close the most of
 them, so that effort can be spent in the order that unblocks the most work.
 
-Every item is marked in place with \AnalysisTBD{} or \InProgress{}; nothing
-here is new, and nothing here is a claim about the analysis.
+Every item is marked in place with \texttt{AnalysisTBD} or \texttt{InProgress}
+(rendered without their braces here so this sentence does not itself count
+as an occurrence of either marker); nothing here is new, and nothing here is
+a claim about the analysis.
 
 \subsection{Distribution of open items}
 \label{app:open:counts}
@@ -32,31 +34,62 @@ here is new, and nothing here is a claim about the analysis.
     \hline
     Section & Artifact & Decision & External & Total \\
     \hline
-    1 Introduction              & 0 & 1 & 0 & 1 \\
-    2 Data and simulation       & 4 & 1 & 2 & 7 \\
-    3 Reconstruction            & 6 & 4 & 2 & 12 \\
-    4 Truth classification      & 3 & 1 & 0 & 4 \\
-    5 Classifier                & 5 & 3 & 0 & 8 \\
-    6 Corrections               & 1 & 4 & 1 & 6 \\
-    7 Generic $B\bar{B}$        & 3 & 1 & 0 & 4 \\
-    8 Signal extraction         & 4 & 3 & 0 & 7 \\
-    9 Systematics               & 2 & 2 & 0 & 4 \\
-    10 Validation, box opening  & 2 & 3 & 0 & 5 \\
+    1 Introduction              & 3 & 0 & 2 & 5 \\
+    2 Data and simulation       & 6 & 4 & 0 & 10 \\
+    3 Reconstruction            & 7 & 4 & 1 & 12 \\
+    4 Truth classification      & 5 & 0 & 0 & 5 \\
+    5 Classifier                & 6 & 0 & 0 & 6 \\
+    6 Corrections               & 2 & 5 & 0 & 7 \\
+    7 Generic $B\bar{B}$        & 5 & 0 & 0 & 5 \\
+    8 Signal extraction         & 3 & 4 & 0 & 7 \\
+    9 Systematics               & 3 & 0 & 0 & 3 \\
+    10 Validation, box opening  & 3 & 3 & 0 & 6 \\
     11 Results                  & 1 & 0 & 0 & 1 \\
     12 Summary                  & 0 & 1 & 0 & 1 \\
     Appendix: selections        & 0 & 1 & 0 & 1 \\
     Appendix: categories        & 0 & 1 & 2 & 3 \\
-    Appendix: classifier        & 6 & 1 & 0 & 7 \\
-    Appendix: fit               & 5 & 1 & 0 & 6 \\
-    Appendix: open items        & 0 & 3 & 0 & 3 \\
+    Appendix: classifier        & 7 & 0 & 0 & 7 \\
+    Appendix: fit               & 6 & 1 & 0 & 7 \\
+    Appendix: open items        & 0 & 1 & 0 & 1 \\
     \hline
-    Total                       & 42 & 31 & 7 & 80 \\
+    Total                       & 57 & 25 & 5 & 87 \\
     \hline
   \end{tabular}
 \end{table}
 
 The totals are generated from the markers in the source and match them
 exactly; the split into the three columns is a working judgement.
+A prior version of this table double-counted two occurrences where the
+marker names were mentioned in prose (this paragraph, and the one above it)
+rather than invoked as an actual open item; those are now rendered without
+the invoking braces so they are not themselves matched by the count.
+Since the count of 80 two revisions ago, the bulk of Sec.~\ref{sec:bbbar} was
+rewritten against the regenerated \texttt{run1+run2} BBbar-weight fits, three
+items closed outright (which classifier model is nominal; the BDT training
+sample size, class weights and best-candidate method; the fake-$D$
+normalisation treatment), and several TBDs were narrowed to a stated plan and
+reclassified as \texttt{InProgress}, which is a net increase in the artifact
+column: a plan is more specific than an unstated TBD, and more of what
+remains open now has a named next step (a plot, a script run, a
+reprocessing) rather than an unresolved question.
+A review pass then added one new item to Sec.~\ref{sec:data}: a currently
+active (not only prospective) overlap between the generic-MC events used for
+BDT training and those used to build the fit templates, for the
+\texttt{bkg\_continuum} and \texttt{bkg\_combinatorial} classes specifically
+(Sec.~\ref{sec:data:overlap}).
+A subsequent pass inserted twelve previously-unused figures from
+\texttt{figures/} into the note (Sec.~\ref{sec:intro}, \ref{sec:truth},
+Appendix~\ref{app:mva}, Appendix~\ref{app:fit:composition}, and
+Sec.~\ref{sec:validation:prelim}); each carries at least one new item asking
+to confirm the run period, channel, or exact producing notebook cell, since
+that information could not be recovered from the image files alone, which is
+the source of the increase from 82 to 86.
+A further review exchange established that the training notebook draws its
+generic-MC pool from Run~1 only while the fit-template notebook combines
+Run~1 and Run~2, so the $68\%$ overlap figure of Sec.~\ref{sec:data:overlap}
+understates the denominator and overstates the true overlap fraction; a new
+item asking for the missing Run~2 count was added, which is the source of
+the increase from 86 to 87.
 \AnalysisTBD{the classification into artifact, decision and external in
 Table~\ref{tab:open-items} is a working judgement made while writing, not an
 approved plan.  Correct it where the intended route to closing an item
@@ -66,6 +99,26 @@ differs}
 \label{app:open:artifacts}
 
 \begin{enumerate}
+  \item \textbf{Check for BDT train/template overlap in the generic-MC
+        background classes.}
+        As found in review, BDT training uses a Run~1-only generic-MC pool in
+        which roughly $68\%$ of the reconstructed \texttt{bkg\_continuum} and
+        \texttt{bkg\_combinatorial} events are used for training, while the
+        fit templates for those classes are built from the larger
+        Run~1$+$Run~2 combined pool (Sec.~\ref{sec:data:overlap}); the true
+        overlap fraction against that combined pool is therefore smaller than
+        $68\%$ but not yet known, since no Run~2 reconstructed count exists in
+        the repository.
+        Per the analyst, the more fundamental question is whether this
+        overlap matters at all: if the classifier's inputs and output are
+        weakly correlated with the fit observables ($\mmiss$, $\pdl$) within a
+        truth category, in-sample selection would not measurably bias the
+        template shape even at high overlap.
+        Two comparatively cheap checks would settle this ahead of a full
+        disjoint re-split: comparing templates built only from the held-out
+        validation split against the current ones, and the
+        input/fit-observable correlation study of
+        Appendix~\ref{app:mva:todo}.
   \item \textbf{Run the truth-category validation on one MC16rd file.}
         Closes the \texttt{D\_mcErrors} $> 512$ question of
         Sec.~\ref{sec:truth:closure}, the yield of the three categories
@@ -86,10 +139,16 @@ differs}
         retained input with $\mmiss$ and $\pdl$ in the fit bins, which is the
         only quantitative evidence that the selection does not sculpt the fit
         observables.
-  \item \textbf{Obtain a generic-$B\bar{B}$ fit with an interior minimum.}
-        This is the precondition for the systematic of
-        Sec.~\ref{sec:syst:bbbar} and for constraining the family
-        normalisations in Sec.~\ref{sec:fit:modifiers}.
+  \item \textbf{Obtain a generic-$B\bar{B}$ fit with an interior minimum in
+        the unmeasured 2-body and 4-body directions.}
+        Three of the five family weights (measured-hadronic, 3-body, 5+-body)
+        now have a usable MINOS width from the regenerated
+        \texttt{run1+run2} fits; the 2-body and 4-body weights remain pinned
+        at their lower bound in every stored fit.  Resolving these two,
+        via \texttt{scripts/scan\_bbbar\_bounds.py}, is the precondition for
+        the remainder of the systematic of Sec.~\ref{sec:syst:bbbar} and for
+        fully constraining the family normalisations in
+        Sec.~\ref{sec:fit:modifiers}.
 \end{enumerate}
 
 \subsection{Decisions required}
@@ -98,13 +157,17 @@ differs}
 The following are choices rather than measurements, and each is referenced at
 the point in the note where it applies.
 \begin{itemize}
-  \item Which stored classifier model is nominal
-        (Sec.~\ref{sec:mva:training}).
   \item Whether the generic-$B\bar{B}$ normalisations are fixed or constrained
-        in the signal-region fit, and how the constraint width is obtained
-        (Sec.~\ref{sec:fit:modifiers}).
-  \item The treatment of form factors and of branching fractions outside the
-        generic-$B\bar{B}$ families (Sec.~\ref{sec:corrections:missing}).
+        in the signal-region fit is settled (constrained, via
+        \texttt{normsys}); how the constraint width is obtained for the two
+        families whose tuned weight remains pinned at a bound is not
+        (Sec.~\ref{sec:fit:modifiers}, Sec.~\ref{sec:bbbar:degeneracy}).
+  \item The treatment of form factors and tracking efficiency is settled
+        (HAMMER and a small correction respectively, both deferred as minor);
+        extending the branching-fraction correction beyond the
+        generic-$B\bar{B}$ families requires a new generator-level branch
+        identifying the companion-$B$ decay mode for every event, which is
+        not yet implemented (Sec.~\ref{sec:corrections:missing}).
   \item The prefit and postfit closure criteria, and the box-opening plan
         (Sec.~\ref{sec:validation:closure},
         Sec.~\ref{sec:validation:unblinding}).
@@ -122,12 +185,13 @@ Two open items are not additive: resolving them changes material already
 written.
 \begin{itemize}
   \item \textbf{The rest-of-event track mask} (Sec.~\ref{sec:recon:b}).
-        Correcting it changes which tracks enter the ROE, and therefore
-        $M_{\mathrm{bc}}^{\mathrm{ROE}}$, $\Delta E^{\mathrm{ROE}}$, the ROE
-        charge and multiplicity, and $\mmiss$.
-        Since $\mmiss$ is a fit observable and the ROE multiplicity enters the
-        generic-$B\bar{B}$ tuning objective, every ROE-derived number in this
-        note predates the fix.
+        The bracketing defect is now fixed in the steering script at the
+        pinned commit, but whether the samples behind any given number in
+        this note were produced before or after that fix is not yet
+        confirmed.
+        Since $\mmiss$ is a fit observable, every ROE-derived number in this
+        note should be treated as potentially predating the fix until that
+        is established.
   \item \textbf{The classifier} (Sec.~\ref{sec:mva}).
         The generic-$B\bar{B}$ tuning region is defined by classifier output,
         so retraining requires re-deriving the family weights.

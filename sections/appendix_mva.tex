@@ -3,7 +3,7 @@
 %   produced-by : 4_LightGBM_Multiclass_Training.py (hyper-parameters,
 %                 schedule); BDTs/LightGBM/eval_result_v{1,2,3}.json (metrics);
 %                 BDTs/LightGBM/lgbm_multiclass_v3.txt (model header)
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : MC16rd training sample, e and mu
 %   selection   : offline_cut (Eq. offline-cut)
 %   corrections : none applied at training time
@@ -16,7 +16,7 @@
 \begin{table}[htbp]
   \centering
   \caption{LightGBM configuration of the four-class classifier, hard-coded in
-  \texttt{4\_LightGBM\_Multiclass\_Training.py} at commit \texttt{dd520a5}.}
+  \texttt{4\_LightGBM\_Multiclass\_Training.py} at commit \texttt{ad2f2ec}.}
   \label{tab:mva-hyperparameters}
   \small
   \begin{tabular}{l l l}
@@ -74,8 +74,9 @@ The train--validation gap narrows monotonically from \texttt{v1} to
 \texttt{v1} shows the clearest sign of overtraining and \texttt{v3} essentially
 none, which is consistent with \texttt{v3} being the model produced by the
 current two-stage schedule.
-\AnalysisTBD{confirm that \texttt{v3} is the nominal model, and that
-\texttt{v1} and \texttt{v2} are retained only as history}
+Confirmed: \texttt{v3} is the nominal model (Sec.~\ref{sec:mva:training}),
+and \texttt{v1}/\texttt{v2} are retained only as history and will be removed
+in a future update.
 
 \subsection{Input variables}
 \label{app:mva:inputs}
@@ -85,6 +86,31 @@ The stored model header lists 17 input features, matching
 Appendix~\ref{app:selections:mva}, and the variables excluded from training
 in Appendix~\ref{app:selections:excluded}.
 
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : utilities.apply_mva_bcs() (importance=True branch,
+%                 lgb.plot_importance(..., importance_type='gain')); the
+%                 calling notebook/script was not identified
+%   commit      : ad2f2ec
+%   sample      : MC16rd BDT training sample (Sec.~\ref{sec:mva:classes})
+%   selection   : offline_cut (Eq. offline-cut); model version not confirmed
+%   corrections : none applied at training time
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{LGBM_feature_importance.png}
+  \caption{LightGBM feature importance (total split gain) for the 17 training
+  variables of Appendix~\ref{app:selections:mva}.
+  The two ROE kinematic variables ($M_{\mathrm{bc}}^{\mathrm{ROE}}$,
+  $\Delta E^{\mathrm{ROE}}$) and $B_0\_CMS\_cos\_angle\_0\_1$ dominate;
+  \texttt{D\_A1FflightDistanceSig\_IP}, the $D$ flight-distance significance
+  of Sec.~\ref{sec:recon:d}, is the next most important, ahead of any single
+  continuum-suppression variable.
+  \AnalysisTBD{confirm which stored model (Sec.~\ref{sec:mva:training}) this
+  importance ranking was computed from, and whether it should be recomputed
+  for \texttt{v3} specifically if it is not already}}
+  \label{fig:lgbm-importance}
+\end{figure}
+
 \subsection{Diagnostics still required}
 \label{app:mva:todo}
 
@@ -93,11 +119,13 @@ classes on the validation subset}
 \AnalysisTBD{learning curves per round, from the stored evaluation histories}
 \AnalysisTBD{distributions of every retained input variable, data versus
 simulation, in an unblinded control region}
-\AnalysisTBD{correlation matrix of the inputs, and the correlation of each
+\InProgress{correlation matrix of the inputs, and the correlation of each
 input with $\mmiss$ and $\pdl$ in the bins used by the fit.  This is the
 quantitative evidence for the exclusions listed in
 Appendix~\ref{app:selections:excluded}, which currently rest on source
-comments alone}
+comments alone.  Two-dimensional plots of each fit variable against the BDT
+inputs and, in particular, against the BDT output probabilities are planned
+(Sec.~\ref{sec:mva:inputs}) to show any sculpting directly}
 \AnalysisTBD{signal and normalisation selection efficiency separately as a
 function of the working point, since $R(D)$ depends on their ratio rather
 than on either alone}

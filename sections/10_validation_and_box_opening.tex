@@ -14,7 +14,7 @@ and the $D$-mass sideband.
 %   produced-by : utilities.py (Dst_veto_cut line 87, lgb_comb line 83,
 %                 offline_cut line 85); Recon_scripts/2_Reconstruction.py
 %                 (wrong-charge sample, lines 470-556)
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
 %   selection   : per row
 %   corrections : PID; generic-MC luminosity 0.25
@@ -77,6 +77,94 @@ Sec.~\ref{sec:bbbar}}
 Because it is a fit channel, agreement there after the fit is a
 self-consistency check rather than a prediction, and should not be presented
 as validation of the fake-$D$ model.
+
+\subsection{Preliminary control-region comparisons}
+\label{sec:validation:prelim}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : a utilities.mpl-based data/MC stacked-plotting helper
+%                 (exact notebook/cell not identified)
+%   commit      : ad2f2ec
+%   sample      : Proc16 + MC16rd, Run 1, e channel
+%   selection   : region as captioned; ``tight BDT'' is lgb_tight
+%                 (Eq. lgb-tight), ``no BDT'' omits the classifier selection
+%   corrections : PID; generic-MC luminosity 0.25
+Figures~\ref{fig:prefit-mD-q2sb}--\ref{fig:prefit-mm2-mDsb-tight} show
+data/MC comparisons, before the yield extraction fit, in the $q^{2}$ and
+$D$-mass sideband regions of Table~\ref{tab:control-regions}.
+These are prefit, not postfit, comparisons: no normalisation has yet been
+fitted to data, so a discrepancy here reflects the generator-level
+normalisation and shape of each component rather than a fit failure.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{prefit_mD_q2Sideband_tightBDT_run1e.png}
+  \caption{$D$ candidate mass in the $q^{2}$ sideband, after the nominal
+  \texttt{lgb\_tight} selection.
+  Good prefit agreement (reduced $\chi^{2} = 1.07$) in a region where the
+  normalisation mode dominates.}
+  \label{fig:prefit-mD-q2sb}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{prefit_mm2_q2Sideband_mDsignal_tightBDT_run1e.png}
+  \caption{$\mmiss$ in the $q^{2}$ sideband, $D$-mass \emph{signal} region,
+  after \texttt{lgb\_tight}.
+  Reduced $\chi^{2} = 6.5$; data sit below the prediction in the tail,
+  unlike the good agreement of Fig.~\ref{fig:prefit-mD-q2sb} in the same
+  $q^{2}$ sideband for the $D$-mass variable.}
+  \label{fig:prefit-mm2-q2sb-dsig}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{prefit_pDL_q2Sideband_mDsignal_tightBDT_run1e.png}
+  \caption{$\pdl$ in the same region as Fig.~\ref{fig:prefit-mm2-q2sb-dsig}.
+  Good prefit agreement (reduced $\chi^{2} = 0.56$).}
+  \label{fig:prefit-pdl-q2sb-dsig}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{prefit_pL_q2Sideband_mDsignal_tightBDT_run1e.png}
+  \caption{Lepton momentum in the same region as
+  Fig.~\ref{fig:prefit-mm2-q2sb-dsig}.
+  Good prefit agreement (reduced $\chi^{2} = 0.80$).}
+  \label{fig:prefit-pl-q2sb-dsig}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{prefit_mm2_mDsideband_noBDT_run1e.png}
+  \caption{$\mmiss$ in the $D$-mass sideband, \emph{without} the BDT
+  selection (only \texttt{offline\_cut}).
+  Reduced $\chi^{2} = 837$: generic MC alone does not describe this region
+  before background suppression, consistent with the motivation for the
+  classifier of Sec.~\ref{sec:mva}.}
+  \label{fig:prefit-mm2-mDsb-noBDT}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{prefit_mm2_mDsideband_tightBDT_run1e.png}
+  \caption{$\mmiss$ in the same $D$-mass sideband as
+  Fig.~\ref{fig:prefit-mm2-mDsb-noBDT}, after \texttt{lgb\_tight}.
+  The classifier substantially improves the agreement (reduced $\chi^{2}$
+  falls from $837$ to $6.3$) but does not eliminate it; residual tension
+  concentrates at high $\mmiss$.
+  Per the caveat above, the $D$-mass sideband is a fit channel, so this
+  remaining prefit tension --- not the postfit result --- is the honest
+  description of the input the fit starts from.}
+  \label{fig:prefit-mm2-mDsb-tight}
+\end{figure}
+
+\AnalysisTBD{identify the exact producing notebook/cell for the figures
+above, confirm luminosity scaling and corrections applied, and extend to
+Run~2 and the $\mu$ channel.  The residual tail disagreement in
+Figs.~\ref{fig:prefit-mm2-q2sb-dsig} and~\ref{fig:prefit-mm2-mDsb-tight}
+has not been investigated}
 
 \subsection{Closure criteria}
 \label{sec:validation:closure}

@@ -1,6 +1,6 @@
 % PROVENANCE (section-level)
 %   produced-by : 5_BBbkg_weights_optuna_minuit.py, bbbar_reweighting.py
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 \section{Generic-$B\bar{B}$ Background Modelling and Validation}
 \label{sec:bbbar}
 
@@ -66,11 +66,34 @@ The set of fit bins is derived once from unweighted MC support and held
 fixed, so that the likelihood support cannot depend on the parameters being
 fitted.
 
-The nominal objective is \texttt{kinematic-2d-plus-roe}: a two-dimensional
-deviance in $\mmiss \times \pdl$ ($20 \times 20$ bins over
-$[-4,10]\,\mathrm{GeV}^{2}/c^{4} \times [0.2,4.0]\,\mathrm{GeV}/c$) plus a
-shape-only one-dimensional deviance in the ROE track multiplicity, with the
-final bin merging all multiplicities $\geq 14$.
+Three objectives are implemented in \texttt{5\_BBbkg\_weights\_optuna\_minuit.py}
+and have all been tried.
+The nominal objective is \texttt{kinematic-2d}: a two-dimensional deviance in
+$\mmiss \times \pdl$ ($20 \times 20$ bins over
+$[-4,10]\,\mathrm{GeV}^{2}/c^{4} \times [0.2,4.0]\,\mathrm{GeV}/c$) alone
+(\texttt{ANALYSIS\_DECISION}).
+\texttt{kinematic-2d-plus-roe} adds a shape-only one-dimensional deviance in
+the ROE track multiplicity, weighted by a coefficient \texttt{roe\_strength}
+(``$\alpha$''), with the final bin merging all multiplicities $\geq 14$;
+\texttt{missm2-roe-2d} instead replaces the $\mmiss \times \pdl$ deviance with
+a two-dimensional missing-mass/ROE-multiplicity deviance.
+Adding the ROE-multiplicity term (at $\alpha = 0.5$ or $\alpha = 1$; $\alpha$
+itself has not been tuned, only tried at these two values) does not improve
+the agreement on the $\mmiss \times \pdl$ plane, and \texttt{missm2-roe-2d}
+performs worse still, both in total deviance and in how pinned the fitted
+parameters are (Sec.~\ref{sec:bbbar:results}).
+One interpretation is that the ROE tracks and the two kinematic variables
+constrain different aspects of the generic-$B\bar{B}$ composition, so that
+adding the ROE term does not simply sharpen the same likelihood but pulls it
+towards a different, not obviously more correct, optimum;
+\texttt{kinematic-2d} is used as the nominal objective on the grounds that it
+gives the best agreement on the $\mmiss \times \pdl$ plane specifically, since
+that is the plane the final fit is performed in
+(Sec.~\ref{sec:fit:observables}).
+\AnalysisTBD{the interpretation above (different physics constrained by the
+ROE tracks versus the two kinematic variables) is a hypothesis, not yet
+demonstrated}
+
 The tuning region is
 \begin{equation}
   1.855 < m(K\pi\pi) < 1.885,\quad
@@ -96,69 +119,111 @@ the combination.
 
 \subsection{Current status of the tuned weights}
 \label{sec:bbbar:results}
-\PreliminaryResult{Run~1, $e$ channel, objective
-\texttt{kinematic-2d-plus-roe} ($\alpha = 1$, ROE tail bin from 14), mode
-replacement disabled: measured hadronic $2.027 \pm 0.062$, unmeasured 2-body
-$0.0010$, 3-body $0.785 \pm 0.124$, 4-body $0.0010$, 5+-body
-$0.193 \pm 0.044$; total deviance $609.95$ ($399.84$ from the 2D term,
-$210.11$ from the ROE term).  Source:
-\texttt{BBbkg\_weights/best\_bbbar\_weights\_kinematic-2d-plus-roe\_alpha1\_%
-roetail14\_run1\_e\_replaceFalse\_minuit.json} at commit \texttt{dd520a5};
-MC16rd + Proc16/Prompt16, Run~1, $e$ channel, region of
-Eq.~\eqref{eq:bbbar-region}}
 
-\InProgress{the stored minimum has
-\texttt{has\_parameters\_at\_limit = true}: the 2-body and 4-body weights sit
-on their lower bound of $0.001$, i.e.\ two hadronic families are scaled
-essentially to zero.  Uncertainties from HESSE are not meaningful at a
-boundary, and this configuration is not acceptable for publication.  A fit
-with an interior minimum is required before these weights or their
-uncertainties can be used}
+The stored fits were regenerated for the combined \texttt{run1+run2} sample,
+and MINOS was enabled for every scenario, specifically to address the
+parameter-at-limit problem below.
+Six results are stored, all with mode replacement disabled
+(\texttt{replaceFalse}): \texttt{kinematic-2d} for $e$ and $\mu$;
+\texttt{kinematic-2d-plus-roe} at $\alpha=0.5$ for $e$ and $\mu$ and at
+$\alpha=1$ for $e$; and \texttt{missm2-roe-2d} for $e$.
+The nominal result is \texttt{kinematic-2d} (Sec.~\ref{sec:bbbar:tuning}).
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : BBbkg_weights/*.json (fit metadata read directly)
+%   commit      : ad2f2ec
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : tuning region of Eq. (bbbar-region)
+%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
+%                 semileptonic weights
+\PreliminaryResult{nominal (\texttt{kinematic-2d}, run1+run2):
+$e$ channel --- measured hadronic $2.264^{+0.057}_{-0.057}$, unmeasured
+2-body $0.0010^{+0.158}_{-0.000}$ (at its lower bound of $0.001$), 3-body
+$0.765^{+0.114}_{-0.118}$, 4-body $0.0010^{+0.031}_{-0.000}$ (at its lower
+bound), 5+-body $0.027^{+0.046}_{-0.026}$; total deviance $419.78$.
+$\mu$ channel --- measured hadronic $1.925^{+0.111}_{-0.112}$, unmeasured
+2-body $0.0010^{+0.088}_{-0.000}$ (at its lower bound), 3-body
+$0.583^{+0.202}_{-0.204}$, 4-body $0.0010^{+0.112}_{-0.000}$ (at its lower
+bound), 5+-body $0.046^{+0.065}_{-0.045}$; total deviance $430.07$.
+Uncertainties quoted are MINOS; parameter bounds are
+$[0.5,5]$ for the measured-hadronic weight and $[0.001,5]$,
+$[0.01,1]$, $[0.001,1]$, $[0.001,0.5]$ for the 2-, 3-, 4- and 5+-body
+unmeasured weights respectively (\texttt{PARAMETER\_SPECS} in
+\texttt{5\_BBbkg\_weights\_optuna\_minuit.py}).  Source:
+\texttt{BBbkg\_weights/best\_bbbar\_weights\_kinematic-2d\_run1+run2\_\{e,mu\}%
+\_replaceFalse\_minuit.json}}
+
+\InProgress{turning on MINOS improves the situation but does not resolve it.
+In both channels of the nominal fit, and in every one of the six stored
+fits, the unmeasured 2-body and 4-body weights remain pinned at their lower
+bound (\texttt{has\_parameters\_at\_limit = true} throughout, exactly as
+before MINOS was enabled); the parameter bounds themselves are unchanged.
+For the three parameters that are \emph{not} pinned in a given fit ---
+typically the measured-hadronic, 3-body and 5+-body weights --- MINOS does
+give a genuine, asymmetric confidence interval that HESSE could not, and
+those three could in principle already supply a propagatable width.
+For the two parameters that remain pinned, however, the MINOS interval is not
+a resolution of the boundary problem: its lower bound is, by construction,
+at or immediately next to the parameter's hard limit (the reported lower
+errors above are $\mathcal{O}(10^{-7})$ or smaller), so it reflects the
+imposed bound rather than a profiled uncertainty, and the same
+three-way question of Sec.~\ref{sec:bbbar:degeneracy} --- too-tight bounds,
+an unresolved degeneracy, or a genuinely non-physical preferred weight ---
+remains open for exactly those two families.  The \texttt{missm2-roe-2d}
+result pins a third parameter (3-body, in addition to 2-body) and pushes
+5+-body to its \emph{upper} bound instead, which is consistent with the
+qualitative statement above that this objective performs worse, not better}
 
 \subsection{Constraining power of the tuning region}
 \label{sec:bbbar:degeneracy}
 
 The tuned fits do not reach an interior minimum.
-In all eight results stored in \texttt{BBbkg\_weights/} the minimum sits on a
-parameter bound, and the pinned parameter is always one of the
-\emph{unmeasured} $n$-body weights and never the measured-hadronic weight.
+In all six results currently stored in \texttt{BBbkg\_weights/} the minimum
+sits on at least one parameter bound, and the pinned parameters are always
+among the \emph{unmeasured} $n$-body weights (2-body and 4-body in five of
+the six fits; \texttt{missm2-roe-2d} additionally pins 3-body and pushes
+5+-body to its \emph{upper} bound) and never the measured-hadronic weight.
 Table~\ref{tab:bbbar-correlations} shows the accompanying correlation
-structure: the pairwise correlation between unmeasured families reaches
-$0.64$ to $0.93$ in seven of the eight fits, and in the eighth the
-measured-hadronic weight is instead correlated with another family at
-$0.94$.
-Every fit therefore contains at least one near-degenerate pair.
+structure.
+The pairwise correlation between the 3-body and 5+-body unmeasured weights is
+large in every fit that uses the $\mmiss\times\pdl$-based objectives, $0.75$
+to $0.78$; \texttt{missm2-roe-2d} is the exception, with unmeasured pairwise
+correlations below $0.001$ but instead a moderate correlation of the
+measured-hadronic weight with 3-body ($0.30$).
+In the other five fits the measured-hadronic weight also correlates with
+3-body and 5+-body at the $0.7$--$0.8$ level, larger than in the fits stored
+previously, though it still never pins.
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT (fit metadata, not a physics measurement)
 %   produced-by : BBbkg_weights/*.json (fit metadata read directly)
-%   commit      : dd520a5
-%   sample      : MC16rd + Proc16/Prompt16, run periods and channels as listed
+%   commit      : ad2f2ec
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
 %   selection   : tuning region of Eq. (bbbar-region)
 %   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
 %                 semileptonic weights
 \begin{table}[htbp]
   \centering
-  \caption{Correlation structure of the stored generic-$B\bar{B}$ weight fits.
-  ``unmeasured pairs'' is the largest absolute correlation between two
-  unmeasured $n$-body weights; the last column is the largest absolute
-  correlation of the measured-hadronic weight with any other parameter.
+  \caption{Correlation structure of the stored generic-$B\bar{B}$ weight fits,
+  all \texttt{run1+run2}, mode replacement disabled.
+  ``unmeas.\ pair'' is the largest absolute correlation between two unmeasured
+  $n$-body weights; ``meas.'' is the largest absolute correlation of the
+  measured-hadronic weight with any other parameter.
   Every fit reported \texttt{has\_parameters\_at\_limit = true}.}
   \label{tab:bbbar-correlations}
-  \small
-  \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth} c c >{\raggedright\arraybackslash}p{0.26\textwidth}}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth} >{\centering\arraybackslash}p{0.10\textwidth} >{\centering\arraybackslash}p{0.10\textwidth} >{\raggedright\arraybackslash}p{0.32\textwidth}}
     \hline
-    Fit & $\max|\rho|$ unmeas. & $\max|\rho|$ meas. & Pinned \\
+    Fit & $\max|\rho|$\newline unmeas. & $\max|\rho|$\newline meas. & Pinned \\
     \hline
-    \texttt{kin-2d-plus-roe run1 $e$} & 0.77 & 0.77 & 2-body, 4-body \\
-    \texttt{kin-2d run1+run2 $e$}     & 0.77 & 0.72 & 4-body \\
-    \texttt{kin-2d run1 $e$}          & 0.77 & 0.72 & 2-body \\
-    \texttt{missm2-roe-2d run1 $e$}   & 0.05 & 0.94 & 2-body, 4-body, 5+-body \\
-    \texttt{poisson-2d run1 $e$}      & 0.93 & 0.00 & 4-body, 5+-body \\
-    \texttt{poisson-2d run1 $\mu$}    & 0.81 & 0.51 & 2-body \\
-    \texttt{poisson-2d run2 $e$}      & 0.76 & 0.45 & 5+-body \\
-    \texttt{poisson-2d run2 $\mu$}    & 0.64 & 0.48 & 4-body \\
+    \texttt{kinematic-2d $e$} (nominal) & 0.77 & 0.71 & 2-body, 4-body \\
+    \texttt{kinematic-2d $\mu$} (nominal) & 0.75 & 0.79 & 2-body, 4-body \\
+    \texttt{kin-2d-plus-roe $\alpha{=}0.5$ $e$} & 0.78 & 0.75 & 2-body, 4-body \\
+    \texttt{kin-2d-plus-roe $\alpha{=}0.5$ $\mu$} & 0.76 & 0.81 & 2-body, 4-body \\
+    \texttt{kin-2d-plus-roe $\alpha{=}1$ $e$} & 0.78 & 0.77 & 2-body, 4-body \\
+    \texttt{missm2-roe-2d $e$} & $<0.001$ & 0.30 & 2-body, 3-body, 5+-body (upper) \\
     \hline
   \end{tabular}
 \end{table}
@@ -173,6 +238,14 @@ different responses.
         the bounds only lets the minimum slide further before pinning again.
         The remedy is to merge the families the region cannot separate, or to
         add an observable that separates them.
+        As an organisational reference only: a sibling Belle~II note
+        ($B\to K^{(*)}\nu\bar\nu$) reports exactly this situation for an
+        analogous background grouping, stating that its control region ``has
+        no handle to constrain them separately,'' and its response is not to
+        keep attempting an in-situ fit but to assign one shared,
+        externally/PDG-constrained nuisance parameter per group instead ---
+        a concrete precedent for the ``merge and constrain'' remedy in this
+        item, should the scan below confirm this explanation over the third.
   \item The constrained optimum is genuine: the data prefer a weight at or
         below zero for one or more unmeasured families, so the optimum lies
         outside the allowed range.  Relaxing the bounds does not help and
@@ -196,14 +269,18 @@ the second or the third.
 The strong correlations of Table~\ref{tab:bbbar-correlations} point towards
 the second, but they do not exclude the third, and the distinction matters
 because the two call for opposite responses.
+Turning on MINOS (Sec.~\ref{sec:bbbar:results}) does not by itself distinguish
+the three either: a MINOS interval that touches the bound on a pinned
+parameter is exactly what both the second and the third explanation predict,
+and does not test the first.
 \InProgress{the three explanations are distinguished by re-running the
 minimisation over a sequence of bound relaxations and profiling each pinned
 weight inward while re-minimising the others.
-\texttt{scripts/scan\_bbbar\_bounds.py} in the analysis repository does this,
-but it postdates the commit pinned by this note and has never been run on real
-ntuples.  Everything above is therefore an inference from the metadata of
-eight stored fits.  No conclusion about merging decay families should be drawn
-until the scan has been run and its output cross-checked}
+\texttt{scripts/scan\_bbbar\_bounds.py} in the analysis repository does this
+and is now included at the commit pinned by this note, but it has still never
+been run on real ntuples.  Everything above is therefore an inference from
+the metadata of six stored fits.  No conclusion about merging decay families
+should be drawn until the scan has been run and its output cross-checked}
 
 \subsection{Validation}
 \label{sec:bbbar:validation}
@@ -213,7 +290,15 @@ composition differs from that of the tuning region --- different hadronic
 versus semileptonic fractions, and a different hadronic multiplicity spectrum
 (see \texttt{Notebooks/Plotting/4\_Plot\_WC\_*.ipynb}) --- so agreement or
 disagreement there does not cleanly test the weights.  A validation region
-matched in composition to the tuning region is needed}
+matched in composition to the tuning region is needed.
+As an organisational reference only: a sibling Belle~II note
+($B\to K^{(*)}\nu\bar\nu$) validated its full background-weight product in
+an independent sideband and reports an imperfect but acceptable closure,
+which it only reached after loosening one background normalisation by $50\%$
+relative to its weighted value.  A validation attempt here that shows
+tension rather than clean closure should not automatically be read as the
+weights failing; it may indicate that a genuinely independent region needs
+its own residual freedom, the same way that note's did}
 
 \AnalysisTBD{closure of the tuned weights in the bins actually used by the
 final fit (Sec.~\ref{sec:fit}), which are not the same bins as the tuning

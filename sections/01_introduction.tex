@@ -2,9 +2,172 @@
 \label{sec:intro}
 The Belle~II physics programme and detector are described in
 Refs.~\cite{Kou:2018nap,Abe:2010gxa}.
-\AnalysisTBD{physics motivation for $R(D)$, the current experimental and
-theoretical status, and why an inclusive-tagging approach is complementary
-to FEI-based measurements}
+
+\subsection{Physics motivation}
+\label{sec:intro:motivation}
+
+The ratios
+\begin{equation}
+  R(D^{(*)}) \equiv
+  \frac{\mathcal{B}(B \to D^{(*)}\tau\bar\nu_{\tau})}
+       {\mathcal{B}(B \to D^{(*)}\ell\bar\nu_{\ell})},
+  \qquad \ell = e, \mu ,
+\end{equation}
+are direct tests of lepton flavour universality in the Standard Model (SM):
+the $B \to D^{(*)}\ell\bar\nu_\ell$ and $B \to D^{(*)}\tau\bar\nu_\tau$ decay
+rates differ, at tree level, only through the charged-lepton mass and phase
+space, so that $R(D^{(*)})$ is predicted with small theoretical uncertainty
+and is largely free of the hadronic form-factor uncertainties that limit the
+individual branching fractions.
+A measured value in excess of the SM prediction would point to new physics
+coupling preferentially to the third-generation lepton, such as a charged
+Higgs boson or a leptoquark~\cite{Fajfer:2012vx,Tanaka:2012nw}.
+Because a charged-Higgs contribution to $B \to D^{*}\tau\bar\nu_\tau$ is
+suppressed by the $D^{*}$ momentum in a way that a charged-Higgs
+contribution to $B \to D\tau\bar\nu_\tau$ is not, $R(D)$ is more sensitive
+than $R(D^{*})$ to this class of scalar couplings~\cite{Fajfer:2012vx,
+Tanaka:2012nw}, which is part of the motivation for measuring $R(D)$ on its
+own rather than only in combination with $R(D^{*})$.
+
+% PROVENANCE
+%   status      : VALIDATED_RESULT (a published/community world average, not
+%                 produced by this analysis or its code)
+%   produced-by : HFLAV averaging group; PDF metadata records the source path
+%                 as "HFLAV2026_Ichep26/rdrds_rd_ichep26.pdf"
+%   commit      : n/a (external figure, ICHEP 2026 preliminary)
+%   sample      : world-average of published R(D), R(D*) measurements
+%   selection   : n/a
+%   corrections : n/a
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{RD_uncertainties_ichep26.pdf}
+  \caption{World-average experimental status of $R(D)$ and $R(D^{*})$
+  against the SM prediction, HFLAV compilation, ICHEP 2026 preliminary
+  \cite{HFLAV:2022pwe}.}
+  \label{fig:rd-uncertainties}
+\end{figure}
+
+% PROVENANCE
+%   status      : PLANNED (a placeholder pending confirmation of its
+%                 producer and sources; not produced by this analysis)
+%   produced-by : Matplotlib-generated summary plot; specific authorship and
+%                 the individual measurements it compiles are not yet
+%                 confirmed against a citable source
+%   commit      : n/a (external figure, ICHEP 2026 preliminary)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{RD_RDst_ichep_2026_prelim.pdf}
+  \caption{$R(D)$--$R(D^{*})$ measurements and their combination, ICHEP 2026
+  preliminary.
+  \AnalysisTBD{confirm the producing group/tool and the list of individual
+  measurements entering this compilation, so that a proper citation can
+  replace this placeholder}}
+  \label{fig:rd-rdst-prelim}
+\end{figure}
+
+Figures~\ref{fig:rd-uncertainties} and~\ref{fig:rd-rdst-prelim} summarise the
+current experimental and theoretical status.
+The first round of $R(D)$ measurements at Belle and Belle~II used the Full
+Event Interpretation (FEI)~\cite{Keck:2018lcd} to reconstruct the companion
+$B$ meson exclusively, in either a hadronic or a semileptonic decay mode (for
+example Ref.~\cite{Belle:2019rba}).
+Reconstructing the rest of the event (ROE) inclusively instead of tagging it
+exclusively is expected to recover roughly an order of magnitude more signal
+events, at the cost of a much larger generic-$B\bar{B}$ background
+(Sec.~\ref{sec:bbbar}) that the tag-side reconstruction would otherwise
+reject.
+The two samples are not statistically independent: an event whose companion
+$B$ the FEI reconstructs exclusively is, in essentially all cases, also
+picked up by the inclusive tag, since the inclusive selection imposes no
+requirement analogous to exclusive tag-side reconstruction.
+The FEI-tagged sample is therefore closer to a (small) subset of the
+inclusively-tagged one than to an independent sample.
+The overlap is nonetheless expected to be small in absolute terms, because
+the FEI's exclusive companion-$B$ reconstruction succeeds for only a small
+fraction of events, while the inclusive selection efficiency for the
+companion side is an order of magnitude larger (\texttt{ANALYSIS\_DECISION}).
+An inclusive-tagging measurement therefore still adds new, largely
+independent statistics on top of the existing FEI-based results and serves
+as a cross-check of them, but it is not a fully independent sample, and
+treating it as one would bias any combination or correlation with an
+FEI-based result.
+\AnalysisTBD{quantify the expected event-yield gain and, in particular, the
+size of the overlap between the FEI-tagged and inclusively-tagged samples
+with a producing artifact --- for example the per-category yield table of
+Sec.~\ref{sec:truth:composition} cross-referenced against an FEI tag-side
+reconstruction flag --- rather than the qualitative statement above}
+
+For an inclusively-tagged analysis, the $B^{0} \to D^{-}\ell^{+}$ mode (as
+opposed to $B^{+} \to \bar D^{0}\ell^{+}$ or a combination of the two) is used
+because of its small $D^{*}$ feed-down and the comparatively long $D^{+}$
+lifetime, both of which keep the $D$-mass reconstruction and the $D^{*}$ veto
+of Sec.~\ref{sec:recon:dstveto} clean.
+\AnalysisTBD{source for the feed-down and lifetime comparison between the
+charged- and neutral-$D$ channels that motivates this choice; it is stated
+here as the analyst's reasoning, not yet as a cited or quantified result}
+
+Only the $D^{-}$ and $\ell^{+}$ are explicitly reconstructed on the signal
+side (Sec.~\ref{sec:reconstruction}); everything else is assigned to the ROE.
+The signal decay has three missing neutrinos, and the companion $B$ is
+reconstructed inclusively, so neither $B$ meson's kinematics is tightly
+constrained.
+This has two consequences for the analysis strategy.
+First, because so little kinematic information is available at
+reconstruction level, a selection based on a handful of variables cannot
+reduce the background enough on its own, and both signal and background
+retain very large yields through reconstruction.
+Second, because the phase space is only loosely constrained, signal and
+background events populate similar regions of the available kinematic
+variables, so that the shapes of candidate fitting variables are similar
+between signal and background.
+Together these two consequences make an effective, high-dimensional
+background suppression necessary, which is why a multi-class BDT
+(Sec.~\ref{sec:mva}) rather than a small set of selection cuts is used.
+After the BDT selection, yields for the signal and normalisation modes are
+extracted from a two-dimensional binned likelihood fit in the missing mass
+squared $\mmiss$ and $\pdl$ (Sec.~\ref{sec:fit}).
+As anticipated from the loosely constrained phase space, many components
+retain a similar shape in this plane even after the BDT selection, and their
+distributions are broad and overlapping, which is what makes the
+two-dimensional yield extraction difficult; the correlation between the BDT
+training variables and the two fit variables is checked to be small
+(Appendix~\ref{app:mva:todo}), so the BDT selection is not expected to be the
+cause of that overlap.
+\AnalysisTBD{expected sensitivity on $R(D)$ for the combined Run~1
+(365\,fb$^{-1}$) and partial Run~2 (125\,fb$^{-1}$ processed) Belle~II
+data-sample, including systematics, MC statistics and background
+systematics.  A figure of approximately 12\% has been quoted by the analyst;
+record it here with its producing artifact once the Asimov sensitivity study
+of Sec.~\ref{sec:results} exists}
+
+% PROVENANCE
+%   status      : ANALYSIS_DECISION (schematic, not a numerical result)
+%   produced-by : analyst-prepared schematic (figures/Kinematic_tagging_tech.png)
+%   commit      : n/a (illustrative diagram, not derived from a specific run)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{Kinematic_tagging_tech.png}
+  \caption{Event topology for the three tagging strategies used to measure
+  $R(D^{(*)})$: hadronic and semileptonic FEI exclusively reconstruct the
+  companion $B$ ($B_{\mathrm{tag}}$), while the inclusive tag used in this
+  note represents it only by the rest of the event.
+  The gain in efficiency going from exclusive to inclusive tagging comes at
+  the cost of purity, since the companion side is no longer required to form
+  a specific, fully-reconstructed decay chain.}
+  \label{fig:tagging-topology}
+\end{figure}
+\AnalysisTBD{add a second, dedicated figure for the signal decay
+$B^{0} \to D^{-}(\to K^{+}\pi^{-}\pi^{-})\,\ell^{+}$ with the ROE at the
+level of detail of Table~\ref{tab:recon-cuts}, cross-referenced from
+Sec.~\ref{sec:reconstruction}; Fig.~\ref{fig:tagging-topology} above gives
+the schematic comparison between tagging strategies but not this analysis's
+own reconstruction chain in detail}
 
 \subsection{Analysis signature}
 \label{sec:intro:signature}
@@ -32,7 +195,7 @@ Each stage is described in the section named beside it.
 %                 (classify_mc_dict, apply_pid_corrections,
 %                 create_templates_new, create_workspace);
 %                 5_BBbkg_weights_optuna_minuit.py
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
 %   selection   : n/a (whole chain)
 %   corrections : n/a (the figure names where each is applied)

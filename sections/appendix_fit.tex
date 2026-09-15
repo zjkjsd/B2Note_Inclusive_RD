@@ -3,7 +3,7 @@
 %                 workspaces relative to the current generator)
 %   produced-by : Fit_toys/2dws_{SR,SB}_e_MC16rd_*.json (generated pyhf
 %                 workspaces); utilities.py create_workspace (1397-1553)
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : MC16rd, e channel
 %   selection   : D-mass signal region or sideband, per file
 %   corrections : not recorded in the workspace files
@@ -108,12 +108,75 @@ Tables~\ref{tab:stored-workspaces} and~\ref{tab:stored-modifiers} with its
 contents.  Until then this note documents an obsolete realisation of its own
 fit model}
 
+\subsection{MC composition of the fit variables}
+\label{app:fit:composition}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/ (utilities.mpl-based stacked plotting
+%                 helper; exact notebook/cell not identified)
+%   commit      : ad2f2ec
+%   sample      : MC16rd, Run 1, e channel
+%   selection   : offline_cut (Eq. offline-cut); region as captioned
+%   corrections : not confirmed from the image alone
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Dtaunu_region_MC_mm2_run1e.png}
+  \caption{$\mmiss$, all truth categories, in a $B\to D\tau\nu$-enhanced
+  region (Run~1, $e$ channel).
+  Per-category mean, standard deviation and a cut efficiency are annotated
+  in the legend; several categories overlap substantially with the
+  $D\tau\nu$ shape itself.}
+  \label{fig:mc-comp-dtaunu-mm2}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Dtaunu_region_MC_pDL_run1e.png}
+  \caption{$\pdl$, all truth categories, in the same $B\to D\tau\nu$-enhanced
+  region as Fig.~\ref{fig:mc-comp-dtaunu-mm2} (Run~1, $e$ channel).}
+  \label{fig:mc-comp-dtaunu-pdl}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Dellnu_region_MC_mm2_run1e.png}
+  \caption{$\mmiss$, all truth categories, in a $B\to D\ell\nu$-enhanced
+  (normalisation) region (Run~1, $e$ channel).
+  The normalisation mode dominates and peaks near $\mmiss = 0$, as expected
+  for a single-neutrino final state, but the signal-like backgrounds
+  ($D^{*}\ell\nu$, $D^{**}\ell\nu$, gap) extend across the same range as the
+  $D\tau\nu$-enhanced region of Fig.~\ref{fig:mc-comp-dtaunu-mm2}.}
+  \label{fig:mc-comp-dellnu-mm2}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{Dellnu_region_MC_pDL_run1e.png}
+  \caption{$\pdl$, all truth categories, in the same $B\to D\ell\nu$-enhanced
+  region as Fig.~\ref{fig:mc-comp-dellnu-mm2} (Run~1, $e$ channel).}
+  \label{fig:mc-comp-dellnu-pdl}
+\end{figure}
+
+\AnalysisTBD{identify the exact producing notebook/cell for
+Figs.~\ref{fig:mc-comp-dtaunu-mm2}--\ref{fig:mc-comp-dellnu-pdl}, confirm
+the precise region definitions (beyond ``$D\tau\nu$-enhanced''/``$D\ell\nu$-enhanced''),
+and extend to Run~2 and the $\mu$ channel.
+A true two-dimensional ($\mmiss$ versus $\pdl$) version per category, as
+referenced in Sec.~\ref{sec:fit:observables}, would show the correlation
+between the two variables that these one-dimensional projections cannot}
+
 \subsection{Tables still required}
 \label{app:fit:todo}
 
 \AnalysisTBD{complete parameter table for the regenerated workspace:
 initial values, bounds, constraint terms and which parameters are fixed,
-extracted from the workspace rather than transcribed from the generator}
+extracted from the workspace rather than transcribed from the generator.
+As an organisational template only: sibling Belle~II \texttt{pyhf}-based
+notes tabulate this per sample/parameter as modifier type
+(\texttt{normfactor}/\texttt{normsys}/\texttt{histosys}/\texttt{staterror}),
+constraint width, which region(s) it applies in, and whether the response is
+one- or two-sided --- a structure this table could follow directly}
 \AnalysisTBD{correlation matrix of the fitted parameters from an Asimov fit,
 and the expected uncertainty on the parameter of interest}
 \AnalysisTBD{alternative binnings and the stability of the extracted yields
@@ -130,4 +193,6 @@ The toy machinery is \texttt{utilities.toy\_utils} together with
 \texttt{b2luigi}.
 \AnalysisTBD{pull distributions and linearity scans from that machinery,
 reported separately from any result on data.  No toy study output is stored in
-the repository at the pinned commit}
+the repository at the pinned commit.  See Sec.~\ref{sec:fit:validation} for
+the planned methodology, including an organisational template drawn from
+sibling analyses}

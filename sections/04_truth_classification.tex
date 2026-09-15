@@ -1,10 +1,10 @@
 % =========================================================================
 % PROVENANCE (section-level)
 %   status      : CODE_FACT unless marked otherwise
-%   produced-by : utilities.py :: classify_mc_dict()  (lines 519-635)
+%   produced-by : utilities.py :: classify_mc_dict()  (lines 520-649)
 %                 utilities.py :: DecayMode_new       (line 73)
-%                 utilities.py :: create_templates_new (lines 1073-1273)
-%   commit      : dd520a5
+%                 utilities.py :: create_templates_new (lines 1087-1287)
+%   commit      : ad2f2ec
 %   scope       : MC16rd, Run 1 + Run 2, e and mu channels
 % =========================================================================
 \section{Truth Classification and Simulated Sample Composition}
@@ -132,12 +132,16 @@ Candidates with $\texttt{D\_mcErrors} > 512$ --- that is, the clone/fake-track
 bit set together with any other mismatch bit, or any higher bit --- satisfy
 none of trueD, fakeD or fakeTracks, and are therefore assigned to no category
 at all.
-Such candidates are expected to be absent or negligible in MC16rd
-\AnalysisTBD{to be confirmed: run
-\texttt{scripts/validate\_truth\_categories.py} over one MC16rd file and
-report the number of unclassified candidates and their
+Such candidates are expected to be absent or negligible in MC16rd.
+\texttt{scripts/validate\_truth\_categories.py} exists in the analysis
+repository for exactly this check, but has not yet been run.
+\AnalysisTBD{run \texttt{scripts/validate\_truth\_categories.py} over one
+MC16rd file and report the number of unclassified candidates and their
 \texttt{D\_mcErrors} spectrum.  Until then, exhaustiveness of the fake branch
-is an assumption}
+is an assumption; it is not treated as urgent because the two catch-all
+categories of the TDT$\ell$ and signal-like branches --- the other place a
+classification gap could hide --- are checked periodically and are consistent
+with zero (Sec.~\ref{sec:truth:closure} below)}
 
 \paragraph{Categories excluded from the fit.}
 Three classified categories are dropped before the templates are built
@@ -147,9 +151,20 @@ Three classified categories are dropped before the templates are built
 The classification is therefore exhaustive in a stronger sense than the fit
 model is: the two catch-alls exist to make the classification complete, and
 are then excluded from the likelihood.
+Two of the three, \texttt{bkg\_other\_TDT$\ell$} and
+\texttt{bkg\_other\_signal}, are placeholders whose purpose is to make the
+classification exhaustive rather than to carry physical content: for a
+correct classification they are expected to contain zero, or at most one or
+two, events, and they are checked periodically to confirm this.
+\texttt{bkg\_fakeTracks} is different: it is a genuine, populated category
+(one of the D daughters is a clone or fake track) that is left out of the
+templates because there is not yet a good way to handle it in the fit.
 \AnalysisTBD{quantify the yield of the three excluded categories in the
-signal region and in the $D$-mass sideband, and either justify neglecting
-them or assign a systematic uncertainty for doing so}
+signal region and in the $D$-mass sideband.  For the two placeholders this
+is a closure check that they are indeed negligible; for \texttt{bkg\_fakeTracks}
+it is the input needed to decide how it should enter the fit, since it is
+currently neither modelled nor assigned a systematic uncertainty for its
+omission}
 
 \subsection{Category merging in the fit templates}
 \label{sec:truth:merging}
@@ -161,9 +176,40 @@ the narrow and broad $D^{**}\ell\nu$ categories are summed into a single
 $D^{**}\ell\nu$ template; and when the gap-mode sample weight is set to zero
 the combined template is relabelled $D^{**}\ell\nu + \text{gap}$, which folds
 the gap modes into the $D^{**}$ template rather than dropping them.
-\AnalysisTBD{state which of these configurations is nominal, and what
-information is lost by merging narrow and broad $D^{**}$ given that they have
-different form factors and different $\mmiss$ shapes}
+The narrow/broad merge into a single $D^{**}\ell\nu$ template is nominal.
+The gap-mode configuration is more involved and is described fully in
+Sec.~\ref{sec:bbbar:hierarchy} and Sec.~\ref{sec:fit:templates}; in short, the
+generic-MC gap-mode models ($B \to D^{(*)}\eta\ell\nu$ and
+$B \to D^{(*)}\pi\pi\ell\nu$) are not trusted to describe the gap between the
+inclusive and exclusive semileptonic branching-fraction measurements
+(of order $1\%$), so the nominal configuration instead uses the
+$D^{**}\ell\nu$ (broad) shape for the gap-mode template as well, with the two
+components' normalisations summed --- effectively treating the gap as
+$B \to D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$.
+This is a shape substitution motivated by a lack of a trusted alternative,
+not a physics statement that the gap is exhausted by $D^{**}\ell\nu$.
+Belle~II has separately produced dedicated signal-enriched MC for the
+$D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$ gap-mode hypothesis specifically; it
+is intended for the systematic study of this substitution and for the final
+template building, but is not yet used at the pinned commit.
+\AnalysisTBD{what information is lost by merging the narrow and broad
+$D^{**}$ categories, given that they have different form factors and
+different $\mmiss$ shapes, and by extension what is lost by using the broad
+$D^{**}\ell\nu$ shape for the gap modes as well; incorporate the dedicated
+gap-mode signal MC once it is used}
+
+As external context only (not an input to this analysis): the generic-MC
+mismodelling of the gap and adjacent hadronic-$B$-decay components is not
+unique to this note.  The Belle~II hadronic-FEI $R(D^{(*)})$ note
+(BELLE2-NOTE-PH-2024-056) reports, in both a control sideband and the final
+fit to data, that its own gap-mode yield comes out substantially lower than
+the generic-MC expectation, and cites a further Belle~II analysis making the
+same observation in its own control region.  That is a different final
+state and a different definition of ``gap mode,'' so it is not evidence
+about the size or direction of any effect in this analysis; it does mean
+that a generic-MC gap-mode component significantly overshooting data would
+not be a novel or suspicious finding on its own, were it to occur here once
+the signal region is examined.
 
 \subsection{Generic-$B\bar{B}$ subdivision}
 \label{sec:truth:bbbar}
@@ -177,7 +223,62 @@ classification, and is documented there.
 \subsection{Sample composition}
 \label{sec:truth:composition}
 
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/2_create_BDTtrainingSet.ipynb (printed sample
+%                 sizes before the per-class 500,000-event subsampling of
+%                 Sec.~\ref{sec:mva:classes})
+%   commit      : ad2f2ec
+%   sample      : MC16rd, e channel, offline_cut (Eq. offline-cut); the
+%                 generic-MC input glob is explicitly run1-only, the
+%                 signal-enriched input glob is a run* wildcard whose actual
+%                 run coverage has not been confirmed
+%   selection   : offline_cut only (pre-BDT); classify_mc_dict('e')
+%   corrections : none
+\PreliminaryResult{as a reference point rather than the composition table
+itself, the reconstructed sample sizes feeding the BDT training classes
+(Sec.~\ref{sec:mva:classes}), before the per-class subsampling to $500\,000$
+events, are: $2\,807\,056$ for the correctly reconstructed $B\to D\tau\nu$
+signal class (from the signal-enriched sample), $15\,815\,120$ for
+\texttt{bkg\_fakeD}, $734\,906$ for \texttt{bkg\_continuum} and $739\,879$ for
+\texttt{bkg\_combinatorial} (all three from generic MC), after
+\texttt{offline\_cut}, $e$ channel.
+The generic-MC counts are read from a run1-only input glob; the
+signal-enriched count is read from a \texttt{run*} wildcard whose actual run
+coverage (Run~1 only, or Run~1$+$Run~2) has not been confirmed, so the four
+numbers above should not yet be read as being on the same run-period
+footing}
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/2_Plot_norm_e_run2.ipynb ::
+%                 mpl_mc.plot_pie(); the identical call also appears in
+%                 Notebooks/Plotting/2_Plot_norm_mu_run2.ipynb, so the exact
+%                 run period/channel of this saved image is not confirmed
+%   commit      : ad2f2ec
+%   sample      : MC16rd, run and channel not confirmed (see above)
+%   selection   : \texttt{1.855<D\_M<1.885 and lgb\_tight and} the $D^{*}$
+%                 veto \texttt{and fakeD\_prob<0.06}, i.e.\ the nominal
+%                 signal-region working point, not only the $D$-mass window
+%                 the truncated plot title shows
+%   corrections : not confirmed from the notebook cell alone
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{MC_composition_signalRegion.png}
+  \caption{Truth-category composition of generic and signal-enriched MC in
+  the $D$-mass signal region at the nominal \texttt{lgb\_tight} working
+  point, with the $D^{*}$ veto applied (left: all categories; right:
+  background categories only, i.e.\ excluding $D\tau\nu$ and the other
+  signal-like categories).
+  \AnalysisTBD{confirm the run period and channel this figure was produced
+  for, and whether it is luminosity-scaled (Sec.~\ref{sec:data:mc}); the
+  plot title is truncated and does not show the full selection string}}
+  \label{fig:mc-composition-sr}
+\end{figure}
+This is a preliminary, single-channel snapshot rather than the composition
+table itself: it has no run/channel breakdown, and Fig.~\ref{fig:mc-composition-sr}
+does not distinguish the $D$-mass sideband from the signal region.
 \AnalysisTBD{table of expected yields and fractions per category, in the
 signal region and in the $D$-mass sideband, separately for Run 1 and Run 2
-and for the $e$ and $\mu$ channels, at the nominal working point.  Producing
-artifact and commit to be recorded in the provenance block above the table}
+and for the $e$ and $\mu$ channels, at the nominal working point.  The
+counts above are a partial, pre-BDT reference point from one notebook run,
+not this table}

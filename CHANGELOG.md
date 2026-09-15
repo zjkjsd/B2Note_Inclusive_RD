@@ -1,7 +1,212 @@
 # Change log
 
 Each released version of the note is pinned to an analysis commit in
-`zjkjsd/inclusive_R_D`, tracked here and by the `external-code` submodule.
+`zjkjsd/inclusive_R_D`, tracked here and in each provenance block. The
+analysis repository is referenced by commit SHA only and is not vendored
+into this one.
+
+## Version 0.3 (draft) — unreleased
+
+Responds to review comments on PR #2 (a mix of an automated reviewer and the
+analyst's own replies) and inserts previously-unused figures from
+`figures/`.
+
+Corrected, from review:
+- Sec. 1: the claim that the FEI-tagged and inclusively-tagged samples are
+  statistically independent was wrong and is corrected: the FEI sample is
+  closer to a small subset of the inclusive one, with a small but nonzero
+  overlap, per the analyst's own clarification.
+- Sec. 2: the three signal-enriched samples do not all share one B-charge
+  combination; only the D and D* samples are B0-B0bar-only, the D** sample
+  is both B0-B0bar and B+B-, per the analyst's clarification. Also
+  identified a currently active (not only prospective) overlap between the
+  generic-MC events used for BDT training and those used to build the fit
+  templates, for the bkg_continuum and bkg_combinatorial classes
+  specifically, where roughly 68% of each class's reconstructed pool is
+  used for training from the same production that also feeds the templates.
+  A follow-up exchange refined this: the training notebook draws generic MC
+  from Run 1 only, while the fit-template notebook combines Run 1 and Run 2,
+  so the 68% figure (which uses the Run-1-only pool as its denominator)
+  overstates the true overlap against the larger, actual template-building
+  pool -- the true fraction cannot yet be stated because no Run 2
+  reconstructed count exists in the repository (new TBD). Per the analyst,
+  the more fundamental question is separate from the overlap fraction
+  itself: if the classifier's inputs/output are only weakly correlated with
+  the fit observables (missing mass squared, the momentum-sum variable)
+  within a truth category, in-sample selection would not measurably bias
+  the template shape even at high overlap -- a plausible but not yet
+  demonstrated argument, tied to the existing classifier-diagnostics TBD in
+  Appendix (classifier).
+- Sec. 8: removed an incorrect statistical justification for the shared
+  per-channel MC-statistical-uncertainty parameter (that same-production
+  truth categories have correlated bin fluctuations -- they do not; if
+  anything, conditioning on a fixed bin total induces anticorrelation).
+  Replaced with the correct justification: it is a lite Beeston-Barlow
+  approximation, justified by large per-sample statistics and a smaller
+  nuisance-parameter count, independent of whether samples share a
+  production.
+- Sec. 1: the two external-figure provenance blocks used a status
+  (`EXTERNAL`) outside the five allowed values; changed to
+  `VALIDATED_RESULT` (the sourced HFLAV figure) and `PLANNED` (the
+  unsourced one).
+- Appendix (open items): two occurrences where the marker names
+  `AnalysisTBD`/`InProgress` were mentioned in prose, rather than invoked as
+  actual open items, were inflating the generated count; rendered without
+  the invoking braces so they are no longer matched by the count, and the
+  table/total corrected accordingly (87, was reported as 83 then 84 with
+  the inflation, then 86, see above).
+- AGENTS.md, README.md, Sec. 3 (provenance comment): removed the remaining
+  references to an `external-code` submodule and a submodule-mediated
+  `docs/ANALYSIS_CONTEXT.md`. A reviewer had flagged that neither exists at
+  the pinned commit; the analyst confirmed the submodule setup was removed
+  deliberately (it existed only to let an earlier tool edit both
+  repositories at once, and that tool is now a PR-comment reviewer only),
+  so the stale setup instructions and source-hierarchy references are
+  corrected to describe the analysis repository as referenced by commit SHA
+  only, not vendored in.
+
+Figures inserted (all previously present in `figures/` but not yet used in
+the note; each carries a new TBD to confirm run/channel/producing notebook
+where that could not be recovered from the image alone):
+- Sec. 1: the tagging-topology schematic (hadronic FEI / semileptonic FEI /
+  inclusive), as the event-topology figure.
+- Sec. 4: a preliminary truth-category composition pie chart in the D-mass
+  signal region at the nominal working point.
+- Appendix (classifier): the LightGBM feature-importance (gain) ranking for
+  the 17 training variables.
+- Appendix (fit): four one-dimensional MC composition plots (missing-mass
+  squared and the momentum-sum fit variable, in signal- and
+  normalisation-enhanced regions), showing the overlapping-shape difficulty
+  directly.
+- Sec. 10 (new "Preliminary control-region comparisons" subsection): six
+  prefit data/MC comparisons in the q^2 sideband and D-mass sideband
+  control regions, including a with/without-BDT comparison showing the
+  classifier's effect on data/MC agreement in the D-mass sideband.
+
+## Version 0.2 (draft) — unreleased
+
+Pinned analysis commit: `ad2f2ec` ("add comments in utilities.py"), moved
+forward from `dd520a5`.
+
+This update closes or narrows a large fraction of the open items recorded
+against `dd520a5`, from analyst answers cross-checked against the analysis
+repository at the new pinned commit. Affected sections: 1, 2, 3, 4, 5, 6, 7,
+8, 9, 11, and the appendices on selections, categories and the classifier.
+Section 7 in particular required a substantive rewrite rather than a
+narrowing: the `BBbkg_weights/` results it described (eight
+single-run-period fits, several under a superseded `poisson-2d` objective
+name) no longer exist in the repository and have been replaced by six
+regenerated `run1+run2` fits with MINOS enabled. See the Open Items appendix
+for the updated open-item count (83, up from 80 -- several TBDs were
+narrowed to a stated plan and reclassified as in-progress, and the BBbar
+rewrite added new, more specific open items even as it closed others).
+
+Added or closed:
+- Section 1: physics motivation for R(D)/R(D*), why R(D) is more sensitive
+  than R(D*) to charged-Higgs-like couplings, and why inclusive tagging is
+  complementary to (not a refinement of) the existing FEI-based
+  measurements. Two external ICHEP-2026-preliminary status figures added,
+  with provenance recorded from their embedded PDF metadata.
+- Section 2: the three signal-enriched MC samples (D tau nu, D* tau nu,
+  eight D** tau nu modes) and their role in template building versus BDT
+  training; the generic/signal-enriched MC luminosity-scaling relationship;
+  a preliminary Run 1/Run 2 luminosity figure; the sample-overlap risk that
+  arises once signal-enriched MC is used for both BDT training and its own
+  fit template.
+- Section 3: motivation for the hadron- and lepton-identification working
+  points (Belle II PID convention, not a scan); the electron and muon
+  momentum thresholds; the nominal best-candidate method (`vtx`) and the
+  resulting multiplicity of 1; confirmed the p_lepton<4 omission from the
+  BBbar tuning region is intentional and small in effect. Table 1's
+  Motivation column removed in favour of the narrative above it, per
+  request.
+- Section 4: resolved the merged-D**/gap-mode template configuration; the
+  distinction between the two placeholder catch-all categories (expected
+  empty) and bkg_fakeTracks (populated, excluded pending a fit treatment);
+  a preliminary BDT-class sample-size reference point, flagging a run-period
+  inconsistency between the signal-enriched and generic-MC input globs found
+  while checking it.
+- Section 5: BDT training-class sizes and the training_weight=1 scheme; v3
+  confirmed nominal; history of the hyperparameter tuning and the tuner's
+  current binary-only limitation.
+- Section 6: the correction tables are now version-controlled in the
+  repository (MC16_sys_tables/); disposition of pi0_eff50_corr.csv (MC15rd,
+  testing only) and the unused slow_pi0/ folder;
+  create_naive_data_mc_correction kept deliberately for now; form-factor and
+  tracking-efficiency corrections deferred as minor; a concrete proposal for
+  extending the branching-fraction correction beyond the generic-BBbar
+  families, which requires a new generator-level branch identifying the
+  companion-B decay mode for every event.
+- Section 7: rewritten against the six regenerated run1+run2 BBbar-weight
+  fits with MINOS enabled. kinematic-2d (no ROE term) adopted as nominal;
+  MINOS found to give a usable width for three of five family weights but
+  not to resolve the persistent 2-body/4-body pinning.
+- Section 8: the planned 2D MC histogram and binning-in-utilities.py items;
+  the R(D)-as-POI question deferred with a proposed intermediate step; a
+  partial MINOS-based width for the generic-BBbar normsys (three of five
+  families); the MC-statistical-uncertainty sharing scheme confirmed as
+  intended for same-production templates, with the signal-enriched-MC case
+  flagged as an unquantified approximation.
+- Section 9: confirmed the fake-D normalisation is no longer a systematic
+  (determined in situ by the sideband channel); updated the BBbar
+  eigen-systematic obstacle with the regenerated fit's HESSE/MINOS
+  discrepancy and covariance condition number.
+- Section 11: recorded the analyst's preliminary ~12% sensitivity figure as
+  indicative, pending the Asimov study of Section 8.
+
+Also added, from cross-checking a sibling Belle II analysis note supplied as
+an organisational reference (the hadronic-FEI R(D*)/R(D) measurement,
+BELLE2-NOTE-PH-2024-056) -- used only for methodological context, per
+AGENTS.md; no number, selection or conclusion from it is an input to this
+analysis:
+- Section 6: cited the HAMMER form-factor parameterisations (BLPRXP for
+  B -> D(*) l/tau nu, BLR for B -> D** l/tau nu) that sibling note uses, as an
+  external example to weigh when this analysis makes its own form-factor
+  decision; noted its GenMCTagTool-based approach to generator-level
+  hadronic-B decay-mode tagging as a possible reusable precedent for the
+  companion-B branching-fraction correction proposed in the same section.
+- Section 4: noted, as external context only, that the same sibling note
+  (and another Belle II analysis it cites) independently found its own
+  gap-mode yield substantially below the generic-MC expectation -- different
+  final state, not evidence about this analysis, but relevant precedent
+  should the same pattern appear here.
+- Section 9: cross-checked the completeness of this note's systematics
+  category list against that note's, and noted its bootstrap-resampling
+  method for the MC-statistics systematic as a candidate for this analysis's
+  own toy machinery.
+
+Further cross-checked against four more sibling Belle II reference notes
+recovered from this repository's own git history (docs/B2N_*.pdf, not
+tracked in git per .gitignore) -- again organisational/methodological
+context only, no numbers imported:
+- Section 3: added a plot-layout template (efficiency/fake-rate vs. cut
+  value, per particle species) for the planned PID working-point plots, from
+  the inclusive B -> Xu l nu / |Vub| note; added a three-step ROE-mask
+  optimisation template (FOM scan, data/MC tie-break, robustness re-check)
+  for if the mask is ever re-optimised, from the B -> tau nu note.
+- Section 5: added a two-stage BDT-input/fit-variable data-MC-agreement
+  check (pre-training input check, post-selection fit-variable check in a
+  sideband) from the semileptonic-tag R(D)/R(D*) note; added an alternative
+  to the planned classifier working-point optimisation -- building
+  decorrelation from the fit variables into the training objective itself,
+  rather than checking it afterward -- from the B -> tau nu note.
+- Section 7: cited the B -> K(*) nu nu-bar note's response to a
+  shape-degenerate background grouping (external/PDG constraint per group,
+  rather than continued in-situ fitting) as a concrete precedent for one of
+  the three explanations in the degeneracy discussion; cited its
+  independent-validation experience (needed one relaxed normalisation to
+  reach acceptable closure) as context for interpreting an imperfect
+  validation result here.
+- Section 8: cited the semileptonic-tag R(D)/R(D*) note's stated reasons for
+  moving from per-bin-per-template to per-bin ("lite Beeston-Barlow")
+  MC-statistical nuisance parameters as independent support for this
+  analysis's existing per-channel \texttt{staterror} choice; added a
+  concrete toy/pull/linearity-check template (toy count, pull definition,
+  linearity-scan range, tornado plot) drawn from several sibling notes'
+  fit-validation sections.
+- Appendix (fit): added a modifier-taxonomy table structure (type,
+  constraint, region, sidedness) as a template for the still-required
+  complete fit-parameter table.
 
 ## Version 0.1 (draft) — unreleased
 

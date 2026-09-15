@@ -28,7 +28,6 @@ from `note.tex` with no extra configuration.
 | `figures/` | Figures, organised by section |
 | `docs/` | Reference B2Notes from other analyses, and the note outline |
 | `scripts/check_provenance.py` | Enforces the provenance convention |
-| `external-code/` | Submodule: the analysis repository at the pinned commit |
 | `CHANGELOG.md` | Note version to analysis commit mapping |
 
 ## Before editing
@@ -40,20 +39,15 @@ Read `AGENTS.md`. The two rules that matter most:
 2. **Every figure, table and number carries a provenance block.** Run
    `python3 scripts/check_provenance.py` before committing.
 
-The analysis repository's `docs/ANALYSIS_CONTEXT.md` — reachable through the
-`external-code` submodule — is the single source for the analysis strategy.
-Do not copy it into this repository.
+The analysis repository's `docs/ANALYSIS_CONTEXT.md` at the pinned commit is
+the single source for the analysis strategy. It is not vendored into this
+repository (no submodule); the analysis repository is referenced by commit
+SHA only, recorded in `CHANGELOG.md` and in each provenance block. Do not
+copy it into this repository.
 
-## Working with the analysis repository
-
-```bash
-git submodule update --init          # fetch the pinned analysis code
-git -C external-code log -1          # confirm the pinned commit
-```
-
-To move the note to a newer analysis commit, update the submodule, record the
-new commit in `CHANGELOG.md`, and check which sections' claims are affected
-before rewriting anything.
+To move the note to a newer analysis commit, record the new commit in
+`CHANGELOG.md` and check which sections' claims are affected before
+rewriting anything.
 
 ## Overleaf
 

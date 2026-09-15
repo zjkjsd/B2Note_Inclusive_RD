@@ -1,8 +1,8 @@
 % PROVENANCE (section-level)
 %   status      : CODE_FACT unless marked otherwise
-%   produced-by : utilities.py :: create_templates_new() (lines 1073-1273),
-%                 create_workspace() (lines 1397-1553)
-%   commit      : dd520a5
+%   produced-by : utilities.py :: create_templates_new() (lines 1087-1287),
+%                 create_workspace() (lines 1411-1590)
+%   commit      : ad2f2ec
 %   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
 %   selection   : lgb_tight (Eq. lgb-tight) plus offline_cut (Eq. offline-cut)
 %   corrections : PID; generic-MC luminosity 0.25; generic-BBbar weights
@@ -29,13 +29,19 @@ likelihood.
 The templates are built from the same MC categories in both channels, so the
 sideband determines the fake-$D$ normalisation and shape in situ rather than
 through an external prior.
-\AnalysisTBD{motivation for a two-dimensional fit rather than two
+\InProgress{motivation for a two-dimensional fit rather than two
 one-dimensional fits, quantified in terms of the correlation between $\mmiss$
-and $\pdl$ and the separation it buys between signal and normalisation}
-\AnalysisTBD{the nominal binning in each channel, together with the
+and $\pdl$ and the separation it buys between signal and normalisation.
+A two-dimensional histogram of $\mmiss$ versus $\pdl$ for every MC component
+entering the fit is planned, which is expected to show the strong
+correlation directly; a two-dimensional binned likelihood fit can use that
+correlation to help separate components with similar one-dimensional
+projections, which a pair of independent one-dimensional fits cannot}
+\InProgress{the nominal binning in each channel, together with the
 bin-population threshold and the merging rule actually used.  The template
 builder exposes \texttt{bin\_threshold} and \texttt{merge\_threshold} but the
-nominal values are not recorded in library code}
+nominal values are not recorded in library code; moving the nominal binning
+into \texttt{utilities.py} is planned}
 
 \subsection{Templates}
 \label{sec:fit:templates}
@@ -46,6 +52,10 @@ summed content passes the population threshold and flattened.
 Three categories are excluded before filling
 (Sec.~\ref{sec:truth:closure}), and the narrow and broad $D^{**}\ell\nu$
 categories are merged (Sec.~\ref{sec:truth:merging}).
+Per-category MC breakdowns of both fit variables, in regions enhanced for
+each of the two signal-like modes, are shown in
+Appendix~\ref{app:fit:composition}; they illustrate directly the
+overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
 
 \subsection{Parameter of interest}
 \label{sec:fit:poi}
@@ -57,7 +67,13 @@ signal and normalisation yields.
 \AnalysisTBD{the explicit relation between the two fitted normalisations and
 $R(D)$, including the signal and normalisation efficiencies, their ratio, and
 the $\tau \to \ell \nu \nu$ branching fraction.  Until this is written down
-the note does not define its own observable}
+the note does not define its own observable.
+Some other Belle~II analyses set $R(D)$ itself, rather than the
+$B\to D\tau\nu$ normalisation, as the parameter of interest; that is not yet
+implemented here, and doing so is expected to need help beyond what is
+currently in \texttt{utilities.py}.  A possible intermediate step, also not
+yet implemented, is to fit the $B\to D\ell\nu$ normalisation and $R(D)$
+directly rather than the two normalisations separately}
 
 \subsection{Modifiers and constraints}
 \label{sec:fit:modifiers}
@@ -67,14 +83,14 @@ commit, and the intended configuration where the two differ.
 
 % PROVENANCE
 %   status      : CODE_FACT (current) / ANALYSIS_DECISION (intended)
-%   produced-by : utilities.py :: create_workspace() lines 1397-1553
-%   commit      : dd520a5
+%   produced-by : utilities.py :: create_workspace() lines 1411-1590
+%   commit      : ad2f2ec
 %   sample      : n/a (model definition)
 %   selection   : n/a
 %   corrections : n/a
 \begin{table}[htbp]
   \centering
-  \caption{Fit parameters as generated at commit \texttt{dd520a5}, and the
+  \caption{Fit parameters as generated at commit \texttt{ad2f2ec}, and the
   intended configuration. ``free'' denotes an unconstrained
   \texttt{normfactor}.}
   \label{tab:fit-parameters}
@@ -110,10 +126,19 @@ from.
 The intended configuration is instead a \texttt{normsys} constraint per
 family, with the width taken from the uncertainty of the tuned weights
 (\texttt{ANALYSIS\_DECISION}).
-\InProgress{no usable width exists yet.  Every stored tuning result sits on a
-parameter bound (Sec.~\ref{sec:bbbar:degeneracy}), so its uncertainties
-cannot be propagated.  This constraint can only be set once a tuning fit
-reaches an interior minimum}
+\InProgress{a usable width now exists for three of the five families.  With
+MINOS enabled (Sec.~\ref{sec:bbbar:results}), the nominal \texttt{kinematic-2d}
+tuning gives a genuine, non-boundary MINOS interval for the measured-hadronic,
+3-body and 5+-body weights, and using that interval as the \texttt{normsys}
+width for those three families is reasonable.
+It is not yet appropriate for the 2-body and 4-body weights: both remain
+pinned at their lower bound in every stored fit (Sec.~\ref{sec:bbbar:results}),
+so their MINOS interval reflects the imposed bound rather than a profiled
+uncertainty, and using it as a constraint width would understate the true
+uncertainty on those two families rather than represent it.  A width for
+those two can only be set once a tuning fit reaches an interior minimum in
+those directions, per the three-way question of
+Sec.~\ref{sec:bbbar:degeneracy}}
 
 \paragraph{Parameter bounds.}
 Every normalisation parameter is generated with bounds $[-5, 5]$, which
@@ -146,16 +171,72 @@ positivity requirement as a cross-check}
 \paragraph{MC statistical uncertainty.}
 All samples in a channel share a single \texttt{staterror} modifier name,
 \texttt{mcStat\_ch$n$}, so the MC statistical uncertainty is treated as one
-parameter per channel correlated across samples rather than as a per-sample
-uncertainty.
-\AnalysisTBD{confirm that this is the intended treatment, and state its
-effect relative to independent per-sample statistical uncertainties}
+constrained nuisance parameter per channel per bin, summing the samples'
+individual MC statistical uncertainties in quadrature into that one
+parameter, rather than as an independent nuisance parameter per sample per
+bin.
+This is the ``lite'' Beeston--Barlow treatment.
+An earlier version of this note justified it by treating the per-bin MC
+statistical fluctuations of different truth categories drawn from one
+generic-MC production as themselves correlated, ``since they trace back to
+the same finite set of generated events.''
+That justification was incorrect and has been removed
+(\texttt{ANALYSIS\_DECISION}, corrected): the categories are mutually
+exclusive subsets of one generated sample, and in the standard binned
+template-statistics model each category's per-bin count is an independent
+Poisson variate with its own finite-sample uncertainty, exactly as it would
+be if the categories came from separate productions.
+Sharing one production does not by itself correlate their fluctuations; if
+anything, conditioning on a fixed total count in a bin would induce
+\emph{anti}-correlation between categories (a multinomial split of a fixed
+total), not the positive correlation the earlier text asserted, and no such
+conditioning is imposed here.
+The real justification for the lite treatment is practical rather than a
+consequence of shared origin: every sample's statistics here are large
+enough that the lite and full (one nuisance parameter per sample per bin)
+treatments are expected to differ only slightly, and the lite treatment
+keeps the nuisance-parameter count at (channels $\times$ bins) rather than
+(channels $\times$ bins $\times$ samples), which is both simpler and
+cheaper to fit.
+This is unrelated to whether the samples in a channel come from one MC
+production or several: the same lite-versus-full trade-off applies either
+way, so a channel mixing generic and signal-enriched MC
+(Sec.~\ref{sec:data:mc}) does not need a different number of \texttt{staterror}
+parameters than a single-production channel on these grounds.
+\InProgress{quantify, rather than assert, that the lite and full treatments
+give a small difference here, given the actual per-bin statistics of each
+sample --- large generic-MC statistics support this for the current
+generic-MC-only templates, but it should be checked again once
+signal-enriched MC enters the templates, particularly in bins where one
+sample's per-bin count is not large.
+As an organisational reference only: a sibling Belle~II semileptonic-tag
+$R(D^{(*)})$ note independently adopted the same lite Beeston-Barlow choice,
+citing an otherwise linearly growing, poorly constrained parameter count as
+the reason to avoid the per-sample alternative --- consistent with, though
+not a substitute for, quantifying the difference directly here}
 
 \subsection{Fit validation}
 \label{sec:fit:validation}
 
-\AnalysisTBD{Asimov sensitivity, toy studies, pull distributions and
+\InProgress{Asimov sensitivity, toy studies, pull distributions and
 linearity tests, each reported separately from any result on data.  The
 machinery exists in \texttt{utilities.pyhf\_utils} and
-\texttt{utilities.toy\_utils} and in \texttt{Fit\_toys/FitToys\_b2luigi.py},
-but no nominal study is recorded}
+\texttt{utilities.toy\_utils} and in \texttt{Fit\_toys/FitToys\_b2luigi.py};
+producing and recording the nominal study, including the results and plots of
+Sec.~\ref{sec:results}, is planned but not yet done.
+As an organisational template only, drawn from several sibling Belle~II
+semileptonic-tag notes rather than as numbers to reproduce: a toy study
+generates $O(10^{3})$ Poisson-fluctuated pseudo-datasets around the Asimov
+best fit (auxiliary measurements fluctuated too, for the nuisance
+parameters), refits each with every parameter free, and reports the fitted
+$B\to D\tau\nu$-normalisation pull, $(\hat\theta - \theta_{\rm true}) /
+\hat\sigma_{\hat\theta}$, fit to a Gaussian --- mean consistent with $0$ and
+width consistent with $1$ is the pass criterion.  A linearity check repeats
+this at several injected normalisation values spanning a wide range (for
+example corresponding to $R(D)$ from about half to double its expected
+value) and fits the mean fitted value against the injected value, requiring
+close to unit slope and zero intercept.  Per-nuisance-parameter pull plots
+and a full correlation matrix are produced alongside, and a
+tornado/ranking plot of each nuisance parameter's impact on the parameter of
+interest is a useful addition once systematics enter the fit
+(Sec.~\ref{sec:syst})}

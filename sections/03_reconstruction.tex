@@ -2,7 +2,7 @@
 % PROVENANCE (section-level)
 %   status      : CODE_FACT unless marked otherwise
 %   produced-by : Recon_scripts/2_Reconstruction.py
-%   commit      : dd520a5 (external-code submodule pin)
+%   commit      : ad2f2ec (analysis repository, referenced by SHA only)
 %   scope       : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
 %   note        : every selection below was transcribed from the pinned
 %                 source.  Physics motivation is marked TODO wherever the
@@ -46,9 +46,25 @@ two pions, and the dominant combinatorial background comes from pions
 misidentified as kaons rather than the reverse, the kaon requirement carries
 most of the rejection while the pion requirement is kept loose to preserve
 efficiency on the two pions simultaneously.
-\AnalysisTBD{the threshold values themselves are not documented in the source.
-Record the efficiency and fake rate at $\texttt{kaonIDNN} > 0.9$ and
-$\texttt{pionIDNN} > 0.1$, and whether either was scanned}
+The values $0.9$ and $0.1$ were not obtained from a scan of this analysis;
+they follow the convention used elsewhere at Belle~II, where a handful of
+working points for the legacy PID variables were pre-defined and
+$\mathrm{PID} > 0.9$ denotes a well-identified particle of the species in
+question.
+The same convention motivates the electron and muon identifier threshold of
+Sec.~\ref{sec:recon:fsp} below (\texttt{ANALYSIS\_DECISION}).
+\InProgress{a scan has not been ruled out but is not planned for the time
+being; instead, the efficiency and fake rate of the $\texttt{kaonIDNN} > 0.9$
+and $\texttt{pionIDNN} > 0.1$ requirements will be recorded, averaged over the
+relevant phase-space region, separately for the $B \to D\tau\nu$ and
+$B \to D\ell\nu$ regions, to demonstrate that the convention-based working
+point performs well here.
+As an organisational template only: a sibling Belle~II note presents this
+kind of check as, per particle species, one efficiency-versus-cut-value plot
+and one fake-rate-versus-cut-value plot, overlaying the different available
+identifiers (there, a likelihood-based and a neural-network-based score)
+rather than a single point at the chosen working point --- useful as a
+layout template for these plots once produced}
 
 \paragraph{Lepton identification.}
 Electrons and muons are both required to have a neural-network identifier
@@ -59,9 +75,21 @@ The higher muon threshold and the KLM acceptance requirement go together:
 muon identification relies on penetration to the KLM, so a muon must have
 enough momentum to reach it and must point into its acceptance for the
 identifier to be meaningful.
-\AnalysisTBD{motivation for the specific values $0.9$, $0.3$~GeV$/c$ and
-$0.6$~GeV$/c$ is not documented; record the working points and their
-efficiencies}
+The $0.9$ neural-network threshold follows the same pre-defined-working-point
+convention as the hadron identifiers above.
+The two momentum thresholds, in contrast, follow from different physical
+reasoning for each lepton species and are not related to each other.
+Electron candidates below $0.3$~GeV$/c$ have low statistics and a high fake
+rate, so they are not useful for reconstruction and are removed.
+Muon identification instead relies on the KLM, the outermost Belle~II
+detector: a track needs at least $0.6$~GeV$/c$ of transverse momentum to
+reach it, and the KLM information is what makes the muon identifier
+meaningful, so every muon candidate is required to clear that threshold
+(\texttt{ANALYSIS\_DECISION}).
+\InProgress{as above, the efficiency and fake rate of the two lepton
+identification requirements will be recorded, averaged over the
+$B \to D\tau\nu$ and $B \to D\ell\nu$ phase-space regions separately, rather
+than a scan of the threshold values}
 
 The electron momentum requirement is deliberately applied to the
 \emph{pre}-bremsstrahlung momentum: the $p > 0.3$~GeV$/c$ cut is made on
@@ -116,8 +144,11 @@ the ten systematic variations are computed and aliased but are \emph{not}
 written to the ntuple in the pinned version of the script, because the
 \texttt{track\_variables} list is commented out of every variable collection.
 They are therefore unavailable offline.
-\AnalysisTBD{decide whether the momentum-scale variations need to be
-re-enabled in the ntuple for the tracking systematic in Sec.~\ref{sec:syst}}
+\InProgress{re-enabling and storing the ten systematic variations is planned
+but deprioritised: the tracking momentum-scale/energy-loss systematic is
+expected to be minor (Sec.~\ref{sec:corrections:missing}), so the
+reprocessing this requires is deferred to a later stage of the systematics
+study rather than done now}
 
 \paragraph{Event-level lepton requirement.}
 Exactly one lepton is required per event,
@@ -147,8 +178,14 @@ The fit also supplies \texttt{D\_A1FflightDistanceSig\_IP}, the flight-distance
 significance with respect to the IP, which is one of the classifier inputs of
 Sec.~\ref{sec:mva}: a real $D$ travels a measurable distance before decaying,
 whereas a random $K\pi\pi$ combination points back to the interaction point.
-\AnalysisTBD{motivation for the value $\texttt{vtxReChi2} < 13$ is not
-documented; record its efficiency}
+\InProgress{motivation for the specific value $13$ is not documented, and no
+scan has been performed; the requirement is known to be close to fully
+efficient for signal ($\sim 100\%$), and a plot supporting this will be
+added.  The same variable, \texttt{D\_vtxReChi2}, was previously a classifier
+training input (Sec.~\ref{sec:mva:inputs}) and was removed because data and MC
+disagree in the low-\texttt{vtxReChi2} region (below approximately $5$); that
+mismodelling does not by itself indicate anything about the efficiency of the
+loose $< 13$ selection cut applied here}
 Because the tree fit updates the daughter momenta, the mass window is applied
 a second time after the fit; the second window is the one that defines the
 regions retained on tape.
@@ -244,34 +281,53 @@ $\texttt{fakePhotonSuppression} > 0.1$.
 Curl tracks are tagged separately with \texttt{tagCurlTracks} on a list of all
 tracks.
 
-Two defects in the tight mask were identified while documenting it, and both
-require a new reconstruction campaign to correct.
+Two defects in the tight mask were identified while documenting it at an
+earlier stage of this note; the first is now fixed in the steering script,
+the second is not.
 
-First, the intended requirement is that the acceptance and track-fit quality
-apply to \emph{every} track, with only the impact-parameter requirement
-depending on $p_{T}$.
-The cut is written as
+First, the intended requirement was that the acceptance and track-fit
+quality apply to \emph{every} track, with only the impact-parameter
+requirement depending on $p_{T}$.
+The cut had been written as
 \texttt{A and B and C and [$p_{T}<0.15$ and \ldots] or [\ldots] or \ldots},
 without brackets around the $p_{T}$ chain.
 In the basf2 cut grammar \texttt{and} binds more tightly than \texttt{or}
 (\texttt{b2parser}: \texttt{disjunction ::= conjunction | disjunction OR
-conjunction}), so this parses as
+conjunction}), so this parsed as
 \texttt{[A and B and C and [$p_{T}<0.15$ and \ldots]] or [\ldots] or \ldots}
-and the acceptance and \texttt{pValue} requirements are applied only to the
-lowest $p_{T}$ branch.
-Tracks above $0.15$~GeV$/c$ enter the ROE with no acceptance or fit-quality
-requirement at all.
-Bracketing the disjunction restores the intended behaviour.
+and the acceptance and \texttt{pValue} requirements were applied only to the
+lowest $p_{T}$ branch, with tracks above $0.15$~GeV$/c$ entering the ROE with
+no acceptance or fit-quality requirement at all.
+This has been corrected at the pinned commit (\texttt{2fdba34}, ``fix roe
+mask bracket error''): the whole $p_{T}$-dependent disjunction is now
+bracketed, restoring the intended behaviour
+(\texttt{CODE\_FACT}).
 
-Second, the leading \texttt{nCDCHits>=0} is satisfied by every track and has no
-effect.
+Second, the leading \texttt{nCDCHits>=0} is still satisfied by every track
+and still has no effect; this one remains unfixed, though it is harmless
+rather than a defect that changes the mask's behaviour.
 
-\AnalysisTBD{both defects change the ROE composition, and therefore
+\InProgress{the bracket fix changes the ROE composition, and therefore
 $M_{\mathrm{bc}}^{\mathrm{ROE}}$, $\Delta E^{\mathrm{ROE}}$, the ROE charge and
-multiplicity, and $\mmiss$.  Everything in this note derived from ROE
-quantities --- including the generic-$B\bar{B}$ weights of
-Sec.~\ref{sec:bbbar}, which are tuned partly on the ROE multiplicity ---
-predates the fix and will need regenerating once the samples are reproduced}
+multiplicity, and $\mmiss$, relative to any ntuple produced before it.
+Whether any of the samples currently used in this note --- including the
+offline ntuples behind the BDT training and template building, and the
+inputs to the regenerated generic-$B\bar{B}$ fits of
+Sec.~\ref{sec:bbbar:results}, committed in the same change as this fix ---
+were produced with the corrected mask or still predate it has not been
+confirmed.  Until it is, every ROE-derived number in this note should be
+treated as potentially predating the fix.
+As an organisational template only, for whenever the ROE mask is revisited
+beyond this bug fix: a sibling Belle~II note tunes its ROE mask by an
+exhaustive scan over combinations of mask cut variables and thresholds,
+ranking each combination by a signal-significance figure of merit on MC with
+embedded signal, then breaking near-ties among the top candidates by
+data/MC agreement of the ROE-derived variables, and finally checking that
+the chosen mask remains competitive under an alternative,
+uncertainty-weighted objective as a robustness check.  That three-step
+pattern --- FOM scan, data/MC tie-break, robustness re-check --- is a
+reusable template if the mask is ever re-optimised here rather than only
+bug-fixed}
 
 The tag-side vertex is obtained with \texttt{TagV} using the same mask, with a
 tube constraint, the \texttt{standard\_PXD} track-finding type, no required
@@ -324,68 +380,78 @@ The WC sample is not reconstructed for off-resonance data.
 \subsection{Candidate multiplicity and best-candidate selection}
 \label{sec:recon:bcs}
 
-\AnalysisTBD{candidate multiplicity after the full selection, and the
-best-candidate criterion actually used in the nominal chain.  The helper
-\texttt{utilities.apply\_mva\_bcs()} exposes a \texttt{bcs} argument
-defaulting to \texttt{'vtx'}, but the nominal working point and the resulting
-multiplicity have not been established from a source artifact}
+The nominal best-candidate selection is \texttt{utilities.apply\_mva\_bcs()}
+with its default, \texttt{bcs='vtx'}: within each event, the candidate with
+the smallest \texttt{B\_D\_ReChi2} --- the sum of the vertex-fit
+$\chi^{2}$ at the $K\pi\pi$ vertex and at the $D\ell$ vertex --- is kept, and
+the helper explicitly checks that exactly one candidate per event survives
+(\texttt{CODE\_FACT}).
+The resulting multiplicity after best-candidate selection is therefore
+exactly $1$ by construction.
+\AnalysisTBD{candidate multiplicity \emph{before} best-candidate selection,
+i.e.\ how many candidates per event the \texttt{vtx} criterion is choosing
+among.  This has not yet been produced from a source artifact}
 
 \subsection{Summary of selections}
 \label{sec:recon:table}
 
 Table~\ref{tab:recon-cuts} lists every selection applied in the pinned
 steering script together with the literal code expression and its line
-number, separating the requirement from its motivation.
+number.
+The motivation for each selection is given in the narrative of
+Sec.~\ref{sec:recon:fsp}--\ref{sec:recon:offline} above rather than repeated
+in the table, so that a motivation is stated once and does not drift out of
+sync between the table and the text.
 
 \begin{table}[p]
   \centering
   \caption{Selections applied in \texttt{Recon\_scripts/2\_Reconstruction.py}
-  at analysis commit \texttt{dd520a5}.  Line numbers refer to that file.
-  Motivations marked TODO are not documented in the source and have not been
-  invented here.}
+  at analysis commit \texttt{ad2f2ec}.  Line numbers refer to that file.
+  See Sec.~\ref{sec:recon:fsp}--\ref{sec:recon:offline} for the motivation
+  behind each row.}
   \label{tab:recon-cuts}
   \scriptsize
-  \setlength{\tabcolsep}{3pt}
+  \setlength{\tabcolsep}{4pt}
   \renewcommand{\arraystretch}{1.15}
-  \begin{tabular}{>{\raggedright\arraybackslash}p{0.17\textwidth} >{\raggedright\arraybackslash}p{0.42\textwidth} >{\raggedright\arraybackslash}p{0.05\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth}}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.62\textwidth} >{\raggedright\arraybackslash}p{0.09\textwidth}}
     \hline
-    Object & Code expression & Line & Motivation \\
+    Object & Code expression & Line \\
     \hline
     All tracks &
       \texttt{abs(dz)<2 and dr<0.5 and thetaInCDCAcceptance and nCDCHits>0 and nSVDHits>0} &
-      57 & Standard track quality \\
+      57 \\
     $\pi^{\pm}$ &
-      \texttt{pionIDNN > 0.1 and p > 0.1} & 58 & Kaon requirement carries the rejection; threshold TODO (Sec.~\ref{sec:recon:fsp}) \\
+      \texttt{pionIDNN > 0.1 and p > 0.1} & 58 \\
     $K^{\pm}$ &
-      \texttt{kaonIDNN > 0.9 and p > 0.3} & 59 & TODO \\
+      \texttt{kaonIDNN > 0.9 and p > 0.3} & 59 \\
     $e^{\pm}$ (pre-brems) &
-      \texttt{electronIDNN > 0.9} & 61 & TODO \\
+      \texttt{electronIDNN > 0.9} & 61 \\
     $e^{\pm}$ (post-$p$ cut) &
-      \texttt{p > 0.3} & 127 & TODO \\
+      \texttt{p > 0.3} & 127 \\
     $\mu^{\pm}$ &
-      \texttt{muonIDNN > 0.9}, then \texttt{inKLMAcceptance and p > 0.6} & 62, 129 & KLM acceptance required for muon ID \\
+      \texttt{muonIDNN > 0.9}, then \texttt{inKLMAcceptance and p > 0.6} & 62, 129 \\
     Brems $\gamma$ &
-      \texttt{0.05 < clusterE < 2.5 and beamBackgroundSuppression > 0.2} & 64 & Bremsstrahlung recovery input \\
+      \texttt{0.05 < clusterE < 2.5 and beamBackgroundSuppression > 0.2} & 64 \\
     Event &
-      \texttt{nParticlesInList(e-:goode) + nParticlesInList(mu-:goodmu) == 1} & 139 & Exactly one lepton; makes $e$/$\mu$ channels disjoint \\
+      \texttt{nParticlesInList(e-:goode) + nParticlesInList(mu-:goodmu) == 1} & 139 \\
     $D^{\pm}$ (pre-fit) &
-      \texttt{1.78 < M < 1.96} & 148, 150 & Wide window before the tree fit \\
+      \texttt{1.78 < M < 1.96} & 148, 150 \\
     $D^{\pm}$ vertex &
-      \texttt{vtxReChi2 < 13} & 169 & Vertex quality \\
+      \texttt{vtxReChi2 < 13} & 169 \\
     $D^{\pm}$ (post-fit) &
-      \texttt{1.79<M<1.82 or 1.92<M<1.95 or 1.855<M<1.885} & 149, 169 & Signal region plus clean fake-$D$ sidebands; see Eq.~\eqref{eq:dmass-windows} \\
+      \texttt{1.79<M<1.82 or 1.92<M<1.95 or 1.855<M<1.885} & 149, 169 \\
     $\pi^{0}$ (slow) &
-      \texttt{eff50\_May2020Fit} plus \texttt{beamBackgroundSuppression>0.5} and \texttt{fakePhotonSuppression>0.1} on both daughters & 178--182 & $D^{*}$ veto input \\
+      \texttt{eff50\_May2020Fit} plus \texttt{beamBackgroundSuppression>0.5} and \texttt{fakePhotonSuppression>0.1} on both daughters & 178--182 \\
     $D^{*\pm}$ veto &
-      best candidate by \texttt{abs(massDiff\_0 - 0.14065)}; $\Delta M$ stored, cut applied offline & 188--193 & Veto applied offline so the complement stays usable as a control region \\
+      best candidate by \texttt{abs(massDiff\_0 - 0.14065)}; $\Delta M$ stored, cut applied offline & 188--193 \\
     $B^{0}$ vertex &
-      \texttt{vtxReChi2 < 14} & 231--232 & Vertex quality \\
+      \texttt{vtxReChi2 < 14} & 231--232 \\
     ROE mask (loose) &
-      \texttt{dr<10 and abs(dz)<20 and thetaInCDCAcceptance and E<5.5}; $\gamma$: \texttt{0.05<clusterE<5.5} & 259--260 & Initial mask before $V^{0}$ update \\
+      \texttt{dr<10 and abs(dz)<20 and thetaInCDCAcceptance and E<5.5}; $\gamma$: \texttt{0.05<clusterE<5.5} & 259--260 \\
     ROE mask (tight) &
-      $p_{T}$-dependent \texttt{dr}/\texttt{dz} ellipses, \texttt{pValue>=0.0005}; $\gamma$: \texttt{clusterE>0.05}, \texttt{abs(clusterTiming)<2*clusterErrorTiming}, \texttt{<200}, \texttt{beamBackgroundSuppression>0.5}, \texttt{fakePhotonSuppression>0.1} & 261--269 & Beam-background and fake-photon rejection in the tag side \\
+      $p_{T}$-dependent \texttt{dr}/\texttt{dz} ellipses, \texttt{pValue>=0.0005}; $\gamma$: \texttt{clusterE>0.05}, \texttt{abs(clusterTiming)<2*clusterErrorTiming}, \texttt{<200}, \texttt{beamBackgroundSuppression>0.5}, \texttt{fakePhotonSuppression>0.1} & 261--269 \\
     Tag side &
-      \texttt{4 < roeMbc and -5 < roeDeltae < 5 and abs(roeCharge) < 3 and 0 < TagVReChi2IP < 100} & 346--349 & Loose, to retain classifier training statistics and preserve sidebands; tightened offline (Sec.~\ref{sec:recon:offline}) \\
+      \texttt{4 < roeMbc and -5 < roeDeltae < 5 and abs(roeCharge) < 3 and 0 < TagVReChi2IP < 100} & 346--349 \\
     \hline
   \end{tabular}
 \end{table}
@@ -407,9 +473,13 @@ The nominal offline requirement is \texttt{utilities.offline\_cut}:
 The generic-$B\bar{B}$ weight tuning of Sec.~\ref{sec:bbbar} applies the same
 requirements \emph{except} $p_{\ell} < 4$, which it omits
 (\texttt{5\_BBbkg\_weights\_optuna\_minuit.py}, lines 809--814).
-\AnalysisTBD{confirm whether the omission of $p_{\ell} < 4$ in the
-generic-$B\bar{B}$ tuning is intentional.  If it is not, the tuned weights
-were derived in a slightly wider region than the one they are applied in}
+The omission is intentional (\texttt{ANALYSIS\_DECISION}), though in practice
+it makes little difference: $p_{\ell} > 4$~GeV$/c$ is rare in this analysis,
+so the tuning region and the region the weights are applied in differ by only
+a small, sparsely populated corner of phase space.
+\AnalysisTBD{quantify the fraction of candidates with $p_{\ell} > 4$~GeV$/c$
+in the tuning-region sample, to support ``rare'' with a number rather than an
+assertion}
 
 \subsection{Superseded and test-only code}
 \label{sec:recon:superseded}

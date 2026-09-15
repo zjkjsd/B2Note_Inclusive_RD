@@ -11,8 +11,10 @@ number, plot, or method is preliminary.
 When sources disagree, use this precedence:
 
 1. Explicit instructions in the current task.
-2. The analysis repository's `docs/ANALYSIS_CONTEXT.md` at the pinned commit,
-   available here through the `external-code` submodule.
+2. The analysis repository's `docs/ANALYSIS_CONTEXT.md` at the pinned commit.
+   The analysis repository is not vendored into this one (no submodule); it
+   is referenced by commit SHA only, recorded in `CHANGELOG.md` and in each
+   provenance block.
 3. Current executable analysis code at the pinned commit.
 4. Reference B2Notes in `docs/`, for organization and methodological
    examples only.  Their selections, correction factors, uncertainties and
@@ -50,8 +52,8 @@ block at the top of the file instead.
 `table` environment and fails if the block above it is missing or incomplete.
 Run it before committing.
 
-The submodule pin is the single analysis-state anchor. `CHANGELOG.md` records
-which analysis commit each note version corresponds to.
+The pinned commit SHA is the single analysis-state anchor. `CHANGELOG.md`
+records which analysis commit each note version corresponds to.
 
 ## Scientific safeguards
 

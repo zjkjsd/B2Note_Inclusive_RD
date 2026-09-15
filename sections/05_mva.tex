@@ -3,7 +3,7 @@
 %   produced-by : 4_LightGBM_Multiclass_Training.py; 2_LightGBM_Tuner.py;
 %                 3_LightGBM_Binary_Training.py; utilities.py (training
 %                 variable lists lines 5-29, working points lines 81-83)
-%   commit      : dd520a5
+%   commit      : ad2f2ec
 %   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
 %   selection   : offline_cut (Eq. offline-cut)
 %   corrections : none applied at training time
@@ -43,9 +43,24 @@ selection of Eq.~\eqref{eq:lgb-tight}, the fake-$D$ suppression that defines
 the generic-$B\bar{B}$ tuning region (Eq.~\eqref{eq:bbbar-region}), and the
 combinatorial-enriched control region of Sec.~\ref{sec:validation}.
 A binary classifier would have required a separate training for each.
-\AnalysisTBD{the composition and size of the training sample per class, and
-the definition of \texttt{training\_weight}.  Both are set in the notebook
-rather than in library code, so they have no citable producing artifact}
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/2_create_BDTtrainingSet.ipynb
+%   commit      : ad2f2ec
+%   sample      : MC16rd, e channel, offline_cut (Eq. offline-cut)
+%   selection   : classify_mc_dict('e'); per-class random subsampling,
+%                 random_state=0
+%   corrections : none
+\PreliminaryResult{each of the four classes is subsampled to exactly
+$500\,000$ events (\texttt{pandas.DataFrame.sample(n=500000,
+random\_state=0)}) before training, from the reconstructed class sizes
+quoted in Sec.~\ref{sec:truth:composition}; \texttt{training\_weight} is set
+to $1$ for every class and every event.
+This is a change from an earlier configuration, in which the full,
+unequal-sized class samples were used together with a per-class
+\texttt{training\_weight} chosen so that (sample size) $\times$
+(\texttt{training\_weight}) was constant across classes; truncating every
+class to the same size removed the need for that weighting.}
 
 \subsection{Training configuration}
 \label{sec:mva:training}
@@ -86,16 +101,24 @@ the \emph{binary} off-resonance data/MC check of
 four-class training, and its default \texttt{multiclass} objective has no
 matching \texttt{num\_class} configuration.
 It therefore does not tune the final classifier in its current form.
-\AnalysisTBD{the hyper-parameters of Table~\ref{tab:mva-hyperparameters} are
-hard-coded.  Record whether they were tuned, scanned by hand, or inherited
-from an earlier configuration}
+\InProgress{the hyper-parameters of Table~\ref{tab:mva-hyperparameters} were
+originally obtained from an Optuna study run with
+\texttt{2\_LightGBM\_Tuner.py}.  The tuner has since been modified --- most
+recently towards the binary off-resonance check described above --- and its
+\texttt{multiclass} objective path needs to be restored and re-validated
+before it can be said to tune the four-class classifier currently in use.
+Until that is done, the values in Table~\ref{tab:mva-hyperparameters} should
+be read as inherited from that earlier tuning rather than as continuously
+re-derived}
 
 Three trained models are stored, \texttt{lgbm\_multiclass\_v1} through
 \texttt{v3}, with 50, 34 and 25 recorded boosting rounds; only \texttt{v3}
 matches the two-stage schedule above.
-\AnalysisTBD{state which stored model is the nominal one and what distinguishes
-the three versions.  The selection working point of
-Eq.~\eqref{eq:lgb-tight} is only meaningful with respect to a named model}
+\texttt{v3} is the nominal, up-to-date model; \texttt{v1} and \texttt{v2} are
+superseded and are kept only as history at the pinned commit, to be removed
+in a future update (\texttt{ANALYSIS\_DECISION}).
+The selection working point of Eq.~\eqref{eq:lgb-tight} refers to
+\texttt{v3}.
 
 \subsection{Input variables}
 \label{sec:mva:inputs}
@@ -130,10 +153,22 @@ The commented-out variable lists retained in \texttt{utilities.py} correspond
 to earlier configurations that included these variables; they are superseded
 and are not the nominal input set.
 
-\AnalysisTBD{quantitative demonstration that the \emph{retained} variables do
+\InProgress{quantitative demonstration that the \emph{retained} variables do
 not sculpt $\mmiss$ or $\pdl$, evaluated in the bins used by the final fit.
 The exclusions above are motivated by source comments, not by a documented
-correlation study}
+correlation study.  Two-dimensional plots of each fit variable against the
+classifier inputs, and --- more importantly, since it is the quantity
+actually applied as a selection --- against the classifier output
+probabilities, are planned to make this visible directly rather than only
+through a correlation coefficient (Appendix~\ref{app:mva:todo}).
+As an organisational reference only: a sibling Belle~II semileptonic-tag
+$R(D^{(*)})$ note dropped a candidate BDT input after finding data/MC
+mismodelling in a low-statistics bin of its own pre-training check, and
+separately checked its two \emph{fit} variables for data/MC shape agreement
+in sideband regions after the full selection, not only before training.
+Both checks --- pre-training input agreement, and post-selection fit-variable
+agreement in a sideband --- are worth adopting here as a two-stage plan, in
+addition to the planned correlation study}
 
 \subsection{Working point}
 \label{sec:mva:wp}
@@ -161,7 +196,15 @@ sensitivity --- equivalently, on the uncertainty of the
 $B \to D \tau \nu$ yield from the full fit --- rather than on a generic figure
 of merit, because the two need not have the same optimum once the sideband
 channel and the constrained backgrounds are included.  Record the figure of
-merit currently used and the scan that produced Eq.~\eqref{eq:lgb-tight}}
+merit currently used and the scan that produced Eq.~\eqref{eq:lgb-tight}.
+As an organisational reference only: a sibling Belle~II note (semileptonic
+tagging, $B \to \tau\nu$) built its BDT hyper-parameter search around a dual
+objective, simultaneously maximising a separation figure of merit and
+minimising the trained output's correlation with its fit variables, rather
+than optimising selection and checking decorrelation as two separate later
+steps.  Building the decorrelation requirement into the training objective
+itself, alongside an eventual $R(D)$-sensitivity figure of merit, is an
+alternative worth considering to the current two-step approach}
 
 \subsection{Validation}
 \label{sec:mva:validation}
