@@ -35,7 +35,7 @@ a claim about the analysis.
     Section & Artifact & Decision & External & Total \\
     \hline
     1 Introduction              & 3 & 0 & 2 & 5 \\
-    2 Data and simulation       & 5 & 4 & 0 & 9 \\
+    2 Data and simulation       & 6 & 4 & 0 & 10 \\
     3 Reconstruction            & 7 & 4 & 1 & 12 \\
     4 Truth classification      & 5 & 0 & 0 & 5 \\
     5 Classifier                & 6 & 0 & 0 & 6 \\
@@ -52,7 +52,7 @@ a claim about the analysis.
     Appendix: fit               & 6 & 1 & 0 & 7 \\
     Appendix: open items        & 0 & 1 & 0 & 1 \\
     \hline
-    Total                       & 56 & 25 & 5 & 86 \\
+    Total                       & 57 & 25 & 5 & 87 \\
     \hline
   \end{tabular}
 \end{table}
@@ -84,6 +84,12 @@ Sec.~\ref{sec:validation:prelim}); each carries at least one new item asking
 to confirm the run period, channel, or exact producing notebook cell, since
 that information could not be recovered from the image files alone, which is
 the source of the increase from 82 to 86.
+A further review exchange established that the training notebook draws its
+generic-MC pool from Run~1 only while the fit-template notebook combines
+Run~1 and Run~2, so the $68\%$ overlap figure of Sec.~\ref{sec:data:overlap}
+understates the denominator and overstates the true overlap fraction; a new
+item asking for the missing Run~2 count was added, which is the source of
+the increase from 86 to 87.
 \AnalysisTBD{the classification into artifact, decision and external in
 Table~\ref{tab:open-items} is a working judgement made while writing, not an
 approved plan.  Correct it where the intended route to closing an item
@@ -95,16 +101,24 @@ differs}
 \begin{enumerate}
   \item \textbf{Check for BDT train/template overlap in the generic-MC
         background classes.}
-        As found in review, roughly $68\%$ of the reconstructed
-        \texttt{bkg\_continuum} and \texttt{bkg\_combinatorial} pools are
-        currently used for BDT training, and the same generic-MC production
-        also supplies the fit templates for those classes
-        (Sec.~\ref{sec:data:overlap}), so the templates are evaluated
-        substantially on the classifier's own training data.
-        A first check --- comparing templates built only from the held-out
-        validation split against the current ones --- is comparatively cheap
-        and would show whether this is a real effect before a full disjoint
-        re-split is undertaken.
+        As found in review, BDT training uses a Run~1-only generic-MC pool in
+        which roughly $68\%$ of the reconstructed \texttt{bkg\_continuum} and
+        \texttt{bkg\_combinatorial} events are used for training, while the
+        fit templates for those classes are built from the larger
+        Run~1$+$Run~2 combined pool (Sec.~\ref{sec:data:overlap}); the true
+        overlap fraction against that combined pool is therefore smaller than
+        $68\%$ but not yet known, since no Run~2 reconstructed count exists in
+        the repository.
+        Per the analyst, the more fundamental question is whether this
+        overlap matters at all: if the classifier's inputs and output are
+        weakly correlated with the fit observables ($\mmiss$, $\pdl$) within a
+        truth category, in-sample selection would not measurably bias the
+        template shape even at high overlap.
+        Two comparatively cheap checks would settle this ahead of a full
+        disjoint re-split: comparing templates built only from the held-out
+        validation split against the current ones, and the
+        input/fit-observable correlation study of
+        Appendix~\ref{app:mva:todo}.
   \item \textbf{Run the truth-category validation on one MC16rd file.}
         Closes the \texttt{D\_mcErrors} $> 512$ question of
         Sec.~\ref{sec:truth:closure}, the yield of the three categories

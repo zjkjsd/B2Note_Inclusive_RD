@@ -1,7 +1,9 @@
 # Change log
 
 Each released version of the note is pinned to an analysis commit in
-`zjkjsd/inclusive_R_D`, tracked here and by the `external-code` submodule.
+`zjkjsd/inclusive_R_D`, tracked here and in each provenance block. The
+analysis repository is referenced by commit SHA only and is not vendored
+into this one.
 
 ## Version 0.3 (draft) — unreleased
 
@@ -22,6 +24,19 @@ Corrected, from review:
   templates, for the bkg_continuum and bkg_combinatorial classes
   specifically, where roughly 68% of each class's reconstructed pool is
   used for training from the same production that also feeds the templates.
+  A follow-up exchange refined this: the training notebook draws generic MC
+  from Run 1 only, while the fit-template notebook combines Run 1 and Run 2,
+  so the 68% figure (which uses the Run-1-only pool as its denominator)
+  overstates the true overlap against the larger, actual template-building
+  pool -- the true fraction cannot yet be stated because no Run 2
+  reconstructed count exists in the repository (new TBD). Per the analyst,
+  the more fundamental question is separate from the overlap fraction
+  itself: if the classifier's inputs/output are only weakly correlated with
+  the fit observables (missing mass squared, the momentum-sum variable)
+  within a truth category, in-sample selection would not measurably bias
+  the template shape even at high overlap -- a plausible but not yet
+  demonstrated argument, tied to the existing classifier-diagnostics TBD in
+  Appendix (classifier).
 - Sec. 8: removed an incorrect statistical justification for the shared
   per-channel MC-statistical-uncertainty parameter (that same-production
   truth categories have correlated bin fluctuations -- they do not; if
@@ -38,15 +53,17 @@ Corrected, from review:
   `AnalysisTBD`/`InProgress` were mentioned in prose, rather than invoked as
   actual open items, were inflating the generated count; rendered without
   the invoking braces so they are no longer matched by the count, and the
-  table/total corrected accordingly (86, was reported as 83 then 84 with
-  the inflation).
-
-Left as recorded analyst context rather than changed:
-- CHANGELOG.md: a reviewer flagged that no `external-code` submodule or
-  ANALYSIS_CONTEXT.md exists at the pinned commit. Per the analyst, the
-  submodule setup was removed deliberately (it existed only to let an
-  earlier tool edit both repositories at once; that tool is now a
-  PR-comment reviewer only), so this is not an error to fix here.
+  table/total corrected accordingly (87, was reported as 83 then 84 with
+  the inflation, then 86, see above).
+- AGENTS.md, README.md, Sec. 3 (provenance comment): removed the remaining
+  references to an `external-code` submodule and a submodule-mediated
+  `docs/ANALYSIS_CONTEXT.md`. A reviewer had flagged that neither exists at
+  the pinned commit; the analyst confirmed the submodule setup was removed
+  deliberately (it existed only to let an earlier tool edit both
+  repositories at once, and that tool is now a PR-comment reviewer only),
+  so the stale setup instructions and source-hierarchy references are
+  corrected to describe the analysis repository as referenced by commit SHA
+  only, not vendored in.
 
 Figures inserted (all previously present in `figures/` but not yet used in
 the note; each carries a new TBD to confirm run/channel/producing notebook
