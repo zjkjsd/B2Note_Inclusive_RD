@@ -52,6 +52,10 @@ summed content passes the population threshold and flattened.
 Three categories are excluded before filling
 (Sec.~\ref{sec:truth:closure}), and the narrow and broad $D^{**}\ell\nu$
 categories are merged (Sec.~\ref{sec:truth:merging}).
+Per-category MC breakdowns of both fit variables, in regions enhanced for
+each of the two signal-like modes, are shown in
+Appendix~\ref{app:fit:composition}; they illustrate directly the
+overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
 
 \subsection{Parameter of interest}
 \label{sec:fit:poi}
@@ -167,35 +171,49 @@ positivity requirement as a cross-check}
 \paragraph{MC statistical uncertainty.}
 All samples in a channel share a single \texttt{staterror} modifier name,
 \texttt{mcStat\_ch$n$}, so the MC statistical uncertainty is treated as one
-parameter per channel correlated across samples rather than as a per-sample
-uncertainty.
-Confirmed as intended when every template in a channel is built from the same
-generic-MC production run (\texttt{ANALYSIS\_DECISION}): the per-bin MC
-statistical fluctuations of different samples drawn from one generic-MC
-sample are correlated, since they trace back to the same finite set of
-generated events, so one shared \texttt{staterror} parameter per channel per
-bin is the treatment consistent with that shared origin, rather than an
-approximation for it.
-That reasoning does not automatically extend to a channel where signal or
-normalisation templates are built from signal-enriched MC while backgrounds
-remain generic MC (Sec.~\ref{sec:data:mc}): those two histograms then draw
-their statistical fluctuations from independent productions, so in principle
-the number of \texttt{staterror} parameters per channel per bin should equal
-the number of independent MC productions contributing to that bin, not one.
-\InProgress{because the signal-enriched samples are of very high statistics
-relative to generic MC (Sec.~\ref{sec:data:mc}), one shared \texttt{staterror}
-per channel per bin is treated as a good approximation even once
-signal-enriched MC enters the templates, rather than splitting it by
-production.  This approximation has not been quantified.
+constrained nuisance parameter per channel per bin, summing the samples'
+individual MC statistical uncertainties in quadrature into that one
+parameter, rather than as an independent nuisance parameter per sample per
+bin.
+This is the ``lite'' Beeston--Barlow treatment.
+An earlier version of this note justified it by treating the per-bin MC
+statistical fluctuations of different truth categories drawn from one
+generic-MC production as themselves correlated, ``since they trace back to
+the same finite set of generated events.''
+That justification was incorrect and has been removed
+(\texttt{ANALYSIS\_DECISION}, corrected): the categories are mutually
+exclusive subsets of one generated sample, and in the standard binned
+template-statistics model each category's per-bin count is an independent
+Poisson variate with its own finite-sample uncertainty, exactly as it would
+be if the categories came from separate productions.
+Sharing one production does not by itself correlate their fluctuations; if
+anything, conditioning on a fixed total count in a bin would induce
+\emph{anti}-correlation between categories (a multinomial split of a fixed
+total), not the positive correlation the earlier text asserted, and no such
+conditioning is imposed here.
+The real justification for the lite treatment is practical rather than a
+consequence of shared origin: every sample's statistics here are large
+enough that the lite and full (one nuisance parameter per sample per bin)
+treatments are expected to differ only slightly, and the lite treatment
+keeps the nuisance-parameter count at (channels $\times$ bins) rather than
+(channels $\times$ bins $\times$ samples), which is both simpler and
+cheaper to fit.
+This is unrelated to whether the samples in a channel come from one MC
+production or several: the same lite-versus-full trade-off applies either
+way, so a channel mixing generic and signal-enriched MC
+(Sec.~\ref{sec:data:mc}) does not need a different number of \texttt{staterror}
+parameters than a single-production channel on these grounds.
+\InProgress{quantify, rather than assert, that the lite and full treatments
+give a small difference here, given the actual per-bin statistics of each
+sample --- large generic-MC statistics support this for the current
+generic-MC-only templates, but it should be checked again once
+signal-enriched MC enters the templates, particularly in bins where one
+sample's per-bin count is not large.
 As an organisational reference only: a sibling Belle~II semileptonic-tag
-$R(D^{(*)})$ note deliberately moved \emph{away} from one MC-statistical
-nuisance parameter per bin per template, to a single constrained
-per-bin parameter summed in quadrature over samples --- the ``lite
-Beeston-Barlow'' method, which is what a single shared \texttt{staterror}
-per channel per bin already is here --- citing an otherwise linearly growing,
-poorly constrained parameter count as the reason to avoid the finer-grained
-alternative.  That is independent support for the current per-channel choice,
-though it does not by itself address the mixed-production case above}
+$R(D^{(*)})$ note independently adopted the same lite Beeston-Barlow choice,
+citing an otherwise linearly growing, poorly constrained parameter count as
+the reason to avoid the per-sample alternative --- consistent with, though
+not a substitute for, quantifying the difference directly here}
 
 \subsection{Fit validation}
 \label{sec:fit:validation}

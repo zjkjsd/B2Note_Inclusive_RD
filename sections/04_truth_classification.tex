@@ -248,6 +248,35 @@ signal-enriched count is read from a \texttt{run*} wildcard whose actual run
 coverage (Run~1 only, or Run~1$+$Run~2) has not been confirmed, so the four
 numbers above should not yet be read as being on the same run-period
 footing}
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/2_Plot_norm_e_run2.ipynb ::
+%                 mpl_mc.plot_pie(); the identical call also appears in
+%                 Notebooks/Plotting/2_Plot_norm_mu_run2.ipynb, so the exact
+%                 run period/channel of this saved image is not confirmed
+%   commit      : ad2f2ec
+%   sample      : MC16rd, run and channel not confirmed (see above)
+%   selection   : \texttt{1.855<D\_M<1.885 and lgb\_tight and} the $D^{*}$
+%                 veto \texttt{and fakeD\_prob<0.06}, i.e.\ the nominal
+%                 signal-region working point, not only the $D$-mass window
+%                 the truncated plot title shows
+%   corrections : not confirmed from the notebook cell alone
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{MC_composition_signalRegion.png}
+  \caption{Truth-category composition of generic and signal-enriched MC in
+  the $D$-mass signal region at the nominal \texttt{lgb\_tight} working
+  point, with the $D^{*}$ veto applied (left: all categories; right:
+  background categories only, i.e.\ excluding $D\tau\nu$ and the other
+  signal-like categories).
+  \AnalysisTBD{confirm the run period and channel this figure was produced
+  for, and whether it is luminosity-scaled (Sec.~\ref{sec:data:mc}); the
+  plot title is truncated and does not show the full selection string}}
+  \label{fig:mc-composition-sr}
+\end{figure}
+This is a preliminary, single-channel snapshot rather than the composition
+table itself: it has no run/channel breakdown, and Fig.~\ref{fig:mc-composition-sr}
+does not distinguish the $D$-mass sideband from the signal region.
 \AnalysisTBD{table of expected yields and fractions per category, in the
 signal region and in the $D$-mass sideband, separately for Run 1 and Run 2
 and for the $e$ and $\mu$ channels, at the nominal working point.  The

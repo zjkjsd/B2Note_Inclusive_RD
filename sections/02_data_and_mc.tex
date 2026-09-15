@@ -60,9 +60,11 @@ produced mode by mode with a large number of events (of order $3\times10^{7}$
 for a single mode), which supports the detailed studies that require high
 statistics but cannot itself be compared directly to data, since it contains
 no real background events.
-Three signal-enriched samples are used in this analysis, all with a
-$B^{0}\bar{B}^{0}$ event and the charged-$D$ final state used in the signal
-reconstruction:
+Three signal-enriched samples are used in this analysis, all producing the
+charged-$D$ final state used in the signal reconstruction, though not all
+from a $B^{0}\bar{B}^{0}$ event: the $D$ and $D^{*}$ samples are generated
+as $B^{0}\bar{B}^{0}$ only, while the $D^{**}$ sample is generated as both
+$B^{0}\bar{B}^{0}$ and $B^{+}B^{-}$, as its four additional modes require:
 \begin{itemize}
   \item one $B \to D\tau\nu$ mode (neutral $B$, charged $D$);
   \item one $B \to D^{*}\tau\nu$ mode (neutral $B$, charged $D^{*}$; the
@@ -198,16 +200,48 @@ and for three of the four BDT training classes (\texttt{bkg\_fakeD},
 \texttt{bkg\_continuum}, \texttt{bkg\_combinatorial}); the fourth,
 signal-like training class alone is drawn from the $B \to D\tau\nu$
 signal-enriched sample (Sec.~\ref{sec:data:mc}, Sec.~\ref{sec:mva:classes}).
-Since the fit templates are currently also built from generic MC, this
-signal-enriched sample and the template-building sample do not yet overlap.
+For the signal-enriched sample specifically, the fit templates are currently
+also built from generic MC (not from that sample), so it does not yet
+overlap with the template-building input.
 
-That changes once signal-enriched MC is used to build the signal and
-normalisation templates for the final fit, as intended
-(Sec.~\ref{sec:data:mc}): the same $B \to D\tau\nu$ sample would then supply
-both the signal class of the BDT training and its own fit template, and the
-disjoint train/validation split used within the training sample
-(Sec.~\ref{sec:mva:training}) does not by itself establish that the template
-is independent of the classifier that selects it.
+The three generic-MC training classes are a different matter, and here an
+overlap already exists now, not only after the transition described below.
+\texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb} draws its
+\texttt{bkg\_fakeD}/\texttt{bkg\_continuum}/\texttt{bkg\_combinatorial}
+training events from the same per-run-period generic-MC production
+(\texttt{4S\_run\{1,2\}\_deimos\_1}) that, once combined and BDT-scored into
+\texttt{4S\_\textless period\textgreater\_deimos\_BDT\_\textless
+channel\textgreater\_3.root} (Sec.~\ref{sec:data:ntuples}), is also the input
+\texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} reads to build the
+fit templates.
+Taking the per-class reconstructed sample sizes of
+Sec.~\ref{sec:truth:composition} and the $500\,000$-event training
+subsample of Sec.~\ref{sec:mva:classes} at face value, this puts roughly
+$500\,000/15\,815\,120 \approx 3\%$ of the reconstructed \texttt{bkg\_fakeD}
+pool, but roughly $500\,000/734\,906 \approx 68\%$ of \texttt{bkg\_continuum}
+and $500\,000/739\,879 \approx 68\%$ of \texttt{bkg\_combinatorial}, into the
+BDT training set --- a majority of those two classes' events.
+Since the same classifier that was partly trained to recognise those events
+as continuum/combinatorial is then applied to select and shape their own fit
+templates, the templates for those two categories are evaluated substantially
+on the classifier's own training data, which can make the post-selection
+shape or purity look better than it would generalise to independent events.
+\AnalysisTBD{quantify whether this in-sample evaluation measurably biases the
+\texttt{bkg\_continuum}/\texttt{bkg\_combinatorial} template shapes or
+efficiencies (for example by comparing templates built only from the
+held-out $20\%$ validation split of Sec.~\ref{sec:mva:training} against the
+current ones), and enforce a disjoint split between the events used for BDT
+training and the events used for template building for these two classes.
+This is a currently active risk, not only a concern for the future
+signal-enriched-template transition below}
+
+That transition is a related but separate case: once signal-enriched MC is
+used to build the signal and normalisation templates for the final fit, as
+intended (Sec.~\ref{sec:data:mc}), the same $B \to D\tau\nu$ sample would
+then supply both the signal class of the BDT training and its own fit
+template, and the disjoint train/validation split used within the training
+sample (Sec.~\ref{sec:mva:training}) does not by itself establish that the
+template is independent of the classifier that selects it.
 \AnalysisTBD{state and enforce an explicit rule preventing overlap between
 the BDT training sample and the sample used to build the signal-enriched fit
 templates once that transition happens --- for example, reserving the

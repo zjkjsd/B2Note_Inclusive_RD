@@ -86,6 +86,31 @@ The stored model header lists 17 input features, matching
 Appendix~\ref{app:selections:mva}, and the variables excluded from training
 in Appendix~\ref{app:selections:excluded}.
 
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : utilities.apply_mva_bcs() (importance=True branch,
+%                 lgb.plot_importance(..., importance_type='gain')); the
+%                 calling notebook/script was not identified
+%   commit      : ad2f2ec
+%   sample      : MC16rd BDT training sample (Sec.~\ref{sec:mva:classes})
+%   selection   : offline_cut (Eq. offline-cut); model version not confirmed
+%   corrections : none applied at training time
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{LGBM_feature_importance.png}
+  \caption{LightGBM feature importance (total split gain) for the 17 training
+  variables of Appendix~\ref{app:selections:mva}.
+  The two ROE kinematic variables ($M_{\mathrm{bc}}^{\mathrm{ROE}}$,
+  $\Delta E^{\mathrm{ROE}}$) and $B_0\_CMS\_cos\_angle\_0\_1$ dominate;
+  \texttt{D\_A1FflightDistanceSig\_IP}, the $D$ flight-distance significance
+  of Sec.~\ref{sec:recon:d}, is the next most important, ahead of any single
+  continuum-suppression variable.
+  \AnalysisTBD{confirm which stored model (Sec.~\ref{sec:mva:training}) this
+  importance ranking was computed from, and whether it should be recomputed
+  for \texttt{v3} specifically if it is not already}}
+  \label{fig:lgbm-importance}
+\end{figure}
+
 \subsection{Diagnostics still required}
 \label{app:mva:todo}
 

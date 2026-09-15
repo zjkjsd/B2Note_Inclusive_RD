@@ -3,6 +3,69 @@
 Each released version of the note is pinned to an analysis commit in
 `zjkjsd/inclusive_R_D`, tracked here and by the `external-code` submodule.
 
+## Version 0.3 (draft) — unreleased
+
+Responds to review comments on PR #2 (a mix of an automated reviewer and the
+analyst's own replies) and inserts previously-unused figures from
+`figures/`.
+
+Corrected, from review:
+- Sec. 1: the claim that the FEI-tagged and inclusively-tagged samples are
+  statistically independent was wrong and is corrected: the FEI sample is
+  closer to a small subset of the inclusive one, with a small but nonzero
+  overlap, per the analyst's own clarification.
+- Sec. 2: the three signal-enriched samples do not all share one B-charge
+  combination; only the D and D* samples are B0-B0bar-only, the D** sample
+  is both B0-B0bar and B+B-, per the analyst's clarification. Also
+  identified a currently active (not only prospective) overlap between the
+  generic-MC events used for BDT training and those used to build the fit
+  templates, for the bkg_continuum and bkg_combinatorial classes
+  specifically, where roughly 68% of each class's reconstructed pool is
+  used for training from the same production that also feeds the templates.
+- Sec. 8: removed an incorrect statistical justification for the shared
+  per-channel MC-statistical-uncertainty parameter (that same-production
+  truth categories have correlated bin fluctuations -- they do not; if
+  anything, conditioning on a fixed bin total induces anticorrelation).
+  Replaced with the correct justification: it is a lite Beeston-Barlow
+  approximation, justified by large per-sample statistics and a smaller
+  nuisance-parameter count, independent of whether samples share a
+  production.
+- Sec. 1: the two external-figure provenance blocks used a status
+  (`EXTERNAL`) outside the five allowed values; changed to
+  `VALIDATED_RESULT` (the sourced HFLAV figure) and `PLANNED` (the
+  unsourced one).
+- Appendix (open items): two occurrences where the marker names
+  `AnalysisTBD`/`InProgress` were mentioned in prose, rather than invoked as
+  actual open items, were inflating the generated count; rendered without
+  the invoking braces so they are no longer matched by the count, and the
+  table/total corrected accordingly (86, was reported as 83 then 84 with
+  the inflation).
+
+Left as recorded analyst context rather than changed:
+- CHANGELOG.md: a reviewer flagged that no `external-code` submodule or
+  ANALYSIS_CONTEXT.md exists at the pinned commit. Per the analyst, the
+  submodule setup was removed deliberately (it existed only to let an
+  earlier tool edit both repositories at once; that tool is now a
+  PR-comment reviewer only), so this is not an error to fix here.
+
+Figures inserted (all previously present in `figures/` but not yet used in
+the note; each carries a new TBD to confirm run/channel/producing notebook
+where that could not be recovered from the image alone):
+- Sec. 1: the tagging-topology schematic (hadronic FEI / semileptonic FEI /
+  inclusive), as the event-topology figure.
+- Sec. 4: a preliminary truth-category composition pie chart in the D-mass
+  signal region at the nominal working point.
+- Appendix (classifier): the LightGBM feature-importance (gain) ranking for
+  the 17 training variables.
+- Appendix (fit): four one-dimensional MC composition plots (missing-mass
+  squared and the momentum-sum fit variable, in signal- and
+  normalisation-enhanced regions), showing the overlapping-shape difficulty
+  directly.
+- Sec. 10 (new "Preliminary control-region comparisons" subsection): six
+  prefit data/MC comparisons in the q^2 sideband and D-mass sideband
+  control regions, including a with/without-BDT comparison showing the
+  classifier's effect on data/MC agreement in the D-mass sideband.
+
 ## Version 0.2 (draft) — unreleased
 
 Pinned analysis commit: `ad2f2ec` ("add comments in utilities.py"), moved

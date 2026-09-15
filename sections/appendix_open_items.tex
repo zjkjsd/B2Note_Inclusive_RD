@@ -13,8 +13,10 @@ This appendix consolidates the open items marked throughout the note.
 Its purpose is to make visible which single input would close the most of
 them, so that effort can be spent in the order that unblocks the most work.
 
-Every item is marked in place with \AnalysisTBD{} or \InProgress{}; nothing
-here is new, and nothing here is a claim about the analysis.
+Every item is marked in place with \texttt{AnalysisTBD} or \texttt{InProgress}
+(rendered without their braces here so this sentence does not itself count
+as an occurrence of either marker); nothing here is new, and nothing here is
+a claim about the analysis.
 
 \subsection{Distribution of open items}
 \label{app:open:counts}
@@ -33,39 +35,55 @@ here is new, and nothing here is a claim about the analysis.
     Section & Artifact & Decision & External & Total \\
     \hline
     1 Introduction              & 3 & 0 & 2 & 5 \\
-    2 Data and simulation       & 4 & 4 & 0 & 8 \\
+    2 Data and simulation       & 5 & 4 & 0 & 9 \\
     3 Reconstruction            & 7 & 4 & 1 & 12 \\
-    4 Truth classification      & 4 & 0 & 0 & 4 \\
+    4 Truth classification      & 5 & 0 & 0 & 5 \\
     5 Classifier                & 6 & 0 & 0 & 6 \\
     6 Corrections               & 2 & 5 & 0 & 7 \\
     7 Generic $B\bar{B}$        & 5 & 0 & 0 & 5 \\
     8 Signal extraction         & 3 & 4 & 0 & 7 \\
     9 Systematics               & 3 & 0 & 0 & 3 \\
-    10 Validation, box opening  & 2 & 3 & 0 & 5 \\
+    10 Validation, box opening  & 3 & 3 & 0 & 6 \\
     11 Results                  & 1 & 0 & 0 & 1 \\
     12 Summary                  & 0 & 1 & 0 & 1 \\
     Appendix: selections        & 0 & 1 & 0 & 1 \\
     Appendix: categories        & 0 & 1 & 2 & 3 \\
-    Appendix: classifier        & 6 & 0 & 0 & 6 \\
-    Appendix: fit               & 5 & 1 & 0 & 6 \\
-    Appendix: open items        & 0 & 3 & 0 & 3 \\
+    Appendix: classifier        & 7 & 0 & 0 & 7 \\
+    Appendix: fit               & 6 & 1 & 0 & 7 \\
+    Appendix: open items        & 0 & 1 & 0 & 1 \\
     \hline
-    Total                       & 51 & 27 & 5 & 83 \\
+    Total                       & 56 & 25 & 5 & 86 \\
     \hline
   \end{tabular}
 \end{table}
 
 The totals are generated from the markers in the source and match them
 exactly; the split into the three columns is a working judgement.
-Since the previous count of 80, the bulk of Sec.~\ref{sec:bbbar} was
+A prior version of this table double-counted two occurrences where the
+marker names were mentioned in prose (this paragraph, and the one above it)
+rather than invoked as an actual open item; those are now rendered without
+the invoking braces so they are not themselves matched by the count.
+Since the count of 80 two revisions ago, the bulk of Sec.~\ref{sec:bbbar} was
 rewritten against the regenerated \texttt{run1+run2} BBbar-weight fits, three
 items closed outright (which classifier model is nominal; the BDT training
 sample size, class weights and best-candidate method; the fake-$D$
 normalisation treatment), and several TBDs were narrowed to a stated plan and
-reclassified as \InProgress{}, which is a net increase in the artifact
+reclassified as \texttt{InProgress}, which is a net increase in the artifact
 column: a plan is more specific than an unstated TBD, and more of what
 remains open now has a named next step (a plot, a script run, a
 reprocessing) rather than an unresolved question.
+A review pass then added one new item to Sec.~\ref{sec:data}: a currently
+active (not only prospective) overlap between the generic-MC events used for
+BDT training and those used to build the fit templates, for the
+\texttt{bkg\_continuum} and \texttt{bkg\_combinatorial} classes specifically
+(Sec.~\ref{sec:data:overlap}).
+A subsequent pass inserted twelve previously-unused figures from
+\texttt{figures/} into the note (Sec.~\ref{sec:intro}, \ref{sec:truth},
+Appendix~\ref{app:mva}, Appendix~\ref{app:fit:composition}, and
+Sec.~\ref{sec:validation:prelim}); each carries at least one new item asking
+to confirm the run period, channel, or exact producing notebook cell, since
+that information could not be recovered from the image files alone, which is
+the source of the increase from 82 to 86.
 \AnalysisTBD{the classification into artifact, decision and external in
 Table~\ref{tab:open-items} is a working judgement made while writing, not an
 approved plan.  Correct it where the intended route to closing an item
@@ -75,6 +93,18 @@ differs}
 \label{app:open:artifacts}
 
 \begin{enumerate}
+  \item \textbf{Check for BDT train/template overlap in the generic-MC
+        background classes.}
+        As found in review, roughly $68\%$ of the reconstructed
+        \texttt{bkg\_continuum} and \texttt{bkg\_combinatorial} pools are
+        currently used for BDT training, and the same generic-MC production
+        also supplies the fit templates for those classes
+        (Sec.~\ref{sec:data:overlap}), so the templates are evaluated
+        substantially on the classifier's own training data.
+        A first check --- comparing templates built only from the held-out
+        validation split against the current ones --- is comparatively cheap
+        and would show whether this is a real effect before a full disjoint
+        re-split is undertaken.
   \item \textbf{Run the truth-category validation on one MC16rd file.}
         Closes the \texttt{D\_mcErrors} $> 512$ question of
         Sec.~\ref{sec:truth:closure}, the yield of the three categories

@@ -30,8 +30,8 @@ Tanaka:2012nw}, which is part of the motivation for measuring $R(D)$ on its
 own rather than only in combination with $R(D^{*})$.
 
 % PROVENANCE
-%   status      : EXTERNAL (world-average compilation, not produced by this
-%                 analysis or its code)
+%   status      : VALIDATED_RESULT (a published/community world average, not
+%                 produced by this analysis or its code)
 %   produced-by : HFLAV averaging group; PDF metadata records the source path
 %                 as "HFLAV2026_Ichep26/rdrds_rd_ichep26.pdf"
 %   commit      : n/a (external figure, ICHEP 2026 preliminary)
@@ -48,7 +48,8 @@ own rather than only in combination with $R(D^{*})$.
 \end{figure}
 
 % PROVENANCE
-%   status      : EXTERNAL (figure not produced by this analysis or its code)
+%   status      : PLANNED (a placeholder pending confirmation of its
+%                 producer and sources; not produced by this analysis)
 %   produced-by : Matplotlib-generated summary plot; specific authorship and
 %                 the individual measurements it compiles are not yet
 %                 confirmed against a citable source
@@ -78,14 +79,26 @@ exclusively is expected to recover roughly an order of magnitude more signal
 events, at the cost of a much larger generic-$B\bar{B}$ background
 (Sec.~\ref{sec:bbbar}) that the tag-side reconstruction would otherwise
 reject.
-Because the two approaches select statistically independent subsets of the
-same data --- an event either has a companion $B$ that the FEI reconstructs
-or it does not --- an inclusive-tagging measurement provides information
-independent of the existing FEI-based results and a cross-check of them,
-rather than a refinement of the same event sample.
-\AnalysisTBD{quantify the expected event-yield gain and the overlap (or lack
-thereof) between the FEI-tagged and inclusively-tagged samples with a
-producing artifact, rather than the order-of-magnitude statement above}
+The two samples are not statistically independent: an event whose companion
+$B$ the FEI reconstructs exclusively is, in essentially all cases, also
+picked up by the inclusive tag, since the inclusive selection imposes no
+requirement analogous to exclusive tag-side reconstruction.
+The FEI-tagged sample is therefore closer to a (small) subset of the
+inclusively-tagged one than to an independent sample.
+The overlap is nonetheless expected to be small in absolute terms, because
+the FEI's exclusive companion-$B$ reconstruction succeeds for only a small
+fraction of events, while the inclusive selection efficiency for the
+companion side is an order of magnitude larger (\texttt{ANALYSIS\_DECISION}).
+An inclusive-tagging measurement therefore still adds new, largely
+independent statistics on top of the existing FEI-based results and serves
+as a cross-check of them, but it is not a fully independent sample, and
+treating it as one would bias any combination or correlation with an
+FEI-based result.
+\AnalysisTBD{quantify the expected event-yield gain and, in particular, the
+size of the overlap between the FEI-tagged and inclusively-tagged samples
+with a producing artifact --- for example the per-category yield table of
+Sec.~\ref{sec:truth:composition} cross-referenced against an FEI tag-side
+reconstruction flag --- rather than the qualitative statement above}
 
 For an inclusively-tagged analysis, the $B^{0} \to D^{-}\ell^{+}$ mode (as
 opposed to $B^{+} \to \bar D^{0}\ell^{+}$ or a combination of the two) is used
@@ -130,9 +143,31 @@ systematics.  A figure of approximately 12\% has been quoted by the analyst;
 record it here with its producing artifact once the Asimov sensitivity study
 of Sec.~\ref{sec:results} exists}
 
-\AnalysisTBD{add the event-topology figure for the signal decay
-$B^{0} \to D^{-}(\to K^{+}\pi^{-}\pi^{-})\,\ell^{+}$ with the ROE, referenced
-here and cross-referenced from Sec.~\ref{sec:reconstruction}}
+% PROVENANCE
+%   status      : ANALYSIS_DECISION (schematic, not a numerical result)
+%   produced-by : analyst-prepared schematic (figures/Kinematic_tagging_tech.png)
+%   commit      : n/a (illustrative diagram, not derived from a specific run)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{Kinematic_tagging_tech.png}
+  \caption{Event topology for the three tagging strategies used to measure
+  $R(D^{(*)})$: hadronic and semileptonic FEI exclusively reconstruct the
+  companion $B$ ($B_{\mathrm{tag}}$), while the inclusive tag used in this
+  note represents it only by the rest of the event.
+  The gain in efficiency going from exclusive to inclusive tagging comes at
+  the cost of purity, since the companion side is no longer required to form
+  a specific, fully-reconstructed decay chain.}
+  \label{fig:tagging-topology}
+\end{figure}
+\AnalysisTBD{add a second, dedicated figure for the signal decay
+$B^{0} \to D^{-}(\to K^{+}\pi^{-}\pi^{-})\,\ell^{+}$ with the ROE at the
+level of detail of Table~\ref{tab:recon-cuts}, cross-referenced from
+Sec.~\ref{sec:reconstruction}; Fig.~\ref{fig:tagging-topology} above gives
+the schematic comparison between tagging strategies but not this analysis's
+own reconstruction chain in detail}
 
 \subsection{Analysis signature}
 \label{sec:intro:signature}
