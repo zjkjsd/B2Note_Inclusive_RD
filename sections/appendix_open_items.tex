@@ -41,7 +41,7 @@ a claim about the analysis.
     5 Classifier                & 6 & 0 & 0 & 6 \\
     6 Corrections               & 2 & 5 & 0 & 7 \\
     7 Generic $B\bar{B}$        & 5 & 0 & 0 & 5 \\
-    8 Signal extraction         & 9 & 2 & 0 & 11 \\
+    8 Signal extraction         & 9 & 3 & 0 & 12 \\
     9 Systematics               & 4 & 0 & 0 & 4 \\
     10 Validation, box opening  & 3 & 3 & 0 & 6 \\
     11 Results                  & 2 & 1 & 0 & 3 \\
@@ -52,7 +52,7 @@ a claim about the analysis.
     Appendix: fit               & 7 & 0 & 1 & 8 \\
     Appendix: open items        & 0 & 1 & 0 & 1 \\
     \hline
-    Total                       & 66 & 23 & 6 & 95 \\
+    Total                       & 66 & 24 & 6 & 96 \\
     \hline
   \end{tabular}
 \end{table}
@@ -122,6 +122,18 @@ reconstructed separately per lepton channel, resolved the independence
 question for the Sec.~\ref{sec:results} combination; this added one new
 item recording that most of those constraints are not yet implemented as
 modifiers, bringing the count from 94 to 95.
+A subsequent review round caught two more inconsistencies: Sec.~\ref{sec:syst:sources}
+had asserted \texttt{bkg\_fakeTracks} is excluded from the templates
+(true of the generator's default, Sec.~\ref{sec:truth:closure}) while
+Fig.~\ref{fig:pyhf-config} shows it present in the actual sensitivity
+workspace, which is now recorded as an unreconciled discrepancy rather than
+silently picking one; and ``all other modifiers fixed'' in
+Table~\ref{tab:sensitivity-breakdown} was ambiguous about whether the other
+free \texttt{normfactor} normalisations are held fixed throughout the
+breakdown or profiled at every step, now a new item in
+Sec.~\ref{sec:fit:validation}.
+Neither changed an existing count on its own, but the second added one new
+item, bringing the total from 95 to 96.
 \AnalysisTBD{the classification into artifact, decision and external in
 Table~\ref{tab:open-items} is a working judgement made while writing, not an
 approved plan.  Correct it where the intended route to closing an item
