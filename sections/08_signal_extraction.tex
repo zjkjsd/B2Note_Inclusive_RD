@@ -439,24 +439,17 @@ not a substitute for, quantifying the difference directly here}
 
 A preliminary Asimov-sensitivity study now exists and is reported in
 Sec.~\ref{sec:results}; the method is to fit the Asimov dataset (the exact
-sum of all template samples) once per channel with every modifier fixed
-except the parameter of interest, giving the data-statistics-only
-uncertainty, then re-fit repeatedly with one further modifier freed at a
-time, attributing each modifier's systematic contribution to the quadrature
-difference between the new and previous returned uncertainty on the
-$B\to D\tau\nu$ normalisation.
-\AnalysisTBD{``every modifier'' here has not been confirmed to mean every
-constrained (\texttt{normsys}/\texttt{staterror}) modifier specifically, as
-opposed to literally every parameter including the other free
+sum of all template samples) once per channel with every \emph{constrained}
+modifier (\texttt{normsys}, \texttt{staterror}) fixed while the free
 \texttt{normfactor} normalisations ($D\ell\nu$, $D^{*}\ell\nu$,
-$D^{**}\ell\nu$~+~gap, \texttt{bkg\_fakeD}) that Table~\ref{tab:fit-parameters}
-and Fig.~\ref{fig:pyhf-config} show floating in the nominal model.  Since
-none of those four is freed at any row of
-Table~\ref{tab:sensitivity-breakdown}, state explicitly whether they are
-fixed throughout the whole breakdown (in which case the reported numbers
-are not yet the nominal-model result, which correlates the POI with these
-backgrounds) or profiled at every step alongside the modifiers being
-incrementally freed}
+$D^{**}\ell\nu$~+~gap, \texttt{bkg\_fakeD}; Table~\ref{tab:fit-parameters})
+remain floating alongside the parameter of interest, giving the
+data-statistics-only uncertainty; then re-fit repeatedly with one further
+constrained modifier freed at a time, attributing each one's systematic
+contribution to the quadrature difference between the new and previous
+returned uncertainty on the $B\to D\tau\nu$ normalisation
+(\texttt{ANALYSIS\_DECISION}, per the analyst, resolving an earlier ambiguity
+in this description raised in review).
 This mechanism (progressively unmasking fixed parameters and refitting) is
 implemented in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb}
 (\texttt{cabinetry}/\texttt{pyhf} Asimov and toy-fit calls, cells 36--53,

@@ -24,16 +24,12 @@ parameters $0$: the only meaningful output is the returned \emph{uncertainty}
 on the parameter of interest, the $B\to D\tau\nu$ normalisation
 (Sec.~\ref{sec:fit:poi}), which is what this section calls the sensitivity.
 The method is described in Sec.~\ref{sec:fit:validation}: fit with every
-modifier but the parameter of interest fixed to obtain the data-statistics-only
-uncertainty, then free one further modifier at a time and attribute its
-systematic contribution to the quadrature difference between the new and
-previous returned uncertainty.
-As flagged in Sec.~\ref{sec:fit:validation}, whether the other free
-\texttt{normfactor} normalisations ($D\ell\nu$, $D^{*}\ell\nu$,
-$D^{**}\ell\nu$~+~gap, \texttt{bkg\_fakeD}) are held fixed throughout
-Table~\ref{tab:sensitivity-breakdown} or profiled at every row alongside it
-has not been confirmed; the ``Data statistics only'' row below should be
-read with that open question in mind.
+\emph{constrained} modifier fixed while the free \texttt{normfactor}
+normalisations ($D\ell\nu$, $D^{*}\ell\nu$, $D^{**}\ell\nu$~+~gap,
+\texttt{bkg\_fakeD}) remain floating, to obtain the data-statistics-only
+uncertainty, then free one further constrained modifier at a time and
+attribute its systematic contribution to the quadrature difference between
+the new and previous returned uncertainty.
 Electron and muon channels are fit separately, each against its own
 two-channel (signal region plus sideband) workspace, and the two resulting
 uncertainties are combined at the end (below) rather than fit jointly.
@@ -41,9 +37,14 @@ uncertainties are combined at the end (below) rather than fit jointly.
 \begin{table}[htbp]
   \centering
   \caption{Preliminary Asimov-sensitivity breakdown on the $B\to D\tau\nu$
-  normalisation, by channel. Each row is the quadrature difference introduced
-  by freeing that modifier relative to the row above; ``more systematics''
-  denotes contributions not yet enabled in the fit (Sec.~\ref{sec:syst}).
+  normalisation, by channel. ``Data statistics only'' fixes every
+  constrained (\texttt{normsys}/\texttt{staterror}) modifier while the free
+  \texttt{normfactor} normalisations ($D\ell\nu$, $D^{*}\ell\nu$,
+  $D^{**}\ell\nu$~+~gap, \texttt{bkg\_fakeD}) remain floating
+  (Sec.~\ref{sec:fit:validation}); each subsequent row is the quadrature
+  difference introduced by freeing one further constrained modifier relative
+  to the row above; ``more systematics'' denotes contributions not yet
+  enabled in the fit (Sec.~\ref{sec:syst}).
   The ``Total'' row is the uncertainty returned directly by the fit with all
   listed modifiers simultaneously free, not a value recomputed from the rows
   above: summing the four individual differences in quadrature gives
@@ -59,7 +60,7 @@ uncertainties are combined at the end (below) rather than fit jointly.
     \hline
     Contribution & $e$ channel & $\mu$ channel \\
     \hline
-    Data statistics only (all other modifiers fixed) & $11.8\%$ & $19.1\%$ \\
+    Data statistics only & $11.8\%$ & $19.1\%$ \\
     $+$ norm.\ sys.\ ($D^{*}\tau\nu$, $D^{**}\tau\nu$) & $\pm 4.6\%$ & $\pm 4.6\%$ \\
     $+$ norm.\ sys.\ (continuum) & $\pm 2.4\%$ & $\pm 1.3\%$ \\
     $+$ MC statistics (\texttt{staterror}) & $\pm 5.8\%$ & $\pm 9.3\%$ \\
