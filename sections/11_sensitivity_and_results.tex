@@ -93,23 +93,26 @@ being misidentified across flavours is small enough that cross-contamination
 between the two samples is negligible (\texttt{ANALYSIS\_DECISION}, per the
 analyst).
 For the systematic components (the $D^{*}\tau\nu$/$D^{**}\tau\nu$ and
-continuum \texttt{normsys} constraints), independence is less immediate:
-each channel's workspace carries its own copy of these nuisance parameters
-rather than a single shared one, so the two Asimov fits \emph{as
-implemented} are formally independent of each other.
-Whether that also holds \emph{physically} --- whether the constraint width
-on, say, the continuum normalisation is derived separately for $e$ and $\mu$
-from disjoint inputs, or from one shared external number applied identically
-to both channels --- is not yet established in this note; if it is the
-latter, the same systematic shift would move both channels coherently and
-the inverse-variance formula would understate the true combined uncertainty,
-regardless of how well-motivated the data-statistics independence is.
-\AnalysisTBD{state, for each enabled systematic modifier, whether its
-constraint width is derived independently per channel or shared from one
-external input; if any are shared, either link them as common nuisance
-parameters in a genuine joint two-channel fit or propagate the resulting
-cross-channel covariance into the combination formula above, rather than
-treating the two channels as fully independent for every component}
+continuum \texttt{normsys} constraints), independence was raised in review
+as a separate question from data statistics: each channel's workspace
+carries its own copy of these nuisance parameters rather than a single
+shared one, so the two Asimov fits \emph{as implemented} are formally
+independent of each other, but that alone does not establish that treating
+them as independent is \emph{physically} correct --- a systematic shift
+shared between channels would move both coherently, and the
+inverse-variance formula would then understate the true combined
+uncertainty.
+Per the analyst, this is resolved by how each constraint is obtained
+(Sec.~\ref{sec:syst:sources}): every systematic here is derived from a
+dedicated control sample reconstructed separately for the electron and muon
+channels, rather than from one external number applied to both, so the two
+channels' constraints are independent measurements for the same reason
+their data statistics are.
+\AnalysisTBD{once each control-sample-derived constraint of
+Sec.~\ref{sec:syst:sources} is actually implemented as a modifier, confirm
+this independence holds in practice (for example, that the same
+off-resonance or wrong-charge run periods are not double-used across
+channels in a way that reintroduces a correlation)}
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT

@@ -5,7 +5,21 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
-## Version 0.4 (draft) — unreleased
+## Version 0.4 (draft) — unreleased (updated)
+
+Additional update: per a PR #3 review reply, added Sec. 9.1 documenting the
+control-sample source for each systematic constraint (off-resonance for
+continuum, BDT-sideband/wrong-charge for the two generic-BBbar categories,
+the `SystematicFramework` tool for fake-lepton, $q^{2}$ sideband for the
+normalisation modes, $D^{*}$-veto for $D^{*}\tau\nu$/$D^{**}\tau\nu$
+feed-down), added the tool as a reference, and resolved the open combination
+question in Sec. 11: since each control sample is reconstructed separately
+per lepton channel, the resulting constraints are independent between the
+$e$ and $\mu$ channels for the same reason their data statistics are, which
+was the missing justification for combining the two channels'
+uncertainties as independent measurements.
+
+
 
 Documents the sensitivity-calculation procedure and preliminary Asimov
 sensitivity described by the analyst, and inserts the four supporting
