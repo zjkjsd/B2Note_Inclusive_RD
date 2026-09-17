@@ -39,17 +39,19 @@ control sample rather than from an external or literature number
         \texttt{normsys}-constrained, Sec.~\ref{sec:fit:modifiers}): the
         $D^{*}$-veto sample (Sec.~\ref{sec:recon:dstveto}).
 \end{itemize}
-\texttt{bkg\_fakeTracks} is not covered by a stated control-sample plan
-either.
+\texttt{bkg\_fakeTracks} is not covered by a control-sample plan: per the
+analyst, no source to study it has been identified yet.
 Sec.~\ref{sec:truth:closure} documents it as excluded from the templates by
 \texttt{create\_templates\_new}'s \emph{default} \texttt{sample\_to\_exclude}
-argument, but Fig.~\ref{fig:pyhf-config} shows it present as a fifth
-category in the actual sensitivity workspace, with only a
-\texttt{staterror} modifier like \texttt{bkg\_combinatorial},
-\texttt{bkg\_fakeL} and \texttt{bkg\_hadronicB\_secondaryL}.
-These two statements describe different things (a documented default versus
-an observed, non-default workspace configuration) and are not yet
-reconciled with each other.
+argument, but --- confirmed by the analyst --- it \emph{was} included in the
+sensitivity workspace, with only a \texttt{staterror} modifier turned on
+like \texttt{bkg\_combinatorial}, \texttt{bkg\_fakeL} and
+\texttt{bkg\_hadronicB\_secondaryL} (Fig.~\ref{fig:pyhf-config}); the
+generator default does not describe this particular workspace.
+If no control sample is eventually found for it, the analyst's fallback
+plan is to rely on the MC shape as-is and assign a large \texttt{normsys}
+of order $\pm 50\%$ rather than leave it fully unconstrained
+(\texttt{PLANNED}).
 
 Each of these control samples is reconstructed, and its lepton identified,
 separately for the electron and muon channels, so the resulting constraint
@@ -64,12 +66,9 @@ justified for the systematic components too, not only the statistical one.
 \InProgress{most of the constraints above are not yet implemented as
 modifiers (only continuum and the $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down
 currently are, per Fig.~\ref{fig:pyhf-config}); derive and add the
-remaining ones from their stated control samples.
-Also reconcile whether \texttt{bkg\_fakeTracks} is excluded from the
-templates (the documented default) or included with only a
-\texttt{staterror} modifier (the actual sensitivity workspace of
-Fig.~\ref{fig:pyhf-config}), and either way confirm a control-sample plan
-for it or record that it is intentionally left unconstrained}
+remaining ones from their stated control samples, and either find a control
+sample for \texttt{bkg\_fakeTracks} or implement the analyst's fallback
+$\pm 50\%$ MC-shape \texttt{normsys} for it}
 
 \subsection{Generic-$B\bar{B}$ composition}
 \label{sec:syst:bbbar}

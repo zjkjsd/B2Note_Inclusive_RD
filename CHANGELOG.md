@@ -5,6 +5,17 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.4 (draft) — unreleased (updated again)
+
+Per the analyst: `bkg_fakeTracks` has no control-sample plan yet (no source
+identified so far); if none is found, the fallback is to rely on the MC
+shape and assign a large (~±50%) `normsys` rather than leave it fully
+unconstrained. Also confirmed directly (resolving the discrepancy Codex
+flagged): it *was* included in the sensitivity workspace with `staterror`
+turned on, matching Fig. 7 — the generator's default exclusion just doesn't
+describe this particular workspace. Sec. 9.1 updated accordingly; no longer
+an unreconciled discrepancy.
+
 ## Version 0.4 (draft) — unreleased (updated)
 
 Additional update: per a PR #3 review reply, added Sec. 9.1 documenting the
