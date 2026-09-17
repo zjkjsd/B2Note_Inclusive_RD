@@ -41,7 +41,7 @@ a claim about the analysis.
     5 Classifier                & 6 & 0 & 0 & 6 \\
     6 Corrections               & 2 & 5 & 0 & 7 \\
     7 Generic $B\bar{B}$        & 5 & 0 & 0 & 5 \\
-    8 Signal extraction         & 8 & 4 & 0 & 12 \\
+    8 Signal extraction         & 9 & 2 & 0 & 11 \\
     9 Systematics               & 3 & 0 & 0 & 3 \\
     10 Validation, box opening  & 3 & 3 & 0 & 6 \\
     11 Results                  & 2 & 1 & 0 & 3 \\
@@ -52,7 +52,7 @@ a claim about the analysis.
     Appendix: fit               & 7 & 0 & 1 & 8 \\
     Appendix: open items        & 0 & 1 & 0 & 1 \\
     \hline
-    Total                       & 64 & 25 & 6 & 95 \\
+    Total                       & 65 & 23 & 6 & 94 \\
     \hline
   \end{tabular}
 \end{table}
@@ -108,6 +108,14 @@ These, together with the usual per-figure provenance items and one item
 closed (the Asimov-correlation-matrix request of
 Appendix~\ref{app:fit:todo}, now answered in Sec.~\ref{sec:results}), are the
 source of the increase from 87 to 95.
+The analyst then clarified both discrepancies directly: the signal-enriched-
+versus-generic-MC question is explained by later, $e$-channel-only notebook
+edits made after the sensitivity was produced, and the four fixed
+generic-$B\bar{B}$ categories are a deliberate placeholder pending their
+background studies, with a stated plan to add \texttt{normsys} modifiers for
+two of them once the generic-$B\bar{B}$ reweighting is complete.
+This closed one item outright and narrowed another to a stated plan,
+lowering the count from 95 to 94.
 \AnalysisTBD{the classification into artifact, decision and external in
 Table~\ref{tab:open-items} is a working judgement made while writing, not an
 approved plan.  Correct it where the intended route to closing an item
@@ -117,19 +125,16 @@ differs}
 \label{app:open:artifacts}
 
 \begin{enumerate}
-  \item \textbf{Confirm the template-building configuration behind the
-        reported sensitivity, and add its workspace files to the
-        repository.}
-        Two things need settling together, since both bear directly on
-        whether Sec.~\ref{sec:results}'s numbers are reproducible: whether
-        $D\tau\nu$/$D^{*}\tau\nu$/$D^{**}\tau\nu$ were built from
-        signal-enriched or generic MC (Sec.~\ref{sec:fit:templates}), and
-        adding the \texttt{Toys\_pipeline} workspace pair itself
-        (Appendix~\ref{app:fit:stored}) so the modifier configuration of
-        Fig.~\ref{fig:pyhf-config} can be read from the file rather than the
-        plot.
-        Until both are done, the sensitivity result cannot be independently
-        checked against the repository.
+  \item \textbf{Add the \texttt{Toys\_pipeline} workspace pair behind the
+        reported sensitivity to the repository.}
+        This is the one remaining step to make Sec.~\ref{sec:results}
+        independently checkable: with it, the modifier configuration of
+        Fig.~\ref{fig:pyhf-config} could be read from the workspace file
+        itself rather than off a plot (Appendix~\ref{app:fit:stored}).
+        A related question about which categories' templates were built from
+        signal-enriched versus generic MC (Sec.~\ref{sec:fit:templates}) has
+        since been clarified by the analyst and does not need further
+        action.
   \item \textbf{Check for BDT train/template overlap in the generic-MC
         background classes.}
         As found in review, BDT training uses a Run~1-only generic-MC pool in

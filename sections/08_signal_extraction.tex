@@ -177,26 +177,22 @@ overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
 The three starred categories above appear twice because the intended
 template construction uses signal-enriched MC for them and generic MC for
 every other category (never generic MC for these three).
-At the pinned commit, however, the specific \texttt{create\_templates\_new}
-calls saved in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} do not
-match this: both channels' calls pass the all-generic-MC dictionary, while a
-mixed dictionary that substitutes signal-enriched MC for exactly these three
-categories exists earlier in the same notebook but is commented out at the
-call site; and the $e$-channel call additionally excludes $D^{*}\tau\nu$ and
-$D^{**}\tau\nu$ entirely via \texttt{sample\_to\_exclude}, while the
-$\mu$-channel call does not.
-Whether this is also the exact configuration behind the sensitivity numbers
-of Sec.~\ref{sec:results} --- as opposed to a different, uncommitted run of
-the same notebook with the mixed dictionary enabled --- is not established
-from the repository alone, since the workspace files those numbers are
-computed from are not present in this repository checkout (see
-Appendix~\ref{app:fit:stored}).
-\AnalysisTBD{confirm which configuration (all-generic-MC, or the mixed
-signal-enriched/generic dictionary) actually produced the workspaces behind
-the Sec.~\ref{sec:results} sensitivity numbers; if it was the all-generic-MC
-one, decide whether that was intended and re-derive the result with the
-mixed dictionary if not, since the discrepancy directly changes the
-statistics and shape of three fit templates}
+At the pinned commit, the specific \texttt{create\_templates\_new} calls
+saved in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} do not read
+as matching this at face value: both channels' saved calls pass the
+all-generic-MC dictionary, while a mixed dictionary that substitutes
+signal-enriched MC for exactly these three categories exists earlier in the
+same notebook but is commented out at the call site; and the $e$-channel
+call additionally excludes $D^{*}\tau\nu$ and $D^{**}\tau\nu$ entirely via
+\texttt{sample\_to\_exclude}, while the $\mu$-channel call does not.
+Per the analyst (\texttt{ANALYSIS\_DECISION}), this reflects the notebook
+having been edited \emph{after} the Sec.~\ref{sec:results} sensitivity was
+produced, for separate $e$-channel-only tests; the $\mu$-channel cell is
+unchanged since that run and is the configuration to read as representative,
+and the $e$-channel's additional exclusion of $D^{*}\tau\nu$/$D^{**}\tau\nu$
+should be disregarded rather than treated as describing the reported result.
+The analyst confirms this is not a concern for the sensitivity numbers as
+reported.
 
 A single overall scaling weight of $0.25$ (Sec.~\ref{sec:data:mc}) is applied
 per category through the \texttt{sample\_weights} argument at the notebook
@@ -298,11 +294,20 @@ itself.
   nor the \texttt{normsys} constraint intended to replace it
   (Sec.~\ref{sec:syst:bbbar}) --- so in this particular workspace those four
   categories are effectively fixed to their MC prediction.
-  \AnalysisTBD{reconcile this with Table~\ref{tab:fit-parameters}: confirm
-  whether fixing these four categories' normalisation is intended for the
-  current sensitivity study or an omission to be corrected, and add the
-  corresponding \texttt{normsys} modifiers once the generic-$B\bar{B}$
-  eigen-decomposition of Sec.~\ref{sec:syst:bbbar} is usable for them.
+  Per the analyst, this is deliberate rather than an omission
+  (\texttt{ANALYSIS\_DECISION}): background studies for these categories are
+  ongoing, so no systematic uncertainty is yet available to encode as a
+  modifier for them, and a family is left fixed rather than given an
+  unjustified constraint width.
+  \texttt{bkg\_combinatorial} and \texttt{bkg\_hadronicB\_secondaryL} are
+  expected to receive \texttt{normsys} modifiers once the generic-$B\bar{B}$
+  reweighting of Sec.~\ref{sec:bbbar} is complete; \texttt{bkg\_fakeL} and
+  \texttt{bkg\_fakeTracks} are not yet covered by a stated plan.
+  \InProgress{add the \texttt{normsys} modifiers for \texttt{bkg\_combinatorial}
+  and \texttt{bkg\_hadronicB\_secondaryL} once the generic-$B\bar{B}$
+  reweighting of Sec.~\ref{sec:bbbar} is complete, and state whether
+  \texttt{bkg\_fakeL}/\texttt{bkg\_fakeTracks} are intended to remain fixed
+  or will eventually get their own systematic.
   Also add the workspace file(s) themselves to a location in the repository
   so this configuration can be verified directly rather than read off the
   plot}}

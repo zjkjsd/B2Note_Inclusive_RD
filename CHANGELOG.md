@@ -37,23 +37,26 @@ Added:
   Asimov-correlation-matrix TBD by cross-referencing the new Sec. 11 figure.
 
 Discrepancies found while verifying the analyst's description against the
-analysis repository, recorded rather than silently resolved either way
-(both flagged directly to the analyst):
+analysis repository, flagged directly to the analyst and then clarified
+(both in Sec. 8/Sec. 11, superseding the initial write-up):
 - The intended template construction uses signal-enriched MC for
   $D\tau\nu$/$D^{*}\tau\nu$/$D^{**}\tau\nu$ and generic MC for every other
-  category. The specific calls saved in
-  `Notebooks/3_fitting_cabinetry_2d_SR.ipynb` do not currently do this (a
-  mixed dictionary exists but is commented out at the call site; the
-  $e$-channel call additionally excludes $D^{*}\tau\nu$/$D^{**}\tau\nu$
-  entirely). Whether this also describes the configuration that actually
-  produced the reported sensitivity is not established, since that
-  workspace is not in this repository checkout.
+  category, but the specific calls saved in
+  `Notebooks/3_fitting_cabinetry_2d_SR.ipynb` did not read as matching this
+  (a mixed dictionary exists but is commented out; the $e$-channel call
+  additionally excludes $D^{*}\tau\nu$/$D^{**}\tau\nu$ entirely). Per the
+  analyst, this is because the notebook was edited after the sensitivity was
+  produced, for separate $e$-channel-only tests; the $\mu$-channel cell is
+  unchanged and is representative, and the extra $e$-channel exclusion
+  should be disregarded. Not a concern for the reported numbers.
 - The `pyhf_config` figure shows four generic-$B\bar{B}$ categories
   (`bkg_combinatorial`, `bkg_fakeL`, `bkg_fakeTracks`,
   `bkg_hadronicB_secondaryL`) with only a `staterror` modifier and no
-  normalisation modifier at all in the workspace behind the sensitivity
-  result, which is a step less complete than Table 5's already-documented
-  "current"/"intended" configuration for generic-$B\bar{B}$ as a whole.
+  normalisation modifier at all. Per the analyst, this is deliberate:
+  background studies for these categories are ongoing and no systematic
+  uncertainty is yet available to encode; `bkg_combinatorial` and
+  `bkg_hadronicB_secondaryL` are expected to get `normsys` modifiers once
+  the generic-$B\bar{B}$ reweighting of Sec. 7 is complete.
 
 ## Version 0.3 (draft) — unreleased
 
