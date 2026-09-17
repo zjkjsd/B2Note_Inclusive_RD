@@ -41,18 +41,18 @@ a claim about the analysis.
     5 Classifier                & 6 & 0 & 0 & 6 \\
     6 Corrections               & 2 & 5 & 0 & 7 \\
     7 Generic $B\bar{B}$        & 5 & 0 & 0 & 5 \\
-    8 Signal extraction         & 3 & 4 & 0 & 7 \\
+    8 Signal extraction         & 8 & 4 & 0 & 12 \\
     9 Systematics               & 3 & 0 & 0 & 3 \\
     10 Validation, box opening  & 3 & 3 & 0 & 6 \\
-    11 Results                  & 1 & 0 & 0 & 1 \\
+    11 Results                  & 2 & 1 & 0 & 3 \\
     12 Summary                  & 0 & 1 & 0 & 1 \\
     Appendix: selections        & 0 & 1 & 0 & 1 \\
     Appendix: categories        & 0 & 1 & 2 & 3 \\
     Appendix: classifier        & 7 & 0 & 0 & 7 \\
-    Appendix: fit               & 6 & 1 & 0 & 7 \\
+    Appendix: fit               & 7 & 0 & 1 & 8 \\
     Appendix: open items        & 0 & 1 & 0 & 1 \\
     \hline
-    Total                       & 57 & 25 & 5 & 87 \\
+    Total                       & 64 & 25 & 6 & 95 \\
     \hline
   \end{tabular}
 \end{table}
@@ -90,6 +90,24 @@ Run~1 and Run~2, so the $68\%$ overlap figure of Sec.~\ref{sec:data:overlap}
 understates the denominator and overstates the true overlap fraction; a new
 item asking for the missing Run~2 count was added, which is the source of
 the increase from 86 to 87.
+A subsequent pass wrote up the sensitivity-calculation procedure the analyst
+described (Sec.~\ref{sec:fit:templates}, Sec.~\ref{sec:fit:modifiers},
+Sec.~\ref{sec:fit:validation}, Sec.~\ref{sec:results}) and inserted three
+more previously-unused figures (\texttt{MC\_fitVars\_2d},
+\texttt{pyhf\_config}, \texttt{pyhf\_fit\_correlation}).
+Cross-checking that description against the analysis repository surfaced two
+genuine discrepancies rather than documentation gaps, each recorded as its
+own item rather than silently resolved one way or the other: the executed
+template-building calls do not use signal-enriched MC for the three
+$\tau\nu$ categories as intended (Sec.~\ref{sec:fit:templates}), and the
+workspace pair behind the reported sensitivity is not present in this
+repository checkout, so its generic-$B\bar{B}$ modifier configuration could
+only be read off a plot (Sec.~\ref{sec:fit:modifiers},
+Appendix~\ref{app:fit:stored}).
+These, together with the usual per-figure provenance items and one item
+closed (the Asimov-correlation-matrix request of
+Appendix~\ref{app:fit:todo}, now answered in Sec.~\ref{sec:results}), are the
+source of the increase from 87 to 95.
 \AnalysisTBD{the classification into artifact, decision and external in
 Table~\ref{tab:open-items} is a working judgement made while writing, not an
 approved plan.  Correct it where the intended route to closing an item
@@ -99,6 +117,19 @@ differs}
 \label{app:open:artifacts}
 
 \begin{enumerate}
+  \item \textbf{Confirm the template-building configuration behind the
+        reported sensitivity, and add its workspace files to the
+        repository.}
+        Two things need settling together, since both bear directly on
+        whether Sec.~\ref{sec:results}'s numbers are reproducible: whether
+        $D\tau\nu$/$D^{*}\tau\nu$/$D^{**}\tau\nu$ were built from
+        signal-enriched or generic MC (Sec.~\ref{sec:fit:templates}), and
+        adding the \texttt{Toys\_pipeline} workspace pair itself
+        (Appendix~\ref{app:fit:stored}) so the modifier configuration of
+        Fig.~\ref{fig:pyhf-config} can be read from the file rather than the
+        plot.
+        Until both are done, the sensitivity result cannot be independently
+        checked against the repository.
   \item \textbf{Check for BDT train/template overlap in the generic-MC
         background classes.}
         As found in review, BDT training uses a Run~1-only generic-MC pool in

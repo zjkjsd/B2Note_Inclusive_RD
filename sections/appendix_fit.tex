@@ -46,6 +46,22 @@ The most complete file, \texttt{2dws\_SR\_e\_MC16rd\_fakeD\_cont}, contains
 the samples and modifiers of Table~\ref{tab:stored-modifiers}, with
 $49\,221$ observed entries in its single channel.
 
+A separate, more current set of workspaces underlies the preliminary
+sensitivity result of Sec.~\ref{sec:results}: a two-channel (signal region
+plus sideband), per-channel ($e$, $\mu$) pair referenced by
+\texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} under paths such as
+\texttt{../Toys\_pipeline/2d\_ws\_SR\_e\_50\_50\_allUncer.json}.
+The \texttt{Toys\_pipeline/} directory does not exist in this repository
+checkout, so those workspace files cannot be inspected directly; the
+modifier configuration of Sec.~\ref{sec:fit:modifiers}'s
+Fig.~\ref{fig:pyhf-config} is read off a plot rather than the file itself,
+and the four-workspace table above should not be taken as documenting them.
+\AnalysisTBD{add the \texttt{Toys\_pipeline} workspace files (or copies of
+them) to a location in this repository, so that Table~\ref{tab:stored-workspaces}
+and Table~\ref{tab:stored-modifiers} can be regenerated from the workspace
+that actually produced Sec.~\ref{sec:results}, and so that its content no
+longer has to be read off a plot}
+
 \begin{table}[htbp]
   \centering
   \caption{Samples and modifiers of
@@ -177,8 +193,15 @@ notes tabulate this per sample/parameter as modifier type
 (\texttt{normfactor}/\texttt{normsys}/\texttt{histosys}/\texttt{staterror}),
 constraint width, which region(s) it applies in, and whether the response is
 one- or two-sided --- a structure this table could follow directly}
-\AnalysisTBD{correlation matrix of the fitted parameters from an Asimov fit,
-and the expected uncertainty on the parameter of interest}
+A preliminary version of this now exists: the electron-channel correlation
+matrix and the expected uncertainty on the parameter of interest are given
+in Sec.~\ref{sec:results} (Fig.~\ref{fig:pyhf-correlation},
+Table~\ref{tab:sensitivity-breakdown}).
+\AnalysisTBD{the equivalent correlation matrix for the muon channel, the
+constrained (\texttt{normsys}) parameters currently omitted from
+Fig.~\ref{fig:pyhf-correlation}, and a version extracted directly from the
+workspace once Appendix~\ref{app:fit:stored}'s request to add the
+\texttt{Toys\_pipeline} workspace files to the repository is done}
 \AnalysisTBD{alternative binnings and the stability of the extracted yields
 against them, including the effect of the population threshold that sets the
 bin counts of Table~\ref{tab:stored-workspaces}}

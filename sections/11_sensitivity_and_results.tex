@@ -1,13 +1,124 @@
+% PROVENANCE (section-level)
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/3_fitting_cabinetry_2d_SR.ipynb (Asimov and toy
+%                 pyhf/cabinetry fits, cells 36-53); the workspace files
+%                 themselves are not present in this repository checkout
+%                 (Appendix~\ref{app:fit:stored}), so the numbers below are
+%                 the analyst's own summary of running that notebook rather
+%                 than a stored, reproducible table
+%   commit      : ad2f2ec
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 (365 fb$^{-1}$) plus
+%                 partial Run 2 (125 fb$^{-1}$ processed); e and mu channels,
+%                 fit separately
+%   selection   : lgb_tight (Eq. lgb-tight) plus offline_cut (Eq.
+%                 offline-cut); D-mass signal region plus sideband
+%   corrections : PID; generic-MC luminosity 0.25; generic-BBbar weights
 \section{Expected Sensitivity and Results}
 \label{sec:results}
-\InProgress{Asimov sensitivity and supporting plots are planned to be added
-here once the fit-validation study of Sec.~\ref{sec:fit:validation} is
-produced.  An expected sensitivity on $R(D)$ of approximately $12\%$
-(including systematics, MC statistics and background systematics) for the
-combined Run~1 ($365$\,fb$^{-1}$) plus partial Run~2 ($125$\,fb$^{-1}$
-processed) Belle~II data-sample has been quoted by the analyst; it is not
-yet backed by a producing artifact in this repository and should be treated
-as indicative rather than final until Sec.~\ref{sec:fit:validation}'s study
-exists.
-No data result for the signal region is shown while the analysis is
-blinded}
+
+No data result for the signal region is shown while the analysis is blinded.
+This section instead reports an Asimov (data-equals-expectation) sensitivity
+study: the fitted data is the exact sum of all template samples, so the
+fitted normalisations are expected to return $1$ and constrained nuisance
+parameters $0$: the only meaningful output is the returned \emph{uncertainty}
+on the parameter of interest, the $B\to D\tau\nu$ normalisation
+(Sec.~\ref{sec:fit:poi}), which is what this section calls the sensitivity.
+The method is described in Sec.~\ref{sec:fit:validation}: fit with every
+modifier but the parameter of interest fixed to obtain the data-statistics-only
+uncertainty, then free one further modifier at a time and attribute its
+systematic contribution to the quadrature difference between the new and
+previous returned uncertainty.
+Electron and muon channels are fit separately, each against its own
+two-channel (signal region plus sideband) workspace, and the two resulting
+uncertainties are combined at the end (below) rather than fit jointly.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Preliminary Asimov-sensitivity breakdown on the $B\to D\tau\nu$
+  normalisation, by channel. Each row is the quadrature difference introduced
+  by freeing that modifier relative to the row above; ``more systematics''
+  denotes contributions not yet enabled in the fit (Sec.~\ref{sec:syst}).}
+  \label{tab:sensitivity-breakdown}
+  \small
+  \begin{tabular}{l c c}
+    \hline
+    Contribution & $e$ channel & $\mu$ channel \\
+    \hline
+    Data statistics only (all other modifiers fixed) & $11.8\%$ & $19.1\%$ \\
+    $+$ norm.\ sys.\ ($D^{*}\tau\nu$, $D^{**}\tau\nu$) & $\pm 4.6\%$ & $\pm 4.6\%$ \\
+    $+$ norm.\ sys.\ (continuum) & $\pm 2.4\%$ & $\pm 1.3\%$ \\
+    $+$ MC statistics (\texttt{staterror}) & $\pm 5.8\%$ & $\pm 9.3\%$ \\
+    $+$ more systematics (not yet enabled) & \multicolumn{2}{c}{---} \\
+    \hline
+    \textbf{Total, this channel} & $\gtrsim 14.5\%$ & $\gtrsim 22.1\%$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The $\gtrsim$ notation is deliberate: Sec.~\ref{sec:syst} lists several
+identified systematics (fake-$D$ extrapolation, $D^{**}\ell\nu$/gap-mode
+modelling, form factors, tracking and PID efficiency, fit bias) not yet
+enabled as modifiers in this workspace, so the totals above are expected to
+grow, not shrink, as the fit model is completed.
+
+\paragraph{Combination.}
+The electron channel is expected to be, and is, more sensitive than the muon
+channel: the tighter muon momentum requirement ($p_{\mu} > 0.6$\,GeV$/c$
+versus $p_{e} > 0.3$\,GeV$/c$, Sec.~\ref{sec:reconstruction}) removes a larger
+fraction of $B\to D\tau\nu$ signal because the signal lepton momentum
+spectrum peaks at low momentum, giving the muon channel roughly half the
+signal-enriched $D\tau\nu$ statistics of the electron channel
+(Table~\ref{tab:sensitivity-sample-sizes}).
+The two channels' uncertainties are combined as an inverse-variance-weighted
+average, $\sigma_{\rm comb} = \left(\sigma_{e}^{-2} +
+\sigma_{\mu}^{-2}\right)^{-1/2}$, which gives $\sigma_{\rm comb} \approx
+12.2\%$ for $14.5\%$ and $22.1\%$ above --- consistent with the analyst's
+quoted value to the precision shown.
+\AnalysisTBD{confirm this is in fact the combination formula used (rather
+than, for example, a joint two-channel fit), and state why a simple
+inverse-variance combination of two independent Asimov results is an
+adequate substitute for fitting $e$ and $\mu$ simultaneously}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : same Asimov fit as the table above (electron channel)
+%   commit      : ad2f2ec
+%   sample      : as above, e channel
+%   selection   : as above
+%   corrections : as above
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{pyhf_fit_correlation.png}
+  \caption{Correlation matrix of the free normalisation parameters from the
+  electron-channel Asimov fit. Only parameter pairs with
+  $|\rho| \geq 0.3$ are shown; smaller correlations are omitted from the
+  plot rather than being exactly zero.
+  The parameter of interest, $D\tau\nu$\_norm, is most anti-correlated with
+  $D^{**}\ell\nu$~+~gap\_norm ($\rho=-0.66$) and $D^{**}\tau\nu$\_norm
+  ($\rho=-0.40$), and positively correlated with $D^{*}\ell\nu$\_norm
+  ($\rho=0.31$) --- consistent with the overlapping-shape difficulty of
+  Sec.~\ref{sec:intro:motivation} and Fig.~\ref{fig:mc-fitvars-2d}: the
+  categories whose $\mmiss$/$\pdl$ shapes most resemble $D\tau\nu$ are also
+  the ones most correlated with its fitted normalisation.
+  \AnalysisTBD{the equivalent matrix for the muon channel, and for the
+  constrained (\texttt{normsys}) parameters currently omitted from this
+  plot}}
+  \label{fig:pyhf-correlation}
+\end{figure}
+
+\paragraph{Caveats.}
+This result should be read together with two open items raised elsewhere in
+this note, both of which can change the numbers above rather than merely
+their presentation: whether the templates for $D\tau\nu$, $D^{*}\tau\nu$ and
+$D^{**}\tau\nu$ were built from signal-enriched or generic MC
+(Sec.~\ref{sec:fit:templates}), and whether the four generic-$B\bar{B}$
+categories shown fixed in Fig.~\ref{fig:pyhf-config} were intended to be
+fixed for this study.
+The parameter of interest is the $B\to D\tau\nu$ normalisation, not $R(D)$
+itself (Sec.~\ref{sec:fit:poi}); the sensitivity above should not yet be
+read as ``the expected uncertainty on $R(D)$'' until that relation is
+written down.
+\AnalysisTBD{once Sec.~\ref{sec:fit:poi}'s normalisation-to-$R(D)$ relation
+is established and the remaining identified systematics of Sec.~\ref{sec:syst}
+are enabled, update this section and record whether the total sensitivity
+moves outside the range indicated by the current, partial breakdown}

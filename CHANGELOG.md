@@ -5,6 +5,56 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.4 (draft) — unreleased
+
+Documents the sensitivity-calculation procedure and preliminary Asimov
+sensitivity described by the analyst, and inserts the four supporting
+figures added to `figures/` (`Kinematic_tagging_tech` was already in the
+note from v0.3; `MC_fitVars_2d`, `pyhf_config` and `pyhf_fit_correlation`
+are new).
+
+Added:
+- Sec. 8 (Templates): a new table of reconstructed event counts across all
+  fourteen truth categories, Run 1 + Run 2 combined, $e$ and $\mu$ channels,
+  supplementing the two existing, narrower Sec. 4 reference points.
+- Sec. 8 (Fit observables): the `MC_fitVars_2d` figure (motivating the
+  two-dimensional fit directly) and the exact nominal binning, prune
+  threshold ($10$) and merge threshold ($5$) used to build the pyhf
+  templates, replacing two `InProgress` placeholders with `CODE_FACT`.
+- Sec. 8 (Modifiers): the `pyhf_config` figure, showing the actual
+  channel/sample/modifier configuration of the workspace behind the
+  sensitivity result.
+- Sec. 8 (Fit validation) and Sec. 11 (renamed content, was a one-paragraph
+  placeholder): the Asimov-sensitivity method, a per-channel uncertainty
+  breakdown table (data statistics, $D^{*}\tau\nu$/$D^{**}\tau\nu$ norm.
+  sys., continuum norm. sys., MC statistics), the `pyhf_fit_correlation`
+  figure, and the $e$+$\mu$ inverse-variance combination ($\approx 12.2\%$),
+  replacing the unsourced $\sim 12\%$ placeholder flagged in PR #2 review.
+- Abstract: a preliminary combined sensitivity statement ($\approx 12\%$),
+  replacing part of the previous "to be completed" TBD.
+- Appendix (fit): a note that the `Toys_pipeline` workspace pair behind the
+  sensitivity result is not present in this repository checkout; closed the
+  Asimov-correlation-matrix TBD by cross-referencing the new Sec. 11 figure.
+
+Discrepancies found while verifying the analyst's description against the
+analysis repository, recorded rather than silently resolved either way
+(both flagged directly to the analyst):
+- The intended template construction uses signal-enriched MC for
+  $D\tau\nu$/$D^{*}\tau\nu$/$D^{**}\tau\nu$ and generic MC for every other
+  category. The specific calls saved in
+  `Notebooks/3_fitting_cabinetry_2d_SR.ipynb` do not currently do this (a
+  mixed dictionary exists but is commented out at the call site; the
+  $e$-channel call additionally excludes $D^{*}\tau\nu$/$D^{**}\tau\nu$
+  entirely). Whether this also describes the configuration that actually
+  produced the reported sensitivity is not established, since that
+  workspace is not in this repository checkout.
+- The `pyhf_config` figure shows four generic-$B\bar{B}$ categories
+  (`bkg_combinatorial`, `bkg_fakeL`, `bkg_fakeTracks`,
+  `bkg_hadronicB_secondaryL`) with only a `staterror` modifier and no
+  normalisation modifier at all in the workspace behind the sensitivity
+  result, which is a step less complete than Table 5's already-documented
+  "current"/"intended" configuration for generic-$B\bar{B}$ as a whole.
+
 ## Version 0.3 (draft) — unreleased
 
 Responds to review comments on PR #2 (a mix of an automated reviewer and the

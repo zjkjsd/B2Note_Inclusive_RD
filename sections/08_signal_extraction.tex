@@ -29,19 +29,89 @@ likelihood.
 The templates are built from the same MC categories in both channels, so the
 sideband determines the fake-$D$ normalisation and shape in situ rather than
 through an external prior.
-\InProgress{motivation for a two-dimensional fit rather than two
-one-dimensional fits, quantified in terms of the correlation between $\mmiss$
-and $\pdl$ and the separation it buys between signal and normalisation.
-A two-dimensional histogram of $\mmiss$ versus $\pdl$ for every MC component
-entering the fit is planned, which is expected to show the strong
-correlation directly; a two-dimensional binned likelihood fit can use that
-correlation to help separate components with similar one-dimensional
-projections, which a pair of independent one-dimensional fits cannot}
-\InProgress{the nominal binning in each channel, together with the
-bin-population threshold and the merging rule actually used.  The template
-builder exposes \texttt{bin\_threshold} and \texttt{merge\_threshold} but the
-nominal values are not recorded in library code; moving the nominal binning
-into \texttt{utilities.py} is planned}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : a $\pdl$-versus-$\mmiss$ 2D-histogram plotting script or
+%                 notebook cell; the exact producing file was not found by a
+%                 repository-wide search for this filename or for a matching
+%                 \texttt{savefig} call, so it is not identified
+%   commit      : ad2f2ec
+%   sample      : generic MC, scaled to $1\,\mathrm{ab}^{-1}$
+%   selection   : none (\texttt{cut=None} per the plot title); this is a
+%                 pre-selection truth-category shape, not the post-selection
+%                 template shape
+%   corrections : not confirmed from the image alone
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{MC_fitVars_2d.png}
+  \caption{$\pdl$ versus $\mmiss$ for every generic-MC truth category, before
+  any selection.
+  This is the motivating plot for a two-dimensional fit: every category's
+  shape is a broad, correlated band in this plane rather than separable in
+  $\mmiss$ or $\pdl$ alone, and several categories occupy overlapping regions
+  of it, exactly the difficulty motivated in Sec.~\ref{sec:intro:motivation}.
+  The panel labels differ from the category names used elsewhere in this
+  note: \texttt{bkg\_TDFl} is \texttt{bkg\_fakeL} and \texttt{bkg\_singleBbkg}
+  is \texttt{bkg\_hadronicB\_secondaryL}; the two \texttt{$D\ell\nu$\_gap\_*}
+  panels are the narrow gap sub-categories (integer codes 15 and 16 of
+  Appendix~\ref{app:categories:codes}) shown \emph{before} they are merged
+  into the single $D\ell\nu$\_gap template of Sec.~\ref{sec:truth:merging}.
+  \AnalysisTBD{identify the producing script/notebook cell, and confirm
+  whether the same shapes hold after the nominal selection
+  (\texttt{offline\_cut} plus \texttt{lgb\_tight}) used to build the actual
+  fit templates, since this plot is explicitly unselected}}
+  \label{fig:mc-fitvars-2d}
+\end{figure}
+
+This directly motivates a two-dimensional fit over two independent
+one-dimensional fits: a two-dimensional binned likelihood can exploit the
+correlation between $\mmiss$ and $\pdl$ visible in
+Fig.~\ref{fig:mc-fitvars-2d} to help separate components with similar
+one-dimensional projections, which a pair of one-dimensional fits cannot.
+\InProgress{quantify the correlation coefficient between $\mmiss$ and $\pdl$
+per category, rather than relying on Fig.~\ref{fig:mc-fitvars-2d} alone, and
+confirm the same conclusion holds after the nominal selection rather than
+before it}
+
+The nominal binning is fixed per channel and per fit region rather than
+derived from the data (\texttt{ANALYSIS\_DECISION}).
+In the $D$-mass signal region, $\pdl \in \{0.4, 0.6, 0.8\} \cup
+\mathrm{linspace}(1,3,41) \cup \{3.1, 3.2, 3.3, 3.4, 3.6, 3.8, 4, 4.2, 4.4,
+4.6, 4.8\}$ (irregular, finer in the bulk of the distribution) and
+$\mmiss \in \mathrm{linspace}(-2.5,2.5,11) \cup \mathrm{linspace}(2.8,10,31)$;
+in the $D$-mass sideband, both variables instead use a coarser, regular
+binning, $\pdl \in \mathrm{linspace}(0.4,4.8,21)$ and
+$\mmiss \in \mathrm{linspace}(-2.5,10,21)$
+(\texttt{CODE\_FACT}: \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb},
+the cell defining \texttt{p\_D\_l\_bins}/\texttt{MM2\_bins}/
+\texttt{p\_D\_l\_bins\_sb}/\texttt{MM2\_bins\_sb}, matches exactly).
+Two distinct mechanisms then act on the flattened 2D bins before they become
+the \texttt{pyhf} template, both exposed as arguments of
+\texttt{create\_templates\_new} (lines 1087--1284) rather than hardcoded: a
+\texttt{bin\_threshold} below which a bin is dropped outright (the function
+default is $1$, i.e.\ only literally empty bins; the fitting notebook
+overrides this to $10$), and, separately, a \texttt{merge\_threshold} used by
+\texttt{rebin\_histogram} (line 984) to \emph{merge} adjacent bins, rather
+than drop them, until each merged bin's content reaches the threshold (the
+notebook passes $5$).
+This is a more precise description than ``empty bins, and separately bins
+below 10, are removed'': in the executed notebook the single prune threshold
+of $10$ already subsumes the empty-bin case ($0 < 10$), and the separate
+merge step combines rather than discards the remaining low-population bins.
+\AnalysisTBD{document the exact order/interaction between the prune and merge
+steps and which channel(s) each is applied to --- this was not established
+from the code alone --- and move the nominal threshold values
+(\texttt{bin\_threshold}$=10$, \texttt{merge\_threshold}$=5$) out of the
+calling notebook and into a documented default in \texttt{utilities.py}.
+State the resulting bin count per channel once regenerated: the counts in
+Table~\ref{tab:stored-workspaces} predate this and should not be assumed
+current}
+The remaining bins are flattened into the \texttt{pyhf} sample-data list, and
+the per-bin Poisson uncertainty --- the square root of the sum of squared
+per-event weights (\texttt{utilities.py} lines 1121--1143) --- is flattened
+identically to form the \texttt{staterror} data of
+Sec.~\ref{sec:fit:modifiers}.
 
 \subsection{Templates}
 \label{sec:fit:templates}
@@ -56,6 +126,84 @@ Per-category MC breakdowns of both fit variables, in regions enhanced for
 each of the two signal-like modes, are shown in
 Appendix~\ref{app:fit:composition}; they illustrate directly the
 overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : analyst-reported reconstructed event counts, precise
+%                 producing notebook cell and selection not yet confirmed
+%                 against a stored printout
+%   commit      : ad2f2ec
+%   sample      : MC16rd, Run 1 + Run 2 combined, e and mu channels
+%   selection   : offline_cut (Eq. offline-cut) plus lgb_tight (Eq.
+%                 lgb-tight), spanning the full D-mass range rather than
+%                 the signal region or sideband separately (unconfirmed)
+%   corrections : not confirmed
+\begin{table}[htbp]
+  \centering
+  \caption{Reconstructed event counts feeding template construction, Run~1
+  plus Run~2 combined.  Generic MC supplies every category except the three
+  starred rows, which are signal-enriched MC.
+  \AnalysisTBD{confirm the exact selection these counts were computed at (in
+  particular whether both D-mass regions are combined here, as assumed), the
+  producing notebook cell, and the Run~1/Run~2 split}}
+  \label{tab:sensitivity-sample-sizes}
+  \small
+  \begin{tabular}{l r r}
+    \hline
+    Category & $e$ channel & $\mu$ channel \\
+    \hline
+    \texttt{bkg\_fakeD}                    & $146\,394$ & $103\,552$ \\
+    \texttt{bkg\_fakeL}                    & $1\,650$   & $7\,347$   \\
+    \texttt{bkg\_fakeTracks}               & $5\,454$   & $3\,812$   \\
+    \texttt{bkg\_continuum}                & $18\,294$  & $9\,260$   \\
+    \texttt{bkg\_combinatorial}            & $31\,537$  & $14\,422$  \\
+    \texttt{bkg\_hadronicB\_secondaryL}    & $17\,302$  & $8\,700$   \\
+    $D\ell\nu$                             & $210\,925$ & $174\,798$ \\
+    $D^{*}\ell\nu$                         & $71\,243$  & $61\,684$  \\
+    $D^{**}\ell\nu$ (narrow)                & $29\,191$  & $23\,696$  \\
+    $D^{**}\ell\nu$ (broad)                 & $22\,796$  & $17\,684$  \\
+    $D\ell\nu$\_gap                        & $10\,062$  & $7\,381$   \\
+    $D\tau\nu$\rlap{$^{*}$}                 & $8\,637$   & $4\,575$   \\
+    $D^{*}\tau\nu$\rlap{$^{*}$}             & $2\,590$   & $1\,429$   \\
+    $D^{**}\tau\nu$\rlap{$^{*}$}            & $2\,482$   & $1\,273$   \\
+    \hline
+    $D\tau\nu$ (signal-enriched)$^{*}$     & $614\,559$ & $325\,582$ \\
+    $D^{*}\tau\nu$ (signal-enriched)$^{*}$ & $272\,979$ & $151\,346$ \\
+    $D^{**}\tau\nu$ (signal-enriched)$^{*}$& $224\,552$ & $117\,201$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The three starred categories above appear twice because the intended
+template construction uses signal-enriched MC for them and generic MC for
+every other category (never generic MC for these three).
+At the pinned commit, however, the specific \texttt{create\_templates\_new}
+calls saved in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} do not
+match this: both channels' calls pass the all-generic-MC dictionary, while a
+mixed dictionary that substitutes signal-enriched MC for exactly these three
+categories exists earlier in the same notebook but is commented out at the
+call site; and the $e$-channel call additionally excludes $D^{*}\tau\nu$ and
+$D^{**}\tau\nu$ entirely via \texttt{sample\_to\_exclude}, while the
+$\mu$-channel call does not.
+Whether this is also the exact configuration behind the sensitivity numbers
+of Sec.~\ref{sec:results} --- as opposed to a different, uncommitted run of
+the same notebook with the mixed dictionary enabled --- is not established
+from the repository alone, since the workspace files those numbers are
+computed from are not present in this repository checkout (see
+Appendix~\ref{app:fit:stored}).
+\AnalysisTBD{confirm which configuration (all-generic-MC, or the mixed
+signal-enriched/generic dictionary) actually produced the workspaces behind
+the Sec.~\ref{sec:results} sensitivity numbers; if it was the all-generic-MC
+one, decide whether that was intended and re-derive the result with the
+mixed dictionary if not, since the discrepancy directly changes the
+statistics and shape of three fit templates}
+
+A single overall scaling weight of $0.25$ (Sec.~\ref{sec:data:mc}) is applied
+per category through the \texttt{sample\_weights} argument at the notebook
+call site, rather than inside \texttt{create\_templates\_new} itself; it
+scales both the bin content and, since the per-bin uncertainty is computed
+from the sum of squared weights, its Poisson statistical uncertainty
+consistently.
 
 \subsection{Parameter of interest}
 \label{sec:fit:poi}
@@ -112,6 +260,54 @@ commit, and the intended configuration where the two differ.
     \hline
   \end{tabular}
 \end{table}
+
+Table~\ref{tab:fit-parameters} documents \texttt{create\_workspace}'s
+defaults; it is not the same workspace that produced the sensitivity result
+of Sec.~\ref{sec:results}, which instead comes from a separate, per-channel
+($e$, $\mu$) two-channel (signal region plus sideband) workspace pair
+referenced by \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} under a
+\texttt{Toys\_pipeline/} path not present in this repository checkout
+(Appendix~\ref{app:fit:stored}), so its modifier configuration can only be
+read off the plot below rather than confirmed against the workspace file
+itself.
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : the Toys_pipeline workspace pair behind Sec.~\ref{sec:results};
+%                 the workspace files themselves are not present in this
+%                 repository checkout, so this reflects the plot only
+%   commit      : ad2f2ec
+%   sample      : n/a (model configuration)
+%   selection   : n/a
+%   corrections : n/a
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{pyhf_config.png}
+  \caption{Samples and modifier types of the workspace behind the
+  Sec.~\ref{sec:results} sensitivity result, one channel per row group:
+  \texttt{channel\_0} is the $D$-mass signal region and \texttt{channel\_1}
+  the sideband, matching Sec.~\ref{sec:fit:observables}.
+  Electron and muon modes are fit separately, each with its own such
+  workspace.
+  Unlike Table~\ref{tab:fit-parameters}, generic-$B\bar{B}$ appears here as
+  four separate categories (\texttt{bkg\_combinatorial},
+  \texttt{bkg\_fakeL}, \texttt{bkg\_fakeTracks},
+  \texttt{bkg\_hadronicB\_secondaryL}), each with \emph{only} a
+  \texttt{staterror} modifier and no dedicated normalisation modifier at
+  all --- neither the free \texttt{normfactor} of Table~\ref{tab:fit-parameters}
+  nor the \texttt{normsys} constraint intended to replace it
+  (Sec.~\ref{sec:syst:bbbar}) --- so in this particular workspace those four
+  categories are effectively fixed to their MC prediction.
+  \AnalysisTBD{reconcile this with Table~\ref{tab:fit-parameters}: confirm
+  whether fixing these four categories' normalisation is intended for the
+  current sensitivity study or an omission to be corrected, and add the
+  corresponding \texttt{normsys} modifiers once the generic-$B\bar{B}$
+  eigen-decomposition of Sec.~\ref{sec:syst:bbbar} is usable for them.
+  Also add the workspace file(s) themselves to a location in the repository
+  so this configuration can be verified directly rather than read off the
+  plot}}
+  \label{fig:pyhf-config}
+\end{figure}
 
 Three properties of the generated workspace require attention.
 
@@ -218,13 +414,30 @@ not a substitute for, quantifying the difference directly here}
 \subsection{Fit validation}
 \label{sec:fit:validation}
 
-\InProgress{Asimov sensitivity, toy studies, pull distributions and
-linearity tests, each reported separately from any result on data.  The
-machinery exists in \texttt{utilities.pyhf\_utils} and
+A preliminary Asimov-sensitivity study now exists and is reported in
+Sec.~\ref{sec:results}; the method is to fit the Asimov dataset (the exact
+sum of all template samples) once per channel with every modifier fixed
+except the parameter of interest, giving the data-statistics-only
+uncertainty, then re-fit repeatedly with one further modifier freed at a
+time, attributing each modifier's systematic contribution to the quadrature
+difference between the new and previous returned uncertainty on the
+$B\to D\tau\nu$ normalisation.
+This mechanism (progressively unmasking fixed parameters and refitting) is
+implemented in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb}
+(\texttt{cabinetry}/\texttt{pyhf} Asimov and toy-fit calls, cells 36--53,
+including the quadrature-difference arithmetic); no stored artifact in the
+repository prints or tabulates the resulting per-modifier breakdown, so the
+numbers of Sec.~\ref{sec:results} are the analyst's own summary of running
+this notebook rather than a committed table.
+\AnalysisTBD{add a script or notebook cell that prints/records the labelled
+per-modifier uncertainty breakdown directly, rather than leaving it as a
+manually-assembled summary}
+
+Toy studies, pull distributions and linearity tests remain not yet done.
+The machinery exists in \texttt{utilities.pyhf\_utils} and
 \texttt{utilities.toy\_utils} and in \texttt{Fit\_toys/FitToys\_b2luigi.py};
-producing and recording the nominal study, including the results and plots of
-Sec.~\ref{sec:results}, is planned but not yet done.
-As an organisational template only, drawn from several sibling Belle~II
+producing and recording the nominal study is planned but not yet done.
+\InProgress{As an organisational template only, drawn from several sibling Belle~II
 semileptonic-tag notes rather than as numbers to reproduce: a toy study
 generates $O(10^{3})$ Poisson-fluctuated pseudo-datasets around the Asimov
 best fit (auxiliary measurements fluctuated too, for the nuisance
