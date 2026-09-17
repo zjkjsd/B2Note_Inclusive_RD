@@ -37,7 +37,16 @@ uncertainties are combined at the end (below) rather than fit jointly.
   \caption{Preliminary Asimov-sensitivity breakdown on the $B\to D\tau\nu$
   normalisation, by channel. Each row is the quadrature difference introduced
   by freeing that modifier relative to the row above; ``more systematics''
-  denotes contributions not yet enabled in the fit (Sec.~\ref{sec:syst}).}
+  denotes contributions not yet enabled in the fit (Sec.~\ref{sec:syst}).
+  The ``Total'' row is the uncertainty returned directly by the fit with all
+  listed modifiers simultaneously free, not a value recomputed from the rows
+  above: summing the four individual differences in quadrature gives
+  $14.1\%$ ($e$) and $21.8\%$ ($\mu$), close to but not exactly the $14.5\%$
+  and $22.1\%$ quoted, since freeing modifiers one at a time and summing
+  their individual differences in quadrature is only exactly equal to the
+  all-at-once result if the modifiers are fully orthogonal.  Per the analyst,
+  this gap is minor and the numbers are preliminary; they are not corrected
+  to force exact agreement.}
   \label{tab:sensitivity-breakdown}
   \small
   \begin{tabular}{l c c}
@@ -55,11 +64,12 @@ uncertainties are combined at the end (below) rather than fit jointly.
   \end{tabular}
 \end{table}
 
-The $\gtrsim$ notation is deliberate: Sec.~\ref{sec:syst} lists several
-identified systematics (fake-$D$ extrapolation, $D^{**}\ell\nu$/gap-mode
-modelling, form factors, tracking and PID efficiency, fit bias) not yet
-enabled as modifiers in this workspace, so the totals above are expected to
-grow, not shrink, as the fit model is completed.
+The $\gtrsim$ notation reflects the outlook, not the quadrature gap noted in
+the caption above: Sec.~\ref{sec:syst} lists several identified systematics
+(fake-$D$ extrapolation, $D^{**}\ell\nu$/gap-mode modelling, form factors,
+tracking and PID efficiency, fit bias) not yet enabled as modifiers in this
+workspace, so the totals above are expected to grow further, not shrink, as
+the fit model is completed.
 
 \paragraph{Combination.}
 The electron channel is expected to be, and is, more sensitive than the muon
@@ -74,10 +84,32 @@ average, $\sigma_{\rm comb} = \left(\sigma_{e}^{-2} +
 \sigma_{\mu}^{-2}\right)^{-1/2}$, which gives $\sigma_{\rm comb} \approx
 12.2\%$ for $14.5\%$ and $22.1\%$ above --- consistent with the analyst's
 quoted value to the precision shown.
-\AnalysisTBD{confirm this is in fact the combination formula used (rather
-than, for example, a joint two-channel fit), and state why a simple
-inverse-variance combination of two independent Asimov results is an
-adequate substitute for fitting $e$ and $\mu$ simultaneously}
+This formula combines two \emph{independent} measurements; whether that
+assumption holds was raised in review and answered in two parts.
+For the data-statistics component, independence is solid: the $e$ and $\mu$
+channels are reconstructed from different, non-overlapping candidates (a
+different lepton flavour is required for each), and the rate of a lepton
+being misidentified across flavours is small enough that cross-contamination
+between the two samples is negligible (\texttt{ANALYSIS\_DECISION}, per the
+analyst).
+For the systematic components (the $D^{*}\tau\nu$/$D^{**}\tau\nu$ and
+continuum \texttt{normsys} constraints), independence is less immediate:
+each channel's workspace carries its own copy of these nuisance parameters
+rather than a single shared one, so the two Asimov fits \emph{as
+implemented} are formally independent of each other.
+Whether that also holds \emph{physically} --- whether the constraint width
+on, say, the continuum normalisation is derived separately for $e$ and $\mu$
+from disjoint inputs, or from one shared external number applied identically
+to both channels --- is not yet established in this note; if it is the
+latter, the same systematic shift would move both channels coherently and
+the inverse-variance formula would understate the true combined uncertainty,
+regardless of how well-motivated the data-statistics independence is.
+\AnalysisTBD{state, for each enabled systematic modifier, whether its
+constraint width is derived independently per channel or shared from one
+external input; if any are shared, either link them as common nuisance
+parameters in a genuine joint two-channel fit or propagate the resulting
+cross-channel covariance into the combination formula above, rather than
+treating the two channels as fully independent for every component}
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
@@ -89,10 +121,22 @@ adequate substitute for fitting $e$ and $\mu$ simultaneously}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\textwidth]{pyhf_fit_correlation.png}
-  \caption{Correlation matrix of the free normalisation parameters from the
-  electron-channel Asimov fit. Only parameter pairs with
-  $|\rho| \geq 0.3$ are shown; smaller correlations are omitted from the
-  plot rather than being exactly zero.
+  \caption{Correlation matrix of five fitted normalisation parameters from
+  the electron-channel Asimov fit, produced by
+  \texttt{cabinetry.visualize.correlation\_matrix(fit\_results,
+  pruning\_threshold=0.3)}.
+  Four are free \texttt{normfactor} parameters ($D\ell\nu$, $D\tau\nu$,
+  $D^{*}\ell\nu$, $D^{**}\ell\nu$~+~gap); the fifth, $D^{**}\tau\nu$\_norm, is
+  a constrained \texttt{normsys} parameter (Table~\ref{tab:fit-parameters})
+  included because it correlates with at least one other shown parameter
+  above the threshold.
+  The pruning is by row/column, not by cell: a parameter is kept if
+  \emph{any} of its correlations exceeds $|\rho|=0.3$, so individual cells
+  within a kept row or column --- for example $-0.07$, $0.19$, $-0.01$,
+  $0.07$ here --- can still be below that threshold.
+  Every other currently-implemented modifier (\texttt{bkg\_fakeD},
+  continuum) is pruned from this plot entirely, meaning none of its
+  correlations with the parameters shown exceeds $0.3$.
   The parameter of interest, $D\tau\nu$\_norm, is most anti-correlated with
   $D^{**}\ell\nu$~+~gap\_norm ($\rho=-0.66$) and $D^{**}\tau\nu$\_norm
   ($\rho=-0.40$), and positively correlated with $D^{*}\ell\nu$\_norm
@@ -100,9 +144,10 @@ adequate substitute for fitting $e$ and $\mu$ simultaneously}
   Sec.~\ref{sec:intro:motivation} and Fig.~\ref{fig:mc-fitvars-2d}: the
   categories whose $\mmiss$/$\pdl$ shapes most resemble $D\tau\nu$ are also
   the ones most correlated with its fitted normalisation.
-  \AnalysisTBD{the equivalent matrix for the muon channel, and for the
-  constrained (\texttt{normsys}) parameters currently omitted from this
-  plot}}
+  \AnalysisTBD{the equivalent matrix for the muon channel, and the full
+  matrix without pruning, so the correlations of the pruned-out parameters
+  (\texttt{bkg\_fakeD}, continuum) can also be read directly rather than
+  inferred from their absence}}
   \label{fig:pyhf-correlation}
 \end{figure}
 
