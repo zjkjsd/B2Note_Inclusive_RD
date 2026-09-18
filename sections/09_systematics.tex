@@ -3,8 +3,9 @@
 \AnalysisTBD{complete systematics table.  The components identified so far
 are: MC statistics; generic-$B\bar{B}$ composition (Sec.~\ref{sec:syst:bbbar});
 fake-$D$ extrapolation; continuum normalisation; $D^{**}\ell\nu$ and gap-mode
-modelling; $D^{*}\tau\nu$ and $D^{**}\tau\nu$ feed-down; form factors;
-tracking and PID efficiency; fit bias and finite-template effects.
+modelling (Sec.~\ref{sec:syst:gap}); $D^{*}\tau\nu$ and $D^{**}\tau\nu$
+feed-down; form factors; tracking and PID efficiency; fit bias and
+finite-template effects.
 As an organisational cross-check only (not a source of numbers for this
 analysis): the Belle~II hadronic-FEI $R(D^{(*)})$ note (BELLE2-NOTE-PH-2024-056)
 lists a closely analogous set of categories --- $D^{**}\ell\nu$/gap-mode
@@ -125,3 +126,58 @@ normalisation in situ, as a free, unconstrained \texttt{normfactor}
 (Sec.~\ref{sec:fit:modifiers}), which is why fake-$D$ does not appear in this
 systematics section: fitting it removes the need for an external prior on
 it.
+
+\subsection{$D^{**}\ell\nu$ and gap-mode modelling}
+\label{sec:syst:gap}
+Per the analyst, this is expected to be one of the potentially large
+systematics, precisely because the current treatment is a shape
+substitution motivated by a lack of a trusted alternative
+(Sec.~\ref{sec:truth:merging}), not a validated model: the gap-mode template
+is built from the $D^{**}\ell\nu$ (broad) shape, with the two components'
+normalisations summed, rather than from the generic-MC gap-mode models
+themselves.
+\InProgress{test alternative models for the gap-mode shape/normalisation
+against the current $D^{**}\ell\nu$ (broad)-substitution default, and
+quantify the resulting change in the fitted $B\to D\tau\nu$ normalisation;
+this is in addition to, and motivated by the same substitution as,
+Sec.~\ref{sec:truth:merging}'s existing item on what is lost by the
+narrow/broad merge}
+
+As external context only (not an input to this analysis, per the
+organisational-reference convention of AGENTS.md): the physics motivation
+for gap-mode categories at all is the well-known mismatch between the
+inclusive $B\to X_{c}\ell\nu$ branching fraction and the sum of measured
+exclusive channels, for which non-resonant $B\to D^{(*)}\pi\pi\ell\nu$ and
+$B\to D^{(*)}\eta\ell\nu$ decays were proposed as a fill
+\cite{Bernlochner:2012bt}.
+The four sibling Belle~II semileptonic-tag notes examined treat this
+differently enough that no single precedent is obviously the right one to
+follow here, which if anything supports treating the current substitution as
+provisional:
+\begin{itemize}
+  \item one uses dedicated gap-mode signal MC generated via an intermediate
+        broad $D^{**}$ resonance (the same substitution used here, but from
+        purpose-built MC rather than a post-hoc template swap), assigns a
+        $100\%$ uncertainty to the combined gap-mode branching fraction
+        (varying all of them together, ``since their true composition is
+        uncertain''), and separately varies the broad-$D^{**}$ form-factor
+        parameters for the gap-mode decays;
+  \item a second instead models the gap as dominated by
+        $B\to D^{(*)}\eta\ell\nu$ rather than $D^{(*)}\pi\pi\ell\nu$, and
+        assigns separate large uncertainties to the two hypotheses;
+  \item a third takes light-lepton gap-mode branching fractions from HFLAV
+        averages and derives semitauonic gap-mode branching fractions (not
+        available from HFLAV) from predicted $R(H_{c})$ ratios
+        \cite{Bernlochner:2023eqn};
+  \item a fourth treats gap modes as ordinary $B\to D^{**}\ell\nu$ decays
+        for form-factor reweighting purposes (the same choice made here),
+        and separately notes that some phase-space-generated non-resonant
+        modes in generic MC are removed because their measured branching
+        fractions are already saturated by resonant $D^{**}$ production.
+\end{itemize}
+\AnalysisTBD{decide whether any of these four precedents --- a dedicated
+gap-mode uncertainty treatment, an eta-dominant alternative hypothesis, an
+$R(H_{c})$-based semitauonic branching-fraction estimate, or the
+non-resonant-mode removal criterion --- should be adopted or adapted here,
+once the dedicated gap-mode signal MC noted in Sec.~\ref{sec:truth:merging}
+is available for a direct test}
