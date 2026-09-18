@@ -5,6 +5,28 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.4 (draft) — unreleased (updated once more)
+
+Addressed a further Codex review round on PR #3:
+- Sec. 8's event-count table (Table 4) provenance now names the confirmed
+  producing notebook (`Notebooks/3_fitting_cabinetry_2d_SR.ipynb`) and notes
+  the counts are expected to shift slightly with the next basf2 release, per
+  the analyst.
+- Sec. 11's correlation-matrix caption (Fig. 14) now lists every
+  currently-implemented modifier pruned from the plot by name
+  (`bkg_fakeD_norm`, `bkg_continuum_norm`, `D*taunu_norm`, and the
+  `staterror` nuisance parameters), not just two of them.
+- Sec. 9's `bkg_fakeTracks` fallback ±50% `normsys` now carries its own
+  provenance block (PLANNED) and organisational context: five of the six
+  sibling Belle II semileptonic-tag notes use a 100% uncertainty convention
+  for backgrounds with no direct measurement or control-sample comparison
+  (the same situation `bkg_fakeTracks` is currently in), while one of them
+  separately uses smaller, data-driven percentages once a control-sample
+  comparison exists -- recorded as context for the analyst's own ±50%
+  choice, not as a substitute value.
+- CHANGELOG.md: per the analyst, versions are announced explicitly rather
+  than pinned to a commit automatically; v0.4 is left as-is.
+
 ## Version 0.4 (draft) — unreleased (updated again)
 
 Per the analyst: `bkg_fakeTracks` has no control-sample plan yet (no source

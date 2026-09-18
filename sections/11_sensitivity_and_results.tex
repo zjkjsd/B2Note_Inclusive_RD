@@ -158,9 +158,12 @@ channels in a way that reintroduces a correlation)}
   \emph{any} of its correlations exceeds $|\rho|=0.3$, so individual cells
   within a kept row or column --- for example $-0.07$, $0.19$, $-0.01$,
   $0.07$ here --- can still be below that threshold.
-  Every other currently-implemented modifier (\texttt{bkg\_fakeD},
-  continuum) is pruned from this plot entirely, meaning none of its
-  correlations with the parameters shown exceeds $0.3$.
+  Every other currently-implemented modifier --- \texttt{bkg\_fakeD}\_norm,
+  \texttt{bkg\_continuum}\_norm, $D^{*}\tau\nu$\_norm, and the per-channel
+  \texttt{staterror} nuisance parameters (\texttt{mcStat\_ch0},
+  \texttt{mcStat\_ch1}) --- is pruned from this plot entirely; per the
+  analyst, this means none of them correlates with the five parameters
+  shown above $|\rho|=0.3$, not that they were otherwise excluded.
   The parameter of interest, $D\tau\nu$\_norm, is most anti-correlated with
   $D^{**}\ell\nu$~+~gap\_norm ($\rho=-0.66$) and $D^{**}\tau\nu$\_norm
   ($\rho=-0.40$), and positively correlated with $D^{*}\ell\nu$\_norm
@@ -170,8 +173,9 @@ channels in a way that reintroduces a correlation)}
   the ones most correlated with its fitted normalisation.
   \AnalysisTBD{the equivalent matrix for the muon channel, and the full
   matrix without pruning, so the correlations of the pruned-out parameters
-  (\texttt{bkg\_fakeD}, continuum) can also be read directly rather than
-  inferred from their absence}}
+  (\texttt{bkg\_fakeD}\_norm, \texttt{bkg\_continuum}\_norm,
+  $D^{*}\tau\nu$\_norm, and the \texttt{staterror} nuisance parameters) can
+  also be read directly rather than inferred from their absence}}
   \label{fig:pyhf-correlation}
 \end{figure}
 

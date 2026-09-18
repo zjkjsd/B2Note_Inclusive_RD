@@ -50,10 +50,35 @@ sensitivity workspace, with only a \texttt{staterror} modifier turned on
 like \texttt{bkg\_combinatorial}, \texttt{bkg\_fakeL} and
 \texttt{bkg\_hadronicB\_secondaryL} (Fig.~\ref{fig:pyhf-config}); the
 generator default does not describe this particular workspace.
+% PROVENANCE
+%   status      : PLANNED
+%   produced-by : analyst decision; not yet implemented as a modifier
+%   commit      : n/a (not yet in the workspace generator)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
 If no control sample is eventually found for it, the analyst's fallback
 plan is to rely on the MC shape as-is and assign a large \texttt{normsys}
 of order $\pm 50\%$ rather than leave it fully unconstrained
-(\texttt{PLANNED}).
+(\texttt{PLANNED}; a personal, not-yet-final choice, per the analyst, since
+\texttt{bkg\_fakeTracks} has not been studied yet).
+As external context only (not an input to this analysis): assigning a
+large, round uncertainty to a background component whose composition or
+rate is not otherwise constrained is a common convention in Belle~II
+analyses, though the sibling notes examined are not unanimous on the size.
+Five of the six sibling notes checked use $100\%$ specifically --- the
+$B\to K\nu\bar\nu$ note for photon-selection and $B\to K^{(*)}\pi\bar\pi$
+BF-derived corrections lacking a direct measurement, the $B\to\tau\nu$
+note for decay modes with ``imprecise values in generic MC generation,''
+and both $R(D^{(*)})$ hadronic-FEI notes and the semileptonic-FEI note for
+BFs with no PDG value or (for the semileptonic-FEI note specifically) the
+gap-mode BF whose ``true composition is uncertain'' --- while the
+$B\to K\nu\bar\nu$ note also separately uses smaller, data-driven
+percentages ($10$--$30\%$) once a control-sample comparison is available to
+calibrate the size.
+\texttt{bkg\_fakeTracks} currently has no control-sample comparison
+(consistent with the $100\%$-style cases above, not the data-driven ones),
+which is worth weighing against the analyst's $\pm 50\%$ working choice.
 
 Each of these control samples is reconstructed, and its lepton identified,
 separately for the electron and muon channels, so the resulting constraint

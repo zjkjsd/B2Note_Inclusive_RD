@@ -129,9 +129,10 @@ overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
-%   produced-by : analyst-reported reconstructed event counts, precise
-%                 producing notebook cell and selection not yet confirmed
-%                 against a stored printout
+%   produced-by : analyst-reported reconstructed event counts from
+%                 Notebooks/3_fitting_cabinetry_2d_SR.ipynb; exact cell and
+%                 selection within that notebook not yet confirmed against a
+%                 stored printout
 %   commit      : ad2f2ec
 %   sample      : MC16rd, Run 1 + Run 2 combined, e and mu channels
 %   selection   : offline_cut (Eq. offline-cut) plus lgb_tight (Eq.
@@ -141,12 +142,15 @@ overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
 \begin{table}[htbp]
   \centering
   \caption{Reconstructed event counts feeding template construction, Run~1
-  plus Run~2 combined.  Sourcing rule: the three semitauonic ($B\to
-  X\tau\nu$) categories, $D\tau\nu$, $D^{*}\tau\nu$ and $D^{**}\tau\nu$, are
-  signal-enriched MC; every other category is generic MC.
-  \AnalysisTBD{confirm the exact selection these counts were computed at (in
-  particular whether both D-mass regions are combined here, as assumed), the
-  producing notebook cell, and the Run~1/Run~2 split}}
+  plus Run~2 combined, from \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb}.
+  Sourcing rule: the three semitauonic ($B\to X\tau\nu$) categories,
+  $D\tau\nu$, $D^{*}\tau\nu$ and $D^{**}\tau\nu$, are signal-enriched MC;
+  every other category is generic MC.
+  These counts are preliminary and expected to shift slightly with the next
+  basf2 software release.
+  \AnalysisTBD{confirm the exact cell and selection within that notebook
+  these counts were computed at (in particular whether both D-mass regions
+  are combined here, as assumed), and the Run~1/Run~2 split}}
   \label{tab:sensitivity-sample-sizes}
   \small
   \begin{tabular}{l r r}
