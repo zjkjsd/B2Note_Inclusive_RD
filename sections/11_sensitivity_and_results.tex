@@ -54,13 +54,15 @@ uncertainties are combined at the end (below) rather than fit jointly.
   nested cumulative fits as described above, this sum telescopes exactly to
   the all-at-once total regardless of any correlation between the modifiers
   --- so, unlike an earlier version of this caption claimed, that gap is
-  \emph{not} explained by the modifiers being non-orthogonal, and its actual
-  source (for example, rounding of an intermediate value before the next
-  step, or the quoted Total coming from a run configured slightly
-  differently from the exact row-by-row sequence) is not established.
-  Per the analyst, the gap is minor and the numbers are preliminary; they
-  are not corrected to force exact agreement, but the cause should be
-  identified before these are treated as final.}
+  \emph{not} explained by the modifiers being non-orthogonal, and the
+  calculation itself already accounts for correlations by construction.
+  Per the analyst, the more likely explanation is a recording issue rather
+  than a calculation one: the individual numbers above were transcribed as
+  rounded, approximate figures rather than read off to full precision, which
+  is enough to break the exact telescoping relation
+  (\texttt{ANALYSIS\_DECISION}).
+  The gap is minor and the numbers are preliminary; they are not corrected
+  here, and are expected to be updated once exact figures are available.}
   \label{tab:sensitivity-breakdown}
   \small
   \begin{tabular}{l c c}
