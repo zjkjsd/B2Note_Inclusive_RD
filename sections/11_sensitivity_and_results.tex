@@ -48,12 +48,19 @@ uncertainties are combined at the end (below) rather than fit jointly.
   The ``Total'' row is the uncertainty returned directly by the fit with all
   listed modifiers simultaneously free, not a value recomputed from the rows
   above: summing the four individual differences in quadrature gives
-  $14.1\%$ ($e$) and $21.8\%$ ($\mu$), close to but not exactly the $14.5\%$
-  and $22.1\%$ quoted, since freeing modifiers one at a time and summing
-  their individual differences in quadrature is only exactly equal to the
-  all-at-once result if the modifiers are fully orthogonal.  Per the analyst,
-  this gap is minor and the numbers are preliminary; they are not corrected
-  to force exact agreement.}
+  $14.1\%$ ($e$) and $21.8\%$ ($\mu$), not exactly the $14.5\%$ and $22.1\%$
+  quoted.
+  If each row is truly the quadrature difference between successive,
+  nested cumulative fits as described above, this sum telescopes exactly to
+  the all-at-once total regardless of any correlation between the modifiers
+  --- so, unlike an earlier version of this caption claimed, that gap is
+  \emph{not} explained by the modifiers being non-orthogonal, and its actual
+  source (for example, rounding of an intermediate value before the next
+  step, or the quoted Total coming from a run configured slightly
+  differently from the exact row-by-row sequence) is not established.
+  Per the analyst, the gap is minor and the numbers are preliminary; they
+  are not corrected to force exact agreement, but the cause should be
+  identified before these are treated as final.}
   \label{tab:sensitivity-breakdown}
   \small
   \begin{tabular}{l c c}
@@ -73,10 +80,13 @@ uncertainties are combined at the end (below) rather than fit jointly.
 
 The $\gtrsim$ notation reflects the outlook, not the quadrature gap noted in
 the caption above: Sec.~\ref{sec:syst} lists several identified systematics
-(fake-$D$ extrapolation, $D^{**}\ell\nu$/gap-mode modelling, form factors,
-tracking and PID efficiency, fit bias) not yet enabled as modifiers in this
-workspace, so the totals above are expected to grow further, not shrink, as
-the fit model is completed.
+($D^{**}\ell\nu$/gap-mode modelling, form factors, tracking and PID
+efficiency, fit bias) not yet enabled as modifiers in this workspace, so the
+totals above are expected to grow further, not shrink, as the fit model is
+completed.
+Fake-$D$ is deliberately absent from that list: Sec.~\ref{sec:syst:faked}
+confirms it is no longer treated as an external systematic at all, since the
+sideband channel already fits it in situ.
 
 \paragraph{Combination.}
 The electron channel is expected to be, and is, more sensitive than the muon

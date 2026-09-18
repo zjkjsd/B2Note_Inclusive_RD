@@ -141,8 +141,12 @@ overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
 \begin{table}[htbp]
   \centering
   \caption{Reconstructed event counts feeding template construction, Run~1
-  plus Run~2 combined.  Generic MC supplies every category except the three
-  starred rows, which are signal-enriched MC.
+  plus Run~2 combined.  Generic MC supplies every category unconditionally
+  except $D\tau\nu$, $D^{*}\tau\nu$ and $D^{**}\tau\nu$, for which both the
+  generic-MC and the signal-enriched-MC alternative are listed (below the
+  rule), since which of the two is actually used is an open question
+  discussed in the text below rather than a settled choice this table can
+  assume.
   \AnalysisTBD{confirm the exact selection these counts were computed at (in
   particular whether both D-mass regions are combined here, as assumed), the
   producing notebook cell, and the Run~1/Run~2 split}}
@@ -163,20 +167,20 @@ overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
     $D^{**}\ell\nu$ (narrow)                & $29\,191$  & $23\,696$  \\
     $D^{**}\ell\nu$ (broad)                 & $22\,796$  & $17\,684$  \\
     $D\ell\nu$\_gap                        & $10\,062$  & $7\,381$   \\
-    $D\tau\nu$\rlap{$^{*}$}                 & $8\,637$   & $4\,575$   \\
-    $D^{*}\tau\nu$\rlap{$^{*}$}             & $2\,590$   & $1\,429$   \\
-    $D^{**}\tau\nu$\rlap{$^{*}$}            & $2\,482$   & $1\,273$   \\
+    $D\tau\nu$ (generic MC)                & $8\,637$   & $4\,575$   \\
+    $D^{*}\tau\nu$ (generic MC)            & $2\,590$   & $1\,429$   \\
+    $D^{**}\tau\nu$ (generic MC)           & $2\,482$   & $1\,273$   \\
     \hline
-    $D\tau\nu$ (signal-enriched)$^{*}$     & $614\,559$ & $325\,582$ \\
-    $D^{*}\tau\nu$ (signal-enriched)$^{*}$ & $272\,979$ & $151\,346$ \\
-    $D^{**}\tau\nu$ (signal-enriched)$^{*}$& $224\,552$ & $117\,201$ \\
+    $D\tau\nu$ (signal-enriched)            & $614\,559$ & $325\,582$ \\
+    $D^{*}\tau\nu$ (signal-enriched)        & $272\,979$ & $151\,346$ \\
+    $D^{**}\tau\nu$ (signal-enriched)       & $224\,552$ & $117\,201$ \\
     \hline
   \end{tabular}
 \end{table}
 
-The three starred categories above appear twice because the intended
-template construction uses signal-enriched MC for them and generic MC for
-every other category (never generic MC for these three).
+$D\tau\nu$, $D^{*}\tau\nu$ and $D^{**}\tau\nu$ appear twice above because the
+intended template construction uses signal-enriched MC for them and generic
+MC for every other category (never generic MC for these three).
 At the pinned commit, the specific \texttt{create\_templates\_new} calls
 saved in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} do not read
 as matching this at face value: both channels' saved calls pass the
