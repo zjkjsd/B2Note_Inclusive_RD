@@ -196,28 +196,32 @@ reported.
 
 The generic-MC luminosity weight of $0.25$ (Sec.~\ref{sec:data:mc}) is
 applied through the \texttt{sample\_weights} argument at the notebook call
-site, rather than inside \texttt{create\_templates\_new} itself, and it is
-not perfectly uniform across categories: most categories (including all of
-signal-enriched MC) are weighted exactly $0.25$, but $D\ell\nu$\_gap is
-weighted $0$ and $D^{**}\ell\nu$ (broad) is weighted $0.25 \times 1.435
-\approx 0.359$, annotated in the notebook as ``$11\,540$ events from
-$1\,\mathrm{ab}^{-1}$''
+site, rather than inside \texttt{create\_templates\_new} itself
 (\texttt{CODE\_FACT}: \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb},
-cells 13--14, the \texttt{sample\_weights} dictionary).
+cells 13--14, the \texttt{sample\_weights} dictionary), and it applies to
+every category's underlying event count, including $D\ell\nu$\_gap and
+$D^{**}\ell\nu$ (broad).
+Two entries in that dictionary look like exceptions, $D\ell\nu$\_gap
+weighted $0$ and $D^{**}\ell\nu$ (broad) weighted $0.25 \times 1.435 \approx
+0.359$, but per the analyst this is the same $0.25$ applied to both
+categories, expressed through the gap-mode merge already described in
+Sec.~\ref{sec:truth:merging}: since the gap-mode shape from generic MC is
+not trusted, its own histogram is not used (weight $0$) and its \emph{yield}
+is instead folded into the $D^{**}\ell\nu$ (broad) sample by inflating that
+sample's weight by the ratio of the two categories' event counts (gap is
+about $43.5\%$ of $D^{**}\ell\nu$ (broad) by count, giving the combined
+factor $0.25 \times (1 + 0.435) = 0.25 \times 1.435$), so that the merged
+sample takes the $D^{**}\ell\nu$ (broad) shape while carrying both
+categories' luminosity-scaled normalisation.
+This scales both the bin content and, since the per-bin uncertainty is
+computed from the sum of squared weights, its Poisson statistical
+uncertainty consistently.
 $D\ell\nu$\_gap's zero weight makes it contribute nothing to the template
 regardless of whether it is also separately excluded by
 \texttt{sample\_to\_exclude}, which itself differs between the two saved
 calls (excluded in the $e$-channel cell, not excluded in the $\mu$-channel
 cell) --- consistent with the $e$-channel cell reflecting later,
-unrelated edits noted in Sec.~\ref{sec:fit:templates}.
-Whichever weight applies, it scales both the bin content and, since the
-per-bin uncertainty is computed from the sum of squared weights, its
-Poisson statistical uncertainty consistently.
-\AnalysisTBD{state the origin of the $1.435$ factor on $D^{**}\ell\nu$
-(broad) (the in-notebook comment suggests an additional
-event-count-based renormalisation) and whether $D\ell\nu$\_gap's zero
-weight is intended to be permanent or a placeholder pending the
-merged-gap treatment of Sec.~\ref{sec:truth:merging}}
+unrelated edits noted above.
 
 \subsection{Parameter of interest}
 \label{sec:fit:poi}
