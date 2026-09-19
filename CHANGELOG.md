@@ -5,6 +5,21 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.4 (draft) — unreleased (updated a fourth time)
+
+Addressed two further minor Codex findings from a re-review of PR #3, both
+confirmed minor by the analyst:
+- Sec. 8's `pyhf_config` caption no longer says `bkg_fakeL`/`bkg_fakeTracks`
+  have no stated plan; it now cross-references the plans already documented
+  in Sec. 9.1 (`SystematicFramework` tool for `bkg_fakeL`, fallback ±50%
+  `normsys` for `bkg_fakeTracks`), which had gone stale after that section
+  was written.
+- Sec. 11's combination paragraph now flags, right where the $12.1\%$ number
+  appears, that the independence assumption is not yet established for the
+  $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down component; per the analyst this is
+  a minor, noted caveat rather than a reason to withhold the preliminary
+  number.
+
 ## Version 0.4 (draft) — unreleased (updated a third time)
 
 Addressed a further Codex review round on PR #3, all four points confirmed or

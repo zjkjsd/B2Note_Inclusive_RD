@@ -330,12 +330,16 @@ itself.
   \texttt{bkg\_combinatorial} and \texttt{bkg\_hadronicB\_secondaryL} are
   expected to receive \texttt{normsys} modifiers once the generic-$B\bar{B}$
   reweighting of Sec.~\ref{sec:bbbar} is complete; \texttt{bkg\_fakeL} and
-  \texttt{bkg\_fakeTracks} are not yet covered by a stated plan.
+  \texttt{bkg\_fakeTracks} each already have a stated plan
+  (Sec.~\ref{sec:syst:sources}) --- the \texttt{SystematicFramework} tool for
+  \texttt{bkg\_fakeL}, and a fallback $\pm50\%$ \texttt{normsys} for
+  \texttt{bkg\_fakeTracks} if no control sample is found --- not yet
+  implemented as modifiers here.
   \InProgress{add the \texttt{normsys} modifiers for \texttt{bkg\_combinatorial}
   and \texttt{bkg\_hadronicB\_secondaryL} once the generic-$B\bar{B}$
-  reweighting of Sec.~\ref{sec:bbbar} is complete, and state whether
-  \texttt{bkg\_fakeL}/\texttt{bkg\_fakeTracks} are intended to remain fixed
-  or will eventually get their own systematic.
+  reweighting of Sec.~\ref{sec:bbbar} is complete, and implement the
+  \texttt{bkg\_fakeL}/\texttt{bkg\_fakeTracks} plans of
+  Sec.~\ref{sec:syst:sources}.
   Also add the workspace file(s) themselves to a location in the repository
   so this configuration can be verified directly rather than read off the
   plot}}
