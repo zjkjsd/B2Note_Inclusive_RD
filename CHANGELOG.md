@@ -5,6 +5,20 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.4 (draft) — unreleased (updated a fifth time)
+
+Addressed one of two minor Codex findings from the latest PR #3 review (the
+other, provenance for the gap-mode template-weight transformation in Sec. 8,
+was called minor and left as-is per the analyst):
+- Sec. 9's four-sibling-note gap-mode survey now carries its own local
+  provenance block naming which of the four notes supports each bullet
+  (`B2N_R(D)R(D*)_SLFEI_v5.pdf`, `B2N_R(D)R(D*)_hadFEI_v16.pdf`,
+  `B2N_R(D*)_hadFEI_v8.pdf`, `B2N_inclusive_Vub_v11.pdf`), identified by
+  searching each PDF's text for the specific claim attributed to it (exact
+  phrase matches found for all four, e.g. SLFEI's "since their true
+  composition is uncertain" and inclusive-Vub's "saturated by production via
+  the D** resonances").
+
 ## Version 0.4 (draft) — unreleased (updated a fourth time)
 
 Addressed two further minor Codex findings from a re-review of PR #3, both
