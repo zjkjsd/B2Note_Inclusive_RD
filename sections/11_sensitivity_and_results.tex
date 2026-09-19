@@ -1,13 +1,228 @@
+% PROVENANCE (section-level)
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/3_fitting_cabinetry_2d_SR.ipynb (Asimov and toy
+%                 pyhf/cabinetry fits, cells 36-53); the workspace files
+%                 themselves are not present in this repository checkout
+%                 (Appendix~\ref{app:fit:stored}), so the numbers below are
+%                 the analyst's own summary of running that notebook rather
+%                 than a stored, reproducible table
+%   commit      : ad2f2ec
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 (365 fb$^{-1}$) plus
+%                 partial Run 2 (125 fb$^{-1}$ processed); e and mu channels,
+%                 fit separately
+%   selection   : lgb_tight (Eq. lgb-tight) plus offline_cut (Eq.
+%                 offline-cut); D-mass signal region plus sideband
+%   corrections : PID; generic-MC luminosity 0.25; generic-BBbar weights
 \section{Expected Sensitivity and Results}
 \label{sec:results}
-\InProgress{Asimov sensitivity and supporting plots are planned to be added
-here once the fit-validation study of Sec.~\ref{sec:fit:validation} is
-produced.  An expected sensitivity on $R(D)$ of approximately $12\%$
-(including systematics, MC statistics and background systematics) for the
-combined Run~1 ($365$\,fb$^{-1}$) plus partial Run~2 ($125$\,fb$^{-1}$
-processed) Belle~II data-sample has been quoted by the analyst; it is not
-yet backed by a producing artifact in this repository and should be treated
-as indicative rather than final until Sec.~\ref{sec:fit:validation}'s study
-exists.
-No data result for the signal region is shown while the analysis is
-blinded}
+
+No data result for the signal region is shown while the analysis is blinded.
+This section instead reports an Asimov (data-equals-expectation) sensitivity
+study: the fitted data is the exact sum of all template samples, so the
+fitted normalisations are expected to return $1$ and constrained nuisance
+parameters $0$: the only meaningful output is the returned \emph{uncertainty}
+on the parameter of interest, the $B\to D\tau\nu$ normalisation
+(Sec.~\ref{sec:fit:poi}), which is what this section calls the sensitivity.
+The method is described in Sec.~\ref{sec:fit:validation}: fit with every
+\emph{constrained} modifier fixed while the free \texttt{normfactor}
+normalisations ($D\ell\nu$, $D^{*}\ell\nu$, $D^{**}\ell\nu$~+~gap,
+\texttt{bkg\_fakeD}) remain floating, to obtain the data-statistics-only
+uncertainty, then free one further constrained modifier at a time and
+attribute its systematic contribution to the quadrature difference between
+the new and previous returned uncertainty.
+Electron and muon channels are fit separately, each against its own
+two-channel (signal region plus sideband) workspace, and the two resulting
+uncertainties are combined at the end (below) rather than fit jointly.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Preliminary Asimov-sensitivity breakdown on the $B\to D\tau\nu$
+  normalisation, by channel. ``Data statistics only'' fixes every
+  constrained (\texttt{normsys}/\texttt{staterror}) modifier while the free
+  \texttt{normfactor} normalisations ($D\ell\nu$, $D^{*}\ell\nu$,
+  $D^{**}\ell\nu$~+~gap, \texttt{bkg\_fakeD}) remain floating
+  (Sec.~\ref{sec:fit:validation}); each subsequent row is the quadrature
+  difference introduced by freeing one further constrained modifier relative
+  to the row above, with one exception: the $D^{*}\tau\nu$ and $D^{**}\tau\nu$
+  \texttt{normsys} modifiers are freed together as a single joint step rather
+  than one at a time, so that row's $\pm4.6\%$ is their combined
+  contribution, not either modifier's individually (per the analyst, this is
+  the only such joint step in the current breakdown); ``more systematics''
+  denotes contributions not yet enabled in the fit (Sec.~\ref{sec:syst}).
+  The ``Total'' row is the uncertainty returned directly by the fit with all
+  listed modifiers simultaneously free, not a value recomputed from the rows
+  above: summing the four individual differences in quadrature gives
+  $14.1\%$ ($e$) and $21.8\%$ ($\mu$), not exactly the $14.5\%$ and $22.1\%$
+  quoted.
+  If each row is truly the quadrature difference between successive,
+  nested cumulative fits as described above, this sum telescopes exactly to
+  the all-at-once total regardless of any correlation between the modifiers
+  --- so, unlike an earlier version of this caption claimed, that gap is
+  \emph{not} explained by the modifiers being non-orthogonal, and the
+  calculation itself already accounts for correlations by construction.
+  Per the analyst, the more likely explanation is a recording issue rather
+  than a calculation one: the individual numbers above were transcribed as
+  rounded, approximate figures rather than read off to full precision, which
+  is enough to break the exact telescoping relation
+  (\texttt{ANALYSIS\_DECISION}).
+  The gap is minor and the numbers are preliminary; they are not corrected
+  here, and are expected to be updated once exact figures are available.}
+  \label{tab:sensitivity-breakdown}
+  \small
+  \begin{tabular}{l c c}
+    \hline
+    Contribution & $e$ channel & $\mu$ channel \\
+    \hline
+    Data statistics only & $11.8\%$ & $19.1\%$ \\
+    $+$ norm.\ sys.\ ($D^{*}\tau\nu$ \& $D^{**}\tau\nu$, joint) & $\pm 4.6\%$ & $\pm 4.6\%$ \\
+    $+$ norm.\ sys.\ (continuum) & $\pm 2.4\%$ & $\pm 1.3\%$ \\
+    $+$ MC statistics (\texttt{staterror}) & $\pm 5.8\%$ & $\pm 9.3\%$ \\
+    $+$ more systematics (not yet enabled) & \multicolumn{2}{c}{---} \\
+    \hline
+    \textbf{Total, this channel} & $\gtrsim 14.5\%$ & $\gtrsim 22.1\%$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+The $\gtrsim$ notation reflects the outlook, not the quadrature gap noted in
+the caption above: Sec.~\ref{sec:syst} lists several identified systematics
+($D^{**}\ell\nu$/gap-mode modelling, form factors, tracking and PID
+efficiency, fit bias) not yet enabled as modifiers in this workspace, so the
+totals above are expected to grow further, not shrink, as the fit model is
+completed.
+Fake-$D$ is deliberately absent from that list: Sec.~\ref{sec:syst:faked}
+confirms it is no longer treated as an external systematic at all, since the
+sideband channel already fits it in situ.
+
+\paragraph{Combination.}
+The electron channel is expected to be, and is, more sensitive than the muon
+channel: the tighter muon momentum requirement ($p_{\mu} > 0.6$\,GeV$/c$
+versus $p_{e} > 0.3$\,GeV$/c$, Sec.~\ref{sec:reconstruction}) removes a larger
+fraction of $B\to D\tau\nu$ signal because the signal lepton momentum
+spectrum peaks at low momentum, giving the muon channel roughly half the
+signal-enriched $D\tau\nu$ statistics of the electron channel
+(Table~\ref{tab:sensitivity-sample-sizes}).
+The two channels' uncertainties are combined as an inverse-variance-weighted
+average, $\sigma_{\rm comb} = \left(\sigma_{e}^{-2} +
+\sigma_{\mu}^{-2}\right)^{-1/2}$, which gives $\sigma_{\rm comb} = 12.1\%$
+for $14.5\%$ and $22.1\%$ above, close to but not exactly the analyst's
+quoted $12.2\%$ (a $0.1$ percentage-point difference); as with the
+per-channel totals above, this is treated as part of the preliminary,
+not-yet-reconciled numbers rather than corrected to match.
+This formula assumes the two channels are combined as \emph{independent}
+measurements; as explained below, that assumption is not yet established for
+one of the four contributions (the $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down),
+so per the analyst this $12.1\%$ is treated as a minor, noted caveat on the
+preliminary number rather than a reason to withhold it -- see the
+\texttt{AnalysisTBD} below for what would resolve it.
+This formula combines two \emph{independent} measurements; whether that
+assumption holds was raised in review and answered in two parts.
+For the data-statistics component, independence is solid: the $e$ and $\mu$
+channels are reconstructed from different, non-overlapping candidates (a
+different lepton flavour is required for each), and the rate of a lepton
+being misidentified across flavours is small enough that cross-contamination
+between the two samples is negligible (\texttt{ANALYSIS\_DECISION}, per the
+analyst).
+For the systematic components (the $D^{*}\tau\nu$/$D^{**}\tau\nu$ and
+continuum \texttt{normsys} constraints), independence was raised in review
+as a separate question from data statistics: each channel's workspace
+carries its own copy of these nuisance parameters rather than a single
+shared one, so the two Asimov fits \emph{as implemented} are formally
+independent of each other, but that alone does not establish that treating
+them as independent is \emph{physically} correct --- a systematic shift
+shared between channels would move both coherently, and the
+inverse-variance formula would then understate the true combined
+uncertainty.
+Per the analyst, this is resolved for the continuum constraint by how it is
+obtained (Sec.~\ref{sec:syst:sources}): it is derived from a dedicated
+control sample reconstructed separately for the electron and muon channels,
+rather than from one external number applied to both, so the two channels'
+continuum constraints are independent measurements for the same reason
+their data statistics are.
+The $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down constraint is different: per the
+analyst (Sec.~\ref{sec:syst:sources}), it is instead taken from the
+uncertainty on the published $R(D^{*})$/$R(D^{**})$ measurements, an
+external input rather than a channel-specific control-sample result, so the
+argument above does not establish its independence between the two
+channels, and if the same external uncertainty enters both the $e$- and
+$\mu$-channel fits, this component should be treated as fully correlated
+between channels rather than independent --- which the inverse-variance
+combination formula above does not currently do.
+\AnalysisTBD{confirm whether the $D^{*}\tau\nu$/$D^{**}\tau\nu$
+\texttt{normsys} width used in the $e$- and $\mu$-channel workspaces is in
+fact the same external $R(D^{*})$/$R(D^{**})$ number in both, and if so
+either combine the two channels accounting for this correlation (for
+example via a joint fit or an explicit correlated-nuisance-parameter
+treatment) rather than the current independent inverse-variance average, or
+quantify that the resulting understatement of the combined uncertainty is
+negligible.
+Once each control-sample-derived constraint of Sec.~\ref{sec:syst:sources}
+is actually implemented as a modifier, also confirm that independence holds
+in practice for those (for example, that the same off-resonance or
+wrong-charge run periods are not double-used across channels in a way that
+reintroduces a correlation)}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : same Asimov fit as the table above (electron channel)
+%   commit      : ad2f2ec
+%   sample      : as above, e channel
+%   selection   : as above
+%   corrections : as above
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{pyhf_fit_correlation.png}
+  \caption{Correlation matrix of five fitted normalisation parameters from
+  the electron-channel Asimov fit, produced by
+  \texttt{cabinetry.visualize.correlation\_matrix(fit\_results,
+  pruning\_threshold=0.3)}.
+  Four are free \texttt{normfactor} parameters ($D\ell\nu$, $D\tau\nu$,
+  $D^{*}\ell\nu$, $D^{**}\ell\nu$~+~gap); the fifth, $D^{**}\tau\nu$\_norm, is
+  a constrained \texttt{normsys} parameter (Table~\ref{tab:fit-parameters})
+  included because it correlates with at least one other shown parameter
+  above the threshold.
+  The pruning is by row/column, not by cell: a parameter is kept if
+  \emph{any} of its correlations exceeds $|\rho|=0.3$, so individual cells
+  within a kept row or column --- for example $-0.07$, $0.19$, $-0.01$,
+  $0.07$ here --- can still be below that threshold.
+  Every other currently-implemented modifier --- \texttt{bkg\_fakeD}\_norm,
+  \texttt{bkg\_continuum}\_norm, $D^{*}\tau\nu$\_norm, and the per-channel
+  \texttt{staterror} nuisance parameters (\texttt{mcStat\_ch0},
+  \texttt{mcStat\_ch1}) --- is pruned from this plot entirely; per the
+  analyst, this means none of them correlates with the five parameters
+  shown above $|\rho|=0.3$, not that they were otherwise excluded.
+  The parameter of interest, $D\tau\nu$\_norm, is most anti-correlated with
+  $D^{**}\ell\nu$~+~gap\_norm ($\rho=-0.66$) and $D^{**}\tau\nu$\_norm
+  ($\rho=-0.40$), and positively correlated with $D^{*}\ell\nu$\_norm
+  ($\rho=0.31$) --- consistent with the overlapping-shape difficulty of
+  Sec.~\ref{sec:intro:motivation} and Fig.~\ref{fig:mc-fitvars-2d}: the
+  categories whose $\mmiss$/$\pdl$ shapes most resemble $D\tau\nu$ are also
+  the ones most correlated with its fitted normalisation.
+  \AnalysisTBD{the equivalent matrix for the muon channel, and the full
+  matrix without pruning, so the correlations of the pruned-out parameters
+  (\texttt{bkg\_fakeD}\_norm, \texttt{bkg\_continuum}\_norm,
+  $D^{*}\tau\nu$\_norm, and the \texttt{staterror} nuisance parameters) can
+  also be read directly rather than inferred from their absence}}
+  \label{fig:pyhf-correlation}
+\end{figure}
+
+\paragraph{Caveats.}
+Two apparent discrepancies with the code were raised against an earlier
+version of this section and have since been clarified by the analyst
+(Sec.~\ref{sec:fit:templates}, Sec.~\ref{sec:fit:modifiers}): the
+$e$-channel notebook cell's mismatch with the intended
+signal-enriched/generic-MC template split reflects later, unrelated
+$e$-channel tests rather than the configuration behind the numbers above;
+and the four generic-$B\bar{B}$ categories shown fixed in
+Fig.~\ref{fig:pyhf-config} are deliberately left without a normalisation
+modifier because their systematic uncertainties are not yet studied, not an
+omission.
+Neither is treated as changing the numbers above.
+The parameter of interest is the $B\to D\tau\nu$ normalisation, not $R(D)$
+itself (Sec.~\ref{sec:fit:poi}); the sensitivity above should not yet be
+read as ``the expected uncertainty on $R(D)$'' until that relation is
+written down.
+\AnalysisTBD{once Sec.~\ref{sec:fit:poi}'s normalisation-to-$R(D)$ relation
+is established and the remaining identified systematics of Sec.~\ref{sec:syst}
+are enabled, update this section and record whether the total sensitivity
+moves outside the range indicated by the current, partial breakdown}

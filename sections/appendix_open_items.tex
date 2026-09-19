@@ -41,18 +41,18 @@ a claim about the analysis.
     5 Classifier                & 6 & 0 & 0 & 6 \\
     6 Corrections               & 2 & 5 & 0 & 7 \\
     7 Generic $B\bar{B}$        & 5 & 0 & 0 & 5 \\
-    8 Signal extraction         & 3 & 4 & 0 & 7 \\
-    9 Systematics               & 3 & 0 & 0 & 3 \\
+    8 Signal extraction         & 9 & 2 & 0 & 11 \\
+    9 Systematics               & 5 & 1 & 0 & 6 \\
     10 Validation, box opening  & 3 & 3 & 0 & 6 \\
-    11 Results                  & 1 & 0 & 0 & 1 \\
+    11 Results                  & 2 & 1 & 0 & 3 \\
     12 Summary                  & 0 & 1 & 0 & 1 \\
     Appendix: selections        & 0 & 1 & 0 & 1 \\
     Appendix: categories        & 0 & 1 & 2 & 3 \\
     Appendix: classifier        & 7 & 0 & 0 & 7 \\
-    Appendix: fit               & 6 & 1 & 0 & 7 \\
+    Appendix: fit               & 7 & 0 & 1 & 8 \\
     Appendix: open items        & 0 & 1 & 0 & 1 \\
     \hline
-    Total                       & 57 & 25 & 5 & 87 \\
+    Total                       & 67 & 24 & 6 & 97 \\
     \hline
   \end{tabular}
 \end{table}
@@ -90,6 +90,79 @@ Run~1 and Run~2, so the $68\%$ overlap figure of Sec.~\ref{sec:data:overlap}
 understates the denominator and overstates the true overlap fraction; a new
 item asking for the missing Run~2 count was added, which is the source of
 the increase from 86 to 87.
+A subsequent pass wrote up the sensitivity-calculation procedure the analyst
+described (Sec.~\ref{sec:fit:templates}, Sec.~\ref{sec:fit:modifiers},
+Sec.~\ref{sec:fit:validation}, Sec.~\ref{sec:results}) and inserted three
+more previously-unused figures (\texttt{MC\_fitVars\_2d},
+\texttt{pyhf\_config}, \texttt{pyhf\_fit\_correlation}).
+Cross-checking that description against the analysis repository surfaced two
+genuine discrepancies rather than documentation gaps, each recorded as its
+own item rather than silently resolved one way or the other: the executed
+template-building calls do not use signal-enriched MC for the three
+$\tau\nu$ categories as intended (Sec.~\ref{sec:fit:templates}), and the
+workspace pair behind the reported sensitivity is not present in this
+repository checkout, so its generic-$B\bar{B}$ modifier configuration could
+only be read off a plot (Sec.~\ref{sec:fit:modifiers},
+Appendix~\ref{app:fit:stored}).
+These, together with the usual per-figure provenance items and one item
+closed (the Asimov-correlation-matrix request of
+Appendix~\ref{app:fit:todo}, now answered in Sec.~\ref{sec:results}), are the
+source of the increase from 87 to 95.
+The analyst then clarified both discrepancies directly: the signal-enriched-
+versus-generic-MC question is explained by later, $e$-channel-only notebook
+edits made after the sensitivity was produced, and the four fixed
+generic-$B\bar{B}$ categories are a deliberate placeholder pending their
+background studies, with a stated plan to add \texttt{normsys} modifiers for
+two of them once the generic-$B\bar{B}$ reweighting is complete.
+This closed one item outright and narrowed another to a stated plan,
+lowering the count from 95 to 94.
+A review reply then supplied the control-sample source for each systematic
+constraint (Sec.~\ref{sec:syst:sources}) and, since each control sample is
+reconstructed separately per lepton channel, resolved the independence
+question for the Sec.~\ref{sec:results} combination; this added one new
+item recording that most of those constraints are not yet implemented as
+modifiers, bringing the count from 94 to 95.
+A subsequent review round caught two more inconsistencies: Sec.~\ref{sec:syst:sources}
+had asserted \texttt{bkg\_fakeTracks} is excluded from the templates
+(true of the generator's default, Sec.~\ref{sec:truth:closure}) while
+Fig.~\ref{fig:pyhf-config} shows it present in the actual sensitivity
+workspace, which is now recorded as an unreconciled discrepancy rather than
+silently picking one; and ``all other modifiers fixed'' in
+Table~\ref{tab:sensitivity-breakdown} was ambiguous about whether the other
+free \texttt{normfactor} normalisations are held fixed throughout the
+breakdown or profiled at every step, now a new item in
+Sec.~\ref{sec:fit:validation}.
+Neither changed an existing count on its own, but the second added one new
+item, bringing the total from 95 to 96.
+An independent self-review pass then caught three further issues, all
+factual rather than open items in themselves: the combination arithmetic
+of Sec.~\ref{sec:results} rounded to $12.2\%$ where the formula as stated
+actually gives $12.1\%$ (corrected); the abstract cited only
+Sec.~\ref{sec:fit:templates} for ``two open questions'' when the second one
+is documented in Sec.~\ref{sec:fit:modifiers} (corrected); and the generic-MC
+luminosity weight of Sec.~\ref{sec:fit:templates} was described as a single
+uniform $0.25$ when two categories ($D\ell\nu$\_gap, $D^{**}\ell\nu$ broad)
+in fact carry different weights (corrected, with one new item asking for
+the origin of the non-$0.25$ factor), bringing the total from 96 to 97.
+The analyst then resolved the one remaining open review question directly:
+the ``data statistics only'' baseline of
+Table~\ref{tab:sensitivity-breakdown} fixes every constrained modifier while
+the free \texttt{normfactor} normalisations remain floating, which is now
+stated explicitly in Sec.~\ref{sec:fit:validation} and Sec.~\ref{sec:results}
+in place of the ambiguous ``all other modifiers fixed.''
+This closed one item, lowering the count from 97 to 96.
+The analyst then also explained the apparent non-uniform $0.25$ weighting
+of Sec.~\ref{sec:fit:templates}: it is the same $0.25$ applied to every
+category, expressed through the pre-existing gap-mode merge of
+Sec.~\ref{sec:truth:merging} (the gap yield is folded into
+$D^{**}\ell\nu$ (broad) by event count rather than using the untrusted gap
+shape), closing that item too and lowering the count from 96 to 95.
+A new Sec.~\ref{sec:syst:gap} was then added at the analyst's request,
+flagging $D^{**}\ell\nu$/gap-mode modelling as a potentially large,
+not-yet-validated systematic and summarising, as organisational reference
+only, how four sibling Belle~II semileptonic-tag notes treat it
+differently from each other and from the substitution used here; this
+added two new items, bringing the count from 95 to 97.
 \AnalysisTBD{the classification into artifact, decision and external in
 Table~\ref{tab:open-items} is a working judgement made while writing, not an
 approved plan.  Correct it where the intended route to closing an item
@@ -99,6 +172,16 @@ differs}
 \label{app:open:artifacts}
 
 \begin{enumerate}
+  \item \textbf{Add the \texttt{Toys\_pipeline} workspace pair behind the
+        reported sensitivity to the repository.}
+        This is the one remaining step to make Sec.~\ref{sec:results}
+        independently checkable: with it, the modifier configuration of
+        Fig.~\ref{fig:pyhf-config} could be read from the workspace file
+        itself rather than off a plot (Appendix~\ref{app:fit:stored}).
+        A related question about which categories' templates were built from
+        signal-enriched versus generic MC (Sec.~\ref{sec:fit:templates}) has
+        since been clarified by the analyst and does not need further
+        action.
   \item \textbf{Check for BDT train/template overlap in the generic-MC
         background classes.}
         As found in review, BDT training uses a Run~1-only generic-MC pool in

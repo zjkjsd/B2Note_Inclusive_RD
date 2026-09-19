@@ -2,9 +2,11 @@
 \label{sec:syst}
 \AnalysisTBD{complete systematics table.  The components identified so far
 are: MC statistics; generic-$B\bar{B}$ composition (Sec.~\ref{sec:syst:bbbar});
-fake-$D$ extrapolation; continuum normalisation; $D^{**}\ell\nu$ and gap-mode
-modelling; $D^{*}\tau\nu$ and $D^{**}\tau\nu$ feed-down; form factors;
-tracking and PID efficiency; fit bias and finite-template effects.
+continuum normalisation; $D^{**}\ell\nu$ and gap-mode modelling
+(Sec.~\ref{sec:syst:gap}); $D^{*}\tau\nu$ and $D^{**}\tau\nu$ feed-down; form
+factors; tracking and PID efficiency; fit bias and finite-template effects.
+Fake-$D$ is deliberately not in this list: Sec.~\ref{sec:syst:faked}
+confirms it is fit in situ rather than treated as an external systematic.
 As an organisational cross-check only (not a source of numbers for this
 analysis): the Belle~II hadronic-FEI $R(D^{(*)})$ note (BELLE2-NOTE-PH-2024-056)
 lists a closely analogous set of categories --- $D^{**}\ell\nu$/gap-mode
@@ -13,6 +15,114 @@ branching fractions, hadronic-$B$ branching fractions, MC statistics
 Sec.~\ref{sec:fit:validation}'s toy machinery could adopt), continuum
 normalisation, form factors, and fitter bias --- which supports the
 completeness of the list above without validating any of its eventual sizes}
+
+\subsection{Constraint sources and channel independence}
+\label{sec:syst:sources}
+
+Per the analyst, each constraint below is intended to come from a dedicated
+control sample rather than from an external or literature number
+(\texttt{ANALYSIS\_DECISION}), with one exception noted where it occurs:
+\begin{itemize}
+  \item continuum normalisation (Sec.~\ref{sec:syst:continuum}): the
+        $\Upsilon(4S)$ off-resonance sample (Sec.~\ref{sec:validation:regions});
+  \item generic-$B\bar{B}$ composition, specifically
+        \texttt{bkg\_combinatorial} and \texttt{bkg\_hadronicB\_secondaryL}
+        (Sec.~\ref{sec:syst:bbbar}, currently fixed --- no normalisation
+        modifier at all, not allowed to float --- in
+        Fig.~\ref{fig:pyhf-config}): the BDT-sideband and wrong-charge
+        control samples (Sec.~\ref{sec:validation:regions});
+  \item fake-$D$ normalisation (Sec.~\ref{sec:syst:faked}): the $D$-mass
+        sideband, already fit in situ rather than as an external constraint;
+  \item \texttt{bkg\_fakeL} (currently fixed --- no normalisation modifier at
+        all, not allowed to float --- in Fig.~\ref{fig:pyhf-config}): the
+        collaboration-provided \texttt{SystematicFramework}
+        tool~\cite{SystematicFramework};
+  \item normalisation-mode ($D\ell\nu$, $D^{*}\ell\nu$) modelling: the
+        $q^{2}$ sideband (Sec.~\ref{sec:validation:regions});
+  \item $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down (already
+        \texttt{normsys}-constrained, Sec.~\ref{sec:fit:modifiers}): unlike
+        every other constraint in this list, this one is \emph{not} from a
+        dedicated control sample --- the $D^{*}$-veto region that would
+        otherwise provide one is not yet usable quantitatively, pending a
+        slow-$\pi^{0}$ efficiency correction (Sec.~\ref{sec:recon:dstveto})
+        --- but an external input, taken from the uncertainty on the
+        published $R(D^{*})$ and $R(D^{**})$ measurements themselves
+        (\texttt{ANALYSIS\_DECISION}, per the analyst).
+\end{itemize}
+\texttt{bkg\_fakeTracks} is not covered by a control-sample plan: per the
+analyst, no source to study it has been identified yet.
+Sec.~\ref{sec:truth:closure} documents it as excluded from the templates by
+\texttt{create\_templates\_new}'s \emph{default} \texttt{sample\_to\_exclude}
+argument, but --- confirmed by the analyst --- it \emph{was} included in the
+sensitivity workspace, with only a \texttt{staterror} modifier turned on
+like \texttt{bkg\_combinatorial}, \texttt{bkg\_fakeL} and
+\texttt{bkg\_hadronicB\_secondaryL} (Fig.~\ref{fig:pyhf-config}); the
+generator default does not describe this particular workspace.
+% PROVENANCE
+%   status      : PLANNED
+%   produced-by : analyst decision; not yet implemented as a modifier
+%   commit      : n/a (not yet in the workspace generator)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
+If no control sample is eventually found for it, the analyst's fallback
+plan is to rely on the MC shape as-is and assign a large \texttt{normsys}
+of order $\pm 50\%$ rather than leave it fully unconstrained
+(\texttt{PLANNED}; a personal, not-yet-final choice, per the analyst, since
+\texttt{bkg\_fakeTracks} has not been studied yet).
+% PROVENANCE
+%   status      : VALIDATED_RESULT (as a statement about what the cited
+%                 sibling notes themselves say; not a result of this
+%                 analysis, per AGENTS.md's organisational-reference rule)
+%   produced-by : docs/B2N_BtoKnunu_v10.pdf, docs/B2N_BtoTauNu_v8.pdf,
+%                 docs/B2N_R(D)R(D*)_hadFEI_v16.pdf,
+%                 docs/B2N_R(D*)_hadFEI_v8.pdf,
+%                 docs/B2N_R(D)R(D*)_SLFEI_v5.pdf (five of the six sibling
+%                 notes in docs/; docs/B2N_inclusive_Vub_v11.pdf was also
+%                 checked and does not state a percentage for this)
+%   commit      : n/a (external documents, not analysis-repository content)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
+As external context only (not an input to this analysis): assigning a
+large, round uncertainty to a background component whose composition or
+rate is not otherwise constrained is a common convention in Belle~II
+analyses, though the sibling notes examined are not unanimous on the size.
+Five of the six sibling notes checked use $100\%$ specifically --- the
+$B\to K\nu\bar\nu$ note for photon-selection and $B\to K^{(*)}\pi\bar\pi$
+BF-derived corrections lacking a direct measurement, the $B\to\tau\nu$
+note for decay modes with ``imprecise values in generic MC generation,''
+and both $R(D^{(*)})$ hadronic-FEI notes and the semileptonic-FEI note for
+BFs with no PDG value or (for the semileptonic-FEI note specifically) the
+gap-mode BF whose ``true composition is uncertain'' --- while the
+$B\to K\nu\bar\nu$ note also separately uses smaller, data-driven
+percentages ($10$--$30\%$) once a control-sample comparison is available to
+calibrate the size.
+\texttt{bkg\_fakeTracks} currently has no control-sample comparison
+(consistent with the $100\%$-style cases above, not the data-driven ones),
+which is worth weighing against the analyst's $\pm 50\%$ working choice.
+
+Each of these control samples, except the $D^{*}\tau\nu$/$D^{**}\tau\nu$
+feed-down constraint above, is reconstructed, and its lepton identified,
+separately for the electron and muon channels, so the resulting constraint
+is itself channel-specific rather than one external number shared between
+the two channels' fits.
+This is the missing piece for Sec.~\ref{sec:results}'s combination for those
+constraints: the two channels' data statistics and control-sample-derived
+systematic constraints are independent for the same reason
+(Sec.~\ref{sec:results}, Combination paragraph) --- each is measured from a
+separate, non-overlapping, lepton-flavour-specific sample --- so treating the
+two channels as independent when combining is justified for those systematic
+components too, not only the statistical one.
+The feed-down constraint does not have this property, since it is an
+external number rather than a channel-specific measurement; see
+Sec.~\ref{sec:results}'s Combination paragraph for the consequence.
+\InProgress{most of the constraints above are not yet implemented as
+modifiers (only continuum and the $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down
+currently are, per Fig.~\ref{fig:pyhf-config}); derive and add the
+remaining ones from their stated control samples, and either find a control
+sample for \texttt{bkg\_fakeTracks} or implement the analyst's fallback
+$\pm 50\%$ MC-shape \texttt{normsys} for it}
 
 \subsection{Generic-$B\bar{B}$ composition}
 \label{sec:syst:bbbar}
@@ -69,3 +179,81 @@ normalisation in situ, as a free, unconstrained \texttt{normfactor}
 (Sec.~\ref{sec:fit:modifiers}), which is why fake-$D$ does not appear in this
 systematics section: fitting it removes the need for an external prior on
 it.
+
+\subsection{$D^{**}\ell\nu$ and gap-mode modelling}
+\label{sec:syst:gap}
+Per the analyst, this is expected to be one of the potentially large
+systematics, precisely because the current treatment is a shape
+substitution motivated by a lack of a trusted alternative
+(Sec.~\ref{sec:truth:merging}), not a validated model: the gap-mode template
+is built from the $D^{**}\ell\nu$ (broad) shape, with the two components'
+normalisations summed, rather than from the generic-MC gap-mode models
+themselves.
+\InProgress{test alternative models for the gap-mode shape/normalisation
+against the current $D^{**}\ell\nu$ (broad)-substitution default, and
+quantify the resulting change in the fitted $B\to D\tau\nu$ normalisation;
+this is in addition to, and motivated by the same substitution as,
+Sec.~\ref{sec:truth:merging}'s existing item on what is lost by the
+narrow/broad merge}
+
+As external context only (not an input to this analysis, per the
+organisational-reference convention of AGENTS.md): the physics motivation
+for gap-mode categories at all is the well-known mismatch between the
+inclusive $B\to X_{c}\ell\nu$ branching fraction and the sum of measured
+exclusive channels, for which non-resonant $B\to D^{(*)}\pi\pi\ell\nu$ and
+$B\to D^{(*)}\eta\ell\nu$ decays were proposed as a fill
+\cite{Bernlochner:2012bt}.
+% PROVENANCE
+%   status      : VALIDATED_RESULT (as a statement about what the cited
+%                 sibling notes themselves say; not a result of this
+%                 analysis, per AGENTS.md's organisational-reference rule)
+%   produced-by : docs/B2N_R(D)R(D*)_SLFEI_v5.pdf (first bullet below:
+%                 dedicated gap-mode signal MC via an intermediate broad
+%                 D** resonance, 100% combined gap-mode BF uncertainty,
+%                 "since their true composition is uncertain"),
+%                 docs/B2N_R(D)R(D*)_hadFEI_v16.pdf (second bullet:
+%                 gap mode "mainly modeled by B -> D(*) eta l"),
+%                 docs/B2N_R(D*)_hadFEI_v8.pdf (third bullet: light-lepton
+%                 gap-mode BFs from HFLAV averages, semitauonic gap-mode
+%                 BFs derived via R(H_c)),
+%                 docs/B2N_inclusive_Vub_v11.pdf (fourth bullet: gap modes
+%                 "treated as regular B -> D** lnu decays" for form-factor
+%                 reweighting, non-resonant D(*)pi lnu events removed as
+%                 "saturated by production via the D** resonances")
+%   commit      : n/a (external documents, not analysis-repository content;
+%                 not vendored into this repository per .gitignore, so not
+%                 present in a fresh checkout at any commit)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
+The four sibling Belle~II semileptonic-tag notes examined treat this
+differently enough that no single precedent is obviously the right one to
+follow here, which if anything supports treating the current substitution as
+provisional:
+\begin{itemize}
+  \item one uses dedicated gap-mode signal MC generated via an intermediate
+        broad $D^{**}$ resonance (the same substitution used here, but from
+        purpose-built MC rather than a post-hoc template swap), assigns a
+        $100\%$ uncertainty to the combined gap-mode branching fraction
+        (varying all of them together, ``since their true composition is
+        uncertain''), and separately varies the broad-$D^{**}$ form-factor
+        parameters for the gap-mode decays;
+  \item a second instead models the gap as dominated by
+        $B\to D^{(*)}\eta\ell\nu$ rather than $D^{(*)}\pi\pi\ell\nu$, and
+        assigns separate large uncertainties to the two hypotheses;
+  \item a third takes light-lepton gap-mode branching fractions from HFLAV
+        averages and derives semitauonic gap-mode branching fractions (not
+        available from HFLAV) from predicted $R(H_{c})$ ratios
+        \cite{Bernlochner:2023eqn};
+  \item a fourth treats gap modes as ordinary $B\to D^{**}\ell\nu$ decays
+        for form-factor reweighting purposes (the same choice made here),
+        and separately notes that some phase-space-generated non-resonant
+        modes in generic MC are removed because their measured branching
+        fractions are already saturated by resonant $D^{**}$ production.
+\end{itemize}
+\AnalysisTBD{decide whether any of these four precedents --- a dedicated
+gap-mode uncertainty treatment, an eta-dominant alternative hypothesis, an
+$R(H_{c})$-based semitauonic branching-fraction estimate, or the
+non-resonant-mode removal criterion --- should be adopted or adapted here,
+once the dedicated gap-mode signal MC noted in Sec.~\ref{sec:truth:merging}
+is available for a direct test}

@@ -5,6 +5,167 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.4 (draft) — unreleased (updated a fifth time)
+
+Addressed one of two minor Codex findings from the latest PR #3 review (the
+other, provenance for the gap-mode template-weight transformation in Sec. 8,
+was called minor and left as-is per the analyst):
+- Sec. 9's four-sibling-note gap-mode survey now carries its own local
+  provenance block naming which of the four notes supports each bullet
+  (`B2N_R(D)R(D*)_SLFEI_v5.pdf`, `B2N_R(D)R(D*)_hadFEI_v16.pdf`,
+  `B2N_R(D*)_hadFEI_v8.pdf`, `B2N_inclusive_Vub_v11.pdf`), identified by
+  searching each PDF's text for the specific claim attributed to it (exact
+  phrase matches found for all four, e.g. SLFEI's "since their true
+  composition is uncertain" and inclusive-Vub's "saturated by production via
+  the D** resonances").
+
+## Version 0.4 (draft) — unreleased (updated a fourth time)
+
+Addressed two further minor Codex findings from a re-review of PR #3, both
+confirmed minor by the analyst:
+- Sec. 8's `pyhf_config` caption no longer says `bkg_fakeL`/`bkg_fakeTracks`
+  have no stated plan; it now cross-references the plans already documented
+  in Sec. 9.1 (`SystematicFramework` tool for `bkg_fakeL`, fallback ±50%
+  `normsys` for `bkg_fakeTracks`), which had gone stale after that section
+  was written.
+- Sec. 11's combination paragraph now flags, right where the $12.1\%$ number
+  appears, that the independence assumption is not yet established for the
+  $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down component; per the analyst this is
+  a minor, noted caveat rather than a reason to withhold the preliminary
+  number.
+
+## Version 0.4 (draft) — unreleased (updated a third time)
+
+Addressed a further Codex review round on PR #3, all four points confirmed or
+clarified by the analyst:
+- Sec. 8's discrepancy paragraph on the semitauonic template-sourcing rule
+  trimmed: per the analyst, no need to record e-channel-specific test detail
+  separately -- the sourcing rule (three semitauonic categories from
+  signal-enriched MC, everything else generic) applies identically to both
+  channels.
+- Sec. 9's `bkg_combinatorial`/`bkg_hadronicB_secondaryL`/`bkg_fakeL` are now
+  described as "fixed" (no normalisation modifier, not allowed to float)
+  rather than "unconstrained", per the analyst's clarification that they will
+  become constrained only once a `normsys` is implemented for them.
+- Sec. 11's Table 7 caption and the $D^{*}\tau\nu$/$D^{**}\tau\nu$ row now
+  state explicitly that this is a joint toggle of both modifiers together
+  (the only exception to the one-modifier-at-a-time procedure), per the
+  analyst's confirmation.
+- Sec. 9's attribution of the $D^{*}\tau\nu$/$D^{**}\tau\nu$ ±10%/±30%
+  priors corrected: per the analyst, these are external inputs from the
+  uncertainty on the published $R(D^{*})$/$R(D^{**})$ measurements, not
+  derived from the $D^{*}$-veto control sample (which Sec. 3 already states
+  is not yet usable quantitatively, pending a slow-$\pi^{0}$ efficiency
+  correction) -- resolving the contradiction Codex flagged. This in turn
+  revealed a new, previously unnoticed issue: Sec. 11's justification for
+  treating the two channels' systematic constraints as independent when
+  combining relied on every constraint being a channel-specific
+  control-sample result, which is no longer true for this one; Sec. 11
+  now flags that if the same external $R(D^{*})$/$R(D^{**})$ uncertainty
+  enters both channel fits, this component should be treated as correlated
+  rather than independent, with a new TBD to confirm and, if so, correct
+  the combination.
+
+## Version 0.4 (draft) — unreleased (updated once more)
+
+Addressed a further Codex review round on PR #3:
+- Sec. 8's event-count table (Table 4) provenance now names the confirmed
+  producing notebook (`Notebooks/3_fitting_cabinetry_2d_SR.ipynb`) and notes
+  the counts are expected to shift slightly with the next basf2 release, per
+  the analyst.
+- Sec. 11's correlation-matrix caption (Fig. 14) now lists every
+  currently-implemented modifier pruned from the plot by name
+  (`bkg_fakeD_norm`, `bkg_continuum_norm`, `D*taunu_norm`, and the
+  `staterror` nuisance parameters), not just two of them.
+- Sec. 9's `bkg_fakeTracks` fallback ±50% `normsys` now carries its own
+  provenance block (PLANNED) and organisational context: five of the six
+  sibling Belle II semileptonic-tag notes use a 100% uncertainty convention
+  for backgrounds with no direct measurement or control-sample comparison
+  (the same situation `bkg_fakeTracks` is currently in), while one of them
+  separately uses smaller, data-driven percentages once a control-sample
+  comparison exists -- recorded as context for the analyst's own ±50%
+  choice, not as a substitute value.
+- CHANGELOG.md: per the analyst, versions are announced explicitly rather
+  than pinned to a commit automatically; v0.4 is left as-is.
+
+## Version 0.4 (draft) — unreleased (updated again)
+
+Per the analyst: `bkg_fakeTracks` has no control-sample plan yet (no source
+identified so far); if none is found, the fallback is to rely on the MC
+shape and assign a large (~±50%) `normsys` rather than leave it fully
+unconstrained. Also confirmed directly (resolving the discrepancy Codex
+flagged): it *was* included in the sensitivity workspace with `staterror`
+turned on, matching Fig. 7 — the generator's default exclusion just doesn't
+describe this particular workspace. Sec. 9.1 updated accordingly; no longer
+an unreconciled discrepancy.
+
+## Version 0.4 (draft) — unreleased (updated)
+
+Additional update: per a PR #3 review reply, added Sec. 9.1 documenting the
+control-sample source for each systematic constraint (off-resonance for
+continuum, BDT-sideband/wrong-charge for the two generic-BBbar categories,
+the `SystematicFramework` tool for fake-lepton, $q^{2}$ sideband for the
+normalisation modes, $D^{*}$-veto for $D^{*}\tau\nu$/$D^{**}\tau\nu$
+feed-down), added the tool as a reference, and resolved the open combination
+question in Sec. 11: since each control sample is reconstructed separately
+per lepton channel, the resulting constraints are independent between the
+$e$ and $\mu$ channels for the same reason their data statistics are, which
+was the missing justification for combining the two channels'
+uncertainties as independent measurements.
+
+
+
+Documents the sensitivity-calculation procedure and preliminary Asimov
+sensitivity described by the analyst, and inserts the four supporting
+figures added to `figures/` (`Kinematic_tagging_tech` was already in the
+note from v0.3; `MC_fitVars_2d`, `pyhf_config` and `pyhf_fit_correlation`
+are new).
+
+Added:
+- Sec. 8 (Templates): a new table of reconstructed event counts across all
+  fourteen truth categories, Run 1 + Run 2 combined, $e$ and $\mu$ channels,
+  supplementing the two existing, narrower Sec. 4 reference points.
+- Sec. 8 (Fit observables): the `MC_fitVars_2d` figure (motivating the
+  two-dimensional fit directly) and the exact nominal binning, prune
+  threshold ($10$) and merge threshold ($5$) used to build the pyhf
+  templates, replacing two `InProgress` placeholders with `CODE_FACT`.
+- Sec. 8 (Modifiers): the `pyhf_config` figure, showing the actual
+  channel/sample/modifier configuration of the workspace behind the
+  sensitivity result.
+- Sec. 8 (Fit validation) and Sec. 11 (renamed content, was a one-paragraph
+  placeholder): the Asimov-sensitivity method, a per-channel uncertainty
+  breakdown table (data statistics, $D^{*}\tau\nu$/$D^{**}\tau\nu$ norm.
+  sys., continuum norm. sys., MC statistics), the `pyhf_fit_correlation`
+  figure, and the $e$+$\mu$ inverse-variance combination ($\approx 12.2\%$),
+  replacing the unsourced $\sim 12\%$ placeholder flagged in PR #2 review.
+- Abstract: a preliminary combined sensitivity statement ($\approx 12\%$),
+  replacing part of the previous "to be completed" TBD.
+- Appendix (fit): a note that the `Toys_pipeline` workspace pair behind the
+  sensitivity result is not present in this repository checkout; closed the
+  Asimov-correlation-matrix TBD by cross-referencing the new Sec. 11 figure.
+
+Discrepancies found while verifying the analyst's description against the
+analysis repository, flagged directly to the analyst and then clarified
+(both in Sec. 8/Sec. 11, superseding the initial write-up):
+- The intended template construction uses signal-enriched MC for
+  $D\tau\nu$/$D^{*}\tau\nu$/$D^{**}\tau\nu$ and generic MC for every other
+  category, but the specific calls saved in
+  `Notebooks/3_fitting_cabinetry_2d_SR.ipynb` did not read as matching this
+  (a mixed dictionary exists but is commented out; the $e$-channel call
+  additionally excludes $D^{*}\tau\nu$/$D^{**}\tau\nu$ entirely). Per the
+  analyst, this is because the notebook was edited after the sensitivity was
+  produced, for separate $e$-channel-only tests; the $\mu$-channel cell is
+  unchanged and is representative, and the extra $e$-channel exclusion
+  should be disregarded. Not a concern for the reported numbers.
+- The `pyhf_config` figure shows four generic-$B\bar{B}$ categories
+  (`bkg_combinatorial`, `bkg_fakeL`, `bkg_fakeTracks`,
+  `bkg_hadronicB_secondaryL`) with only a `staterror` modifier and no
+  normalisation modifier at all. Per the analyst, this is deliberate:
+  background studies for these categories are ongoing and no systematic
+  uncertainty is yet available to encode; `bkg_combinatorial` and
+  `bkg_hadronicB_secondaryL` are expected to get `normsys` modifiers once
+  the generic-$B\bar{B}$ reweighting of Sec. 7 is complete.
+
 ## Version 0.3 (draft) — unreleased
 
 Responds to review comments on PR #2 (a mix of an automated reviewer and the
