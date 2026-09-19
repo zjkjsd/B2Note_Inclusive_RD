@@ -5,6 +5,38 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.4 (draft) — unreleased (updated a third time)
+
+Addressed a further Codex review round on PR #3, all four points confirmed or
+clarified by the analyst:
+- Sec. 8's discrepancy paragraph on the semitauonic template-sourcing rule
+  trimmed: per the analyst, no need to record e-channel-specific test detail
+  separately -- the sourcing rule (three semitauonic categories from
+  signal-enriched MC, everything else generic) applies identically to both
+  channels.
+- Sec. 9's `bkg_combinatorial`/`bkg_hadronicB_secondaryL`/`bkg_fakeL` are now
+  described as "fixed" (no normalisation modifier, not allowed to float)
+  rather than "unconstrained", per the analyst's clarification that they will
+  become constrained only once a `normsys` is implemented for them.
+- Sec. 11's Table 7 caption and the $D^{*}\tau\nu$/$D^{**}\tau\nu$ row now
+  state explicitly that this is a joint toggle of both modifiers together
+  (the only exception to the one-modifier-at-a-time procedure), per the
+  analyst's confirmation.
+- Sec. 9's attribution of the $D^{*}\tau\nu$/$D^{**}\tau\nu$ ±10%/±30%
+  priors corrected: per the analyst, these are external inputs from the
+  uncertainty on the published $R(D^{*})$/$R(D^{**})$ measurements, not
+  derived from the $D^{*}$-veto control sample (which Sec. 3 already states
+  is not yet usable quantitatively, pending a slow-$\pi^{0}$ efficiency
+  correction) -- resolving the contradiction Codex flagged. This in turn
+  revealed a new, previously unnoticed issue: Sec. 11's justification for
+  treating the two channels' systematic constraints as independent when
+  combining relied on every constraint being a channel-specific
+  control-sample result, which is no longer true for this one; Sec. 11
+  now flags that if the same external $R(D^{*})$/$R(D^{**})$ uncertainty
+  enters both channel fits, this component should be treated as correlated
+  rather than independent, with a new TBD to confirm and, if so, correct
+  the combination.
+
 ## Version 0.4 (draft) — unreleased (updated once more)
 
 Addressed a further Codex review round on PR #3:

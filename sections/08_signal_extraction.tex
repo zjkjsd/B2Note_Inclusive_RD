@@ -187,28 +187,17 @@ overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
   \end{tabular}
 \end{table}
 
-For reference, the generic-MC pool also contains reconstructed
-$D\tau\nu$/$D^{*}\tau\nu$/$D^{**}\tau\nu$ candidates, at the much smaller
-counts of $8\,637$/$2\,590$/$2\,482$ ($e$) and $4\,575$/$1\,429$/$1\,273$
-($\mu$); these are not part of the sourcing rule above and are not what the
-table lists, but they are what the specific \texttt{create\_templates\_new}
-calls saved in the notebook currently read for these three categories,
-which is the discrepancy discussed next.
 At the pinned commit, the specific \texttt{create\_templates\_new} calls
 saved in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} do not read
-as matching this at face value: both channels' saved calls pass the
-all-generic-MC dictionary, while a mixed dictionary that substitutes
-signal-enriched MC for exactly these three categories exists earlier in the
-same notebook but is commented out at the call site; and the $e$-channel
-call additionally excludes $D^{*}\tau\nu$ and $D^{**}\tau\nu$ entirely via
-\texttt{sample\_to\_exclude}, while the $\mu$-channel call does not.
-Per the analyst (\texttt{ANALYSIS\_DECISION}), this reflects the notebook
-having been edited \emph{after} the Sec.~\ref{sec:results} sensitivity was
-produced, for separate $e$-channel-only tests; the $\mu$-channel cell is
-unchanged since that run and is the configuration to read as representative,
-and the $e$-channel's additional exclusion of $D^{*}\tau\nu$/$D^{**}\tau\nu$
-should be disregarded rather than treated as describing the reported result.
-The analyst confirms this is not a concern for the sensitivity numbers as
+as matching the sourcing rule above at face value for the three semitauonic
+categories: both channels' saved calls pass the all-generic-MC dictionary,
+and the $e$-channel call additionally excludes $D^{*}\tau\nu$ and
+$D^{**}\tau\nu$ entirely via \texttt{sample\_to\_exclude}.
+Per the analyst (\texttt{ANALYSIS\_DECISION}), this is a later,
+$e$-channel-only artifact from tests run \emph{after} the
+Sec.~\ref{sec:results} sensitivity was produced, not a procedural difference
+between the two channels: the sourcing rule above holds identically for both
+$e$ and $\mu$, and this is not a concern for the sensitivity numbers as
 reported.
 
 The generic-MC luminosity weight of $0.25$ (Sec.~\ref{sec:data:mc}) is

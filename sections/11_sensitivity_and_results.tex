@@ -43,8 +43,12 @@ uncertainties are combined at the end (below) rather than fit jointly.
   $D^{**}\ell\nu$~+~gap, \texttt{bkg\_fakeD}) remain floating
   (Sec.~\ref{sec:fit:validation}); each subsequent row is the quadrature
   difference introduced by freeing one further constrained modifier relative
-  to the row above; ``more systematics'' denotes contributions not yet
-  enabled in the fit (Sec.~\ref{sec:syst}).
+  to the row above, with one exception: the $D^{*}\tau\nu$ and $D^{**}\tau\nu$
+  \texttt{normsys} modifiers are freed together as a single joint step rather
+  than one at a time, so that row's $\pm4.6\%$ is their combined
+  contribution, not either modifier's individually (per the analyst, this is
+  the only such joint step in the current breakdown); ``more systematics''
+  denotes contributions not yet enabled in the fit (Sec.~\ref{sec:syst}).
   The ``Total'' row is the uncertainty returned directly by the fit with all
   listed modifiers simultaneously free, not a value recomputed from the rows
   above: summing the four individual differences in quadrature gives
@@ -70,7 +74,7 @@ uncertainties are combined at the end (below) rather than fit jointly.
     Contribution & $e$ channel & $\mu$ channel \\
     \hline
     Data statistics only & $11.8\%$ & $19.1\%$ \\
-    $+$ norm.\ sys.\ ($D^{*}\tau\nu$, $D^{**}\tau\nu$) & $\pm 4.6\%$ & $\pm 4.6\%$ \\
+    $+$ norm.\ sys.\ ($D^{*}\tau\nu$ \& $D^{**}\tau\nu$, joint) & $\pm 4.6\%$ & $\pm 4.6\%$ \\
     $+$ norm.\ sys.\ (continuum) & $\pm 2.4\%$ & $\pm 1.3\%$ \\
     $+$ MC statistics (\texttt{staterror}) & $\pm 5.8\%$ & $\pm 9.3\%$ \\
     $+$ more systematics (not yet enabled) & \multicolumn{2}{c}{---} \\
@@ -123,17 +127,34 @@ them as independent is \emph{physically} correct --- a systematic shift
 shared between channels would move both coherently, and the
 inverse-variance formula would then understate the true combined
 uncertainty.
-Per the analyst, this is resolved by how each constraint is obtained
-(Sec.~\ref{sec:syst:sources}): every systematic here is derived from a
-dedicated control sample reconstructed separately for the electron and muon
-channels, rather than from one external number applied to both, so the two
-channels' constraints are independent measurements for the same reason
+Per the analyst, this is resolved for the continuum constraint by how it is
+obtained (Sec.~\ref{sec:syst:sources}): it is derived from a dedicated
+control sample reconstructed separately for the electron and muon channels,
+rather than from one external number applied to both, so the two channels'
+continuum constraints are independent measurements for the same reason
 their data statistics are.
-\AnalysisTBD{once each control-sample-derived constraint of
-Sec.~\ref{sec:syst:sources} is actually implemented as a modifier, confirm
-this independence holds in practice (for example, that the same
-off-resonance or wrong-charge run periods are not double-used across
-channels in a way that reintroduces a correlation)}
+The $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down constraint is different: per the
+analyst (Sec.~\ref{sec:syst:sources}), it is instead taken from the
+uncertainty on the published $R(D^{*})$/$R(D^{**})$ measurements, an
+external input rather than a channel-specific control-sample result, so the
+argument above does not establish its independence between the two
+channels, and if the same external uncertainty enters both the $e$- and
+$\mu$-channel fits, this component should be treated as fully correlated
+between channels rather than independent --- which the inverse-variance
+combination formula above does not currently do.
+\AnalysisTBD{confirm whether the $D^{*}\tau\nu$/$D^{**}\tau\nu$
+\texttt{normsys} width used in the $e$- and $\mu$-channel workspaces is in
+fact the same external $R(D^{*})$/$R(D^{**})$ number in both, and if so
+either combine the two channels accounting for this correlation (for
+example via a joint fit or an explicit correlated-nuisance-parameter
+treatment) rather than the current independent inverse-variance average, or
+quantify that the resulting understatement of the combined uncertainty is
+negligible.
+Once each control-sample-derived constraint of Sec.~\ref{sec:syst:sources}
+is actually implemented as a modifier, also confirm that independence holds
+in practice for those (for example, that the same off-resonance or
+wrong-charge run periods are not double-used across channels in a way that
+reintroduces a correlation)}
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT

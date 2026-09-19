@@ -19,27 +19,35 @@ completeness of the list above without validating any of its eventual sizes}
 \subsection{Constraint sources and channel independence}
 \label{sec:syst:sources}
 
-Per the analyst, each constraint above is intended to come from a dedicated
+Per the analyst, each constraint below is intended to come from a dedicated
 control sample rather than from an external or literature number
-(\texttt{ANALYSIS\_DECISION}):
+(\texttt{ANALYSIS\_DECISION}), with one exception noted where it occurs:
 \begin{itemize}
   \item continuum normalisation (Sec.~\ref{sec:syst:continuum}): the
         $\Upsilon(4S)$ off-resonance sample (Sec.~\ref{sec:validation:regions});
   \item generic-$B\bar{B}$ composition, specifically
         \texttt{bkg\_combinatorial} and \texttt{bkg\_hadronicB\_secondaryL}
-        (Sec.~\ref{sec:syst:bbbar}, currently unconstrained in
+        (Sec.~\ref{sec:syst:bbbar}, currently fixed --- no normalisation
+        modifier at all, not allowed to float --- in
         Fig.~\ref{fig:pyhf-config}): the BDT-sideband and wrong-charge
         control samples (Sec.~\ref{sec:validation:regions});
   \item fake-$D$ normalisation (Sec.~\ref{sec:syst:faked}): the $D$-mass
         sideband, already fit in situ rather than as an external constraint;
-  \item \texttt{bkg\_fakeL} (currently unconstrained in
-        Fig.~\ref{fig:pyhf-config}): the collaboration-provided
-        \texttt{SystematicFramework} tool~\cite{SystematicFramework};
+  \item \texttt{bkg\_fakeL} (currently fixed --- no normalisation modifier at
+        all, not allowed to float --- in Fig.~\ref{fig:pyhf-config}): the
+        collaboration-provided \texttt{SystematicFramework}
+        tool~\cite{SystematicFramework};
   \item normalisation-mode ($D\ell\nu$, $D^{*}\ell\nu$) modelling: the
         $q^{2}$ sideband (Sec.~\ref{sec:validation:regions});
   \item $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down (already
-        \texttt{normsys}-constrained, Sec.~\ref{sec:fit:modifiers}): the
-        $D^{*}$-veto sample (Sec.~\ref{sec:recon:dstveto}).
+        \texttt{normsys}-constrained, Sec.~\ref{sec:fit:modifiers}): unlike
+        every other constraint in this list, this one is \emph{not} from a
+        dedicated control sample --- the $D^{*}$-veto region that would
+        otherwise provide one is not yet usable quantitatively, pending a
+        slow-$\pi^{0}$ efficiency correction (Sec.~\ref{sec:recon:dstveto})
+        --- but an external input, taken from the uncertainty on the
+        published $R(D^{*})$ and $R(D^{**})$ measurements themselves
+        (\texttt{ANALYSIS\_DECISION}, per the analyst).
 \end{itemize}
 \texttt{bkg\_fakeTracks} is not covered by a control-sample plan: per the
 analyst, no source to study it has been identified yet.
@@ -94,16 +102,21 @@ calibrate the size.
 (consistent with the $100\%$-style cases above, not the data-driven ones),
 which is worth weighing against the analyst's $\pm 50\%$ working choice.
 
-Each of these control samples is reconstructed, and its lepton identified,
+Each of these control samples, except the $D^{*}\tau\nu$/$D^{**}\tau\nu$
+feed-down constraint above, is reconstructed, and its lepton identified,
 separately for the electron and muon channels, so the resulting constraint
 is itself channel-specific rather than one external number shared between
 the two channels' fits.
-This is the missing piece for Sec.~\ref{sec:results}'s combination: the two
-channels' \emph{systematic} constraints are independent for the same reason
-their data statistics are (Sec.~\ref{sec:results}, Combination paragraph)
---- each is measured from a separate, non-overlapping, lepton-flavour-specific
-sample --- so treating the two channels as independent when combining is
-justified for the systematic components too, not only the statistical one.
+This is the missing piece for Sec.~\ref{sec:results}'s combination for those
+constraints: the two channels' data statistics and control-sample-derived
+systematic constraints are independent for the same reason
+(Sec.~\ref{sec:results}, Combination paragraph) --- each is measured from a
+separate, non-overlapping, lepton-flavour-specific sample --- so treating the
+two channels as independent when combining is justified for those systematic
+components too, not only the statistical one.
+The feed-down constraint does not have this property, since it is an
+external number rather than a channel-specific measurement; see
+Sec.~\ref{sec:results}'s Combination paragraph for the consequence.
 \InProgress{most of the constraints above are not yet implemented as
 modifiers (only continuum and the $D^{*}\tau\nu$/$D^{**}\tau\nu$ feed-down
 currently are, per Fig.~\ref{fig:pyhf-config}); derive and add the
