@@ -83,7 +83,10 @@ records which analysis commit each note version corresponds to.
   and source commit for every numerical result.
 - Use \AnalysisTBD{} for missing content, \PreliminaryResult{} for non-final
   values, \InProgress{} for known-incomplete work actively being addressed,
-  and \Superseded{} for retained but obsolete material.
+  and \Superseded{} for retained but obsolete material.  Do not mark open
+  items with ad-hoc bold or coloured text: only \AnalysisTBD{} and
+  \InProgress{} appear in the to-do list that the draft builds from them
+  (`\listofTBDs`, defined in `definitions.tex`).
 - Do not remove TODO markers without evidence that the item is resolved.
 
 ## Workflow

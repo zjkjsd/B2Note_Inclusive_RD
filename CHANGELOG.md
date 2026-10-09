@@ -5,6 +5,36 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.5 (draft) — unreleased
+
+Overleaf revision by the analysts (commit `69f744d`), focused on physics
+understanding and readability for reviewers outside the analysis team; many
+TBD markers were resolved or removed and several passages rewritten or cut.
+Followed by a tidy-up that changes no prose:
+- Added an automatically generated to-do list after the table of contents
+  (draft mode only), built from every `\AnalysisTBD`/`\InProgress` marker.
+  It replaces the hand-maintained open-items appendix
+  (`sections/appendix_open_items.tex`, whose text had already been removed
+  on Overleaf, leaving only its provenance comment), which is deleted.
+- The three informal open-item notes written in bold/red on Overleaf
+  (Sec. 2 gap modes, Sec. 6 fake-D sideband corrections, Appendix D table
+  placement) now use `\AnalysisTBD` with their wording unchanged, so they
+  appear in the to-do list.
+- Restored the Sec. 7 heading and `sec:bbbar` label (removed on Overleaf;
+  six cross-references were left undefined); pointed the stale
+  `sec:bbbar:rundep` reference at `sec:bbbar:tuning`, where the run
+  dependence is now described; replaced the stale `sec:truth:closure`
+  reference in Sec. 8 with a TBD, since the subsection it pointed to was
+  removed.
+- LaTeX comments brought in line with the edited text: provenance blocks
+  moved to the float they describe (Fig. 1; the four MC fit-variable figures
+  now in Sec. 3; Tables 4 and 6), orphaned blocks whose content was cut
+  removed (Secs. 4, 5, 9, Appendix D), Sec. 7 provenance completed,
+  commented-out prose removed (recoverable from git history).
+- Fixed the Sec. 4 enumeration, which skipped item 8 after an item was cut.
+- Removed the empty `sections/12_summary.tex` and its `\input`.
+- Restored the executable bit on the scripts (lost in the Overleaf sync).
+
 ## Version 0.4 (draft) — unreleased (updated a fifth time)
 
 Addressed one of two minor Codex findings from the latest PR #3 review (the

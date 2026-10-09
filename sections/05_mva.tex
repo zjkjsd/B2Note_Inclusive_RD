@@ -25,7 +25,6 @@ The four training classes are assigned in
 \texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb} as
 \begin{center}
 \begin{tabular}{c l l}
-  % narrow content; kept simple
   \hline
   Target & Class & Output probability \\
   \hline
@@ -43,14 +42,6 @@ selection of Eq.~\eqref{eq:lgb-tight}, the fake-$D$ suppression that defines
 the generic-$B\bar{B}$ tuning region (Eq.~\eqref{eq:bbbar-region}), and the
 combinatorial-enriched control region of Sec.~\ref{sec:validation}.
 A binary classifier would have required a separate training for each.
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : Notebooks/2_create_BDTtrainingSet.ipynb
-%   commit      : ad2f2ec
-%   sample      : MC16rd, e channel, offline_cut (Eq. offline-cut)
-%   selection   : classify_mc_dict('e'); per-class random subsampling,
-%                 random_state=0
-%   corrections : none
 
 \subsection{BDT Training configuration}
 \label{sec:mva:training}

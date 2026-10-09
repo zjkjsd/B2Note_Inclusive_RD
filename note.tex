@@ -46,6 +46,10 @@ BELLE2-NOTE-PH-XXXX-YYY \\ % TODO: request the note number
 
 \tableofcontents
 
+% Draft only: the list of open items, generated from every \AnalysisTBD and
+% \InProgress marker in the text (see definitions.tex).
+\ifthenelse{\boolean{final}}{}{\clearpage\listofTBDs}
+
 \ifthenelse{\boolean{final}}{}{\linenumbers}
 
 \clearpage

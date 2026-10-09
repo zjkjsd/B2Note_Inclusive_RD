@@ -13,4 +13,4 @@ note: note.tex $(SOURCES)
 # removes temporary files
 .PHONY : clean
 clean:
-	@rm -f *~ *.toc *.aux *.log *.bbl *.blg *.dvi *.tmp *.out *prlNotes.bib *.fdb_latexmk *.fls
+	@rm -f *~ *.toc *.tbd *.aux *.log *.bbl *.blg *.dvi *.tmp *.out *prlNotes.bib *.fdb_latexmk *.fls
