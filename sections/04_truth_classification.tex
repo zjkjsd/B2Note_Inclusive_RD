@@ -5,7 +5,9 @@
 %                 utilities.py :: DecayMode_new       (line 73)
 %                 utilities.py :: create_templates_new (lines 1087-1287)
 %   commit      : ad2f2ec
-%   scope       : MC16rd, Run 1 + Run 2, e and mu channels
+%   sample      : MC16rd, Run 1 + Run 2, e and mu channels
+%   selection   : n/a (definitions)
+%   corrections : n/a
 % =========================================================================
 \section{Truth Classification and Simulated Sample Composition}
 \label{sec:truth}
@@ -82,7 +84,7 @@ and are split by the origin of the pair:
 The signal-like sample is then subdivided by the generated first two
 daughters of the $B$:
 
-\begin{enumerate}\setcounter{enumi}{8}
+\begin{enumerate}\setcounter{enumi}{7}
   \item $B \to D \tau \nu$ (signal) and $B \to D \ell \nu$ (normalization),
         identified by the PDG-code product of the first two daughters;
   \item $B \to D^{*} \tau \nu$ and $B \to D^{*} \ell \nu$;
@@ -142,19 +144,6 @@ purpose of the reweighting described in Sec.~\ref{sec:bbbar}.
 
 \subsection{Sample composition}
 \label{sec:truth:composition}
-
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : Notebooks/2_create_BDTtrainingSet.ipynb (printed sample
-%                 sizes before the per-class 500,000-event subsampling of
-%                 Sec.~\ref{sec:mva:classes})
-%   commit      : ad2f2ec
-%   sample      : MC16rd, e channel, offline_cut (Eq. offline-cut); the
-%                 generic-MC input glob is explicitly run1-only, the
-%                 signal-enriched input glob is a run* wildcard whose actual
-%                 run coverage has not been confirmed
-%   selection   : offline_cut only (pre-BDT); classify_mc_dict('e')
-%   corrections : none
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT

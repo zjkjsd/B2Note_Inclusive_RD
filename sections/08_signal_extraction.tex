@@ -85,9 +85,24 @@ Template histograms are filled for each truth category with per-bin statistical
 uncertainties from the sum of squared weights, then trimmed to bins whose
 summed content passes the population threshold and flattened.
 Three categories are excluded before filling
-(Sec.~\ref{sec:truth:closure}), and the narrow and broad $D^{**}\ell\nu$
+\AnalysisTBD{the subsection this referred to, which named the three excluded
+categories, was removed; restore it or drop this clause, and reconcile with
+Table~\ref{tab:sensitivity-sample-sizes}, which lists \texttt{bkg\_fakeTracks}},
+and the narrow and broad $D^{**}\ell\nu$
 categories are merged (Sec.~\ref{sec:truth:merging}).
 
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : analyst-reported reconstructed event counts from
+%                 Notebooks/3_fitting_cabinetry_2d_SR.ipynb; exact cell and
+%                 selection within that notebook not yet confirmed against a
+%                 stored printout
+%   commit      : ad2f2ec
+%   sample      : MC16rd, Run 1 + Run 2 combined, e and mu channels
+%   selection   : offline_cut (Eq. offline-cut) plus lgb_tight (Eq.
+%                 lgb-tight), spanning the full D-mass range rather than
+%                 the signal region or sideband separately (unconfirmed)
+%   corrections : not confirmed
 \begin{table}[htbp]
   \centering
   \caption{Reconstructed events used to obtain templates. Here Run~1
@@ -119,26 +134,6 @@ categories are merged (Sec.~\ref{sec:truth:merging}).
     \hline
   \end{tabular}
 \end{table}
-
-
-
-
-
-
-
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : analyst-reported reconstructed event counts from
-%                 Notebooks/3_fitting_cabinetry_2d_SR.ipynb; exact cell and
-%                 selection within that notebook not yet confirmed against a
-%                 stored printout
-%   commit      : ad2f2ec
-%   sample      : MC16rd, Run 1 + Run 2 combined, e and mu channels
-%   selection   : offline_cut (Eq. offline-cut) plus lgb_tight (Eq.
-%                 lgb-tight), spanning the full D-mass range rather than
-%                 the signal region or sideband separately (unconfirmed)
-%   corrections : not confirmed
-
 
 
 \subsection{Parameter of interest}

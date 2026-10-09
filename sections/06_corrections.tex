@@ -2,8 +2,7 @@
 %   status      : CODE_FACT unless marked otherwise
 %   produced-by : Recon_scripts/2_Reconstruction.py (tracking corrections);
 %                 utilities.py apply_pid_corrections (381-449),
-%                 apply_pi0_eff_correction (334-380),
-%                 create_naive_data_mc_correction (278-321);
+%                 apply_pi0_eff_correction (334-380);
 %                 5_BBbkg_weights_optuna_minuit.py (BBbar weights, fake-D)
 %   commit      : ad2f2ec
 %   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
@@ -52,18 +51,7 @@ analysis-specific correction currently derived.
 It is applied as a per-event weight multiplying the base weight, the PID
 weight and, for a combined-run fit, the run-dependent factor.
 
-{\bf Check whether fake-D sideband corrections are needed}
-
-%The fake-$D$ normalisation is a special case and is the one place where a
-%double application is plausible, so it is stated explicitly.
-%The run-dependent factor ($0.87$ for Run~1, $1.0$ for Run~2) is a
-%\emph{fixed input} to the generic-$B\bar{B}$ tuning, where it holds the
-%fake-$D$ component at its externally determined level while the
-%generic-$B\bar{B}$ families are fitted.
-%It is deliberately \emph{not} applied when the fit templates are built: in the
-%fit the fake-$D$ normalisation is a free parameter determined by the $D$-mass
-%sideband channel (Sec.~\ref{sec:fit:modifiers}).
-%Applying the factor in both places would count it twice.
+\AnalysisTBD{Check whether fake-D sideband corrections are needed}
 
 \subsection{Corrections not implemented}
 \label{sec:corrections:notnominal}

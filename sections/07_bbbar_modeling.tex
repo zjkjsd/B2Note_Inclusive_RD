@@ -1,7 +1,13 @@
 % PROVENANCE (section-level)
+%   status      : CODE_FACT unless marked otherwise
 %   produced-by : 5_BBbkg_weights_optuna_minuit.py, bbbar_reweighting.py
 %   commit      : ad2f2ec
-
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : tuning region of Eq. (bbbar-region)
+%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
+%                 semileptonic weights
+\section{Generic-$B\bar{B}$ Background Modelling and Validation}
+\label{sec:bbbar}
 
 Generic $B\bar{B}$ events in which a true $D$ and a true lepton are
 reconstructed --- either from different $B$ mesons
@@ -63,6 +69,14 @@ We fit $\mmiss \times \pdl$ for the $B {\bar B}$ background enhanced region,
 we find 
 \vspace{2mm}
 
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : BBbkg_weights/*.json (fit metadata read directly)
+%   commit      : ad2f2ec
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : tuning region of Eq. (bbbar-region)
+%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
+%                 semileptonic weights
 \begin{table}[h]
 \centering
 \caption{Fitted background component weights for the $e$ and $\mu$ channels,
@@ -102,16 +116,6 @@ For the combined \texttt{run1+run2} fit the differing fake-$D$ normalizations
 
 \subsection{Current status of the tuned  $B \bar{B}$ weights}
 \label{sec:bbbar:results}
-
-
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : BBbkg_weights/*.json (fit metadata read directly)
-%   commit      : ad2f2ec
-%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
-%   selection   : tuning region of Eq. (bbbar-region)
-%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
-%                 semileptonic weights
 
 
 Although a perfect solution for the $B\bar{B}$ background weights has not been obtained, there is improved

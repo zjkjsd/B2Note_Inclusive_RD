@@ -3,10 +3,10 @@
 %   status      : CODE_FACT unless marked otherwise
 %   produced-by : Recon_scripts/2_Reconstruction.py
 %   commit      : ad2f2ec (analysis repository, referenced by SHA only)
-%   scope       : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
-%   note        : every selection below was transcribed from the pinned
-%                 source.  Physics motivation is marked TODO wherever the
-%                 code does not document it -- do not invent one.
+%   sample      : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
+%   selection   : every selection below was transcribed from the pinned
+%                 source; the physics motivation is the analysts' own
+%   corrections : n/a
 % =========================================================================
 \section{Event Reconstruction}
 \label{sec:reconstruction}
@@ -334,6 +334,15 @@ The expected distributions of the two fitting variables for a $1.4 ~ab^{-1}$ MC 
 Figs~\ref{fig:mc-comp-dtaunu-mm2} and \ref{fig:mc-comp-dtaunu-pdl}. Here we show the $B\to D\tau \nu$ enhanced
 part of the fitting region. In addition, we also show the fitting in the $B\to D \ell\nu$ normalization region,
 Figs~\ref{fig:mc-comp-dellnu-mm2} and \ref{fig:mc-comp-dellnu-pdl}.
+
+% PROVENANCE (applies to the four figures below)
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/ (utilities.mpl-based stacked plotting
+%                 helper; exact notebook/cell not identified)
+%   commit      : ad2f2ec
+%   sample      : MC16rd, Run 1, e channel
+%   selection   : offline_cut (Eq. offline-cut); region as captioned
+%   corrections : not confirmed from the image alone
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.85\textwidth]{Dtaunu_region_MC_mm2_run1e.png}

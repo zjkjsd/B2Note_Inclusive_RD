@@ -21,10 +21,11 @@ from `note.tex` with no extra configuration.
 
 | Path | Purpose |
 |---|---|
-| `note.tex` | Document driver: title page, TOC, `body.tex`, bibliography, appendices |
+| `note.tex` | Document driver: title page, TOC, to-do list (draft only), `body.tex`, bibliography, appendices |
 | `body.tex` | Inputs the numbered sections in order |
 | `sections/` | One file per section, plus appendices |
-| `definitions.tex` | Packages, macros, and the result-status macros |
+| `definitions.tex` | Packages, macros, the result-status macros and the to-do list |
+| `material.tex` | Inputs the appendices |
 | `figures/` | Figures, organised by section |
 | `docs/` | Reference B2Notes from other analyses, and the note outline |
 | `scripts/check_provenance.py` | Enforces the provenance convention |
@@ -36,6 +37,9 @@ Read `AGENTS.md`. The two rules that matter most:
 
 1. **Nothing is written as prose unless it has a source.** Missing content
    gets `\AnalysisTBD{what is missing}`, not an invented value.
+   Every `\AnalysisTBD` and `\InProgress` marker is listed automatically in
+   the to-do list at the start of the draft; there is no list to maintain by
+   hand.
 2. **Every figure, table and number carries a provenance block.** Run
    `python3 scripts/check_provenance.py` before committing.
 
@@ -54,3 +58,6 @@ rewriting anything.
 `connect_overleaf <overleaf-git-url>` links the project; `sync_from_overleaf`
 pulls Overleaf edits and pushes them here. `update` refreshes the Belle II
 author list and template files.
+
+Overleaf does not preserve the executable bit: after a sync, restore it with
+`chmod +x connect_overleaf sync_from_overleaf update scripts/*.py`.
