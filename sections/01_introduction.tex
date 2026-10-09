@@ -1,7 +1,22 @@
 \section{Introduction and Analysis Overview}
 \label{sec:intro}
-The Belle~II physics programme and detector are described in
-Refs.~\cite{Kou:2018nap,Abe:2010gxa}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{RD_RDst_ichep_2026_prelim.pdf}
+  \caption{$R(D)$--$R(D^{*})$ measurements and their combination, ICHEP 2026
+  preliminary. 
+  None of the $B$ factory results use inclusive ROE tagging. See
+~~https://hflav.web.cern.ch/historic/pre2026/semileptonic/}  
+  
+  \label{fig:rd-rdst-prelim}
+\end{figure}
+
+
+
+%The Belle~II physics programme and detector are described in
+%Refs.~\cite{Kou:2018nap,Abe:2010gxa}.
+
 
 \subsection{Physics motivation}
 \label{sec:intro:motivation}
@@ -43,7 +58,7 @@ own rather than only in combination with $R(D^{*})$.
   \includegraphics[width=0.75\textwidth]{RD_uncertainties_ichep26.pdf}
   \caption{World-average experimental status of $R(D)$ and $R(D^{*})$
   against the SM prediction, HFLAV compilation, ICHEP 2026 preliminary
-  \cite{HFLAV:2022pwe}.}
+  \cite{HFLAV:2022pwe}. So far, there are no inclusively tagged ROE measurements from $B$-factories.}
   \label{fig:rd-uncertainties}
 \end{figure}
 
@@ -57,91 +72,60 @@ own rather than only in combination with $R(D^{*})$.
 %   sample      : n/a
 %   selection   : n/a
 %   corrections : n/a
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.75\textwidth]{RD_RDst_ichep_2026_prelim.pdf}
-  \caption{$R(D)$--$R(D^{*})$ measurements and their combination, ICHEP 2026
-  preliminary.
-  \AnalysisTBD{confirm the producing group/tool and the list of individual
-  measurements entering this compilation, so that a proper citation can
-  replace this placeholder}}
-  \label{fig:rd-rdst-prelim}
-\end{figure}
 
-Figures~\ref{fig:rd-uncertainties} and~\ref{fig:rd-rdst-prelim} summarise the
+
+Figures~\ref{fig:rd-uncertainties} and~\ref{fig:rd-rdst-prelim} summarize the
 current experimental and theoretical status.
 The first round of $R(D)$ measurements at Belle and Belle~II used the Full
 Event Interpretation (FEI)~\cite{Keck:2018lcd} to reconstruct the companion
 $B$ meson exclusively, in either a hadronic or a semileptonic decay mode (for
 example Ref.~\cite{Belle:2019rba}).
 Reconstructing the rest of the event (ROE) inclusively instead of tagging it
-exclusively is expected to recover roughly an order of magnitude more signal
+exclusively is expected to give roughly an order of magnitude more signal
 events, at the cost of a much larger generic-$B\bar{B}$ background
 (Sec.~\ref{sec:bbbar}) that the tag-side reconstruction would otherwise
 reject.
-The two samples are not statistically independent: an event whose companion
-$B$ the FEI reconstructs exclusively is, in essentially all cases, also
-picked up by the inclusive tag, since the inclusive selection imposes no
-requirement analogous to exclusive tag-side reconstruction.
-The FEI-tagged sample is therefore closer to a (small) subset of the
-inclusively-tagged one than to an independent sample.
-The overlap is nonetheless expected to be small in absolute terms, because
-the FEI's exclusive companion-$B$ reconstruction succeeds for only a small
-fraction of events, while the inclusive selection efficiency for the
-companion side is an order of magnitude larger (\texttt{ANALYSIS\_DECISION}).
-An inclusive-tagging measurement therefore still adds new, largely
-independent statistics on top of the existing FEI-based results and serves
-as a cross-check of them, but it is not a fully independent sample, and
-treating it as one would bias any combination or correlation with an
-FEI-based result.
-\AnalysisTBD{quantify the expected event-yield gain and, in particular, the
-size of the overlap between the FEI-tagged and inclusively-tagged samples
-with a producing artifact --- for example the per-category yield table of
-Sec.~\ref{sec:truth:composition} cross-referenced against an FEI tag-side
-reconstruction flag --- rather than the qualitative statement above}
+The two samples are not statistically independent. However,
+the FEI-tagged sample is a (small) subset of the
+inclusively-tagged one. 
+
+
 
 For an inclusively-tagged analysis, the $B^{0} \to D^{-}\ell^{+}$ mode (as
 opposed to $B^{+} \to \bar D^{0}\ell^{+}$ or a combination of the two) is used
 because of its small $D^{*}$ feed-down and the comparatively long $D^{+}$
-lifetime, both of which keep the $D$-mass reconstruction and the $D^{*}$ veto
-of Sec.~\ref{sec:recon:dstveto} clean.
-\AnalysisTBD{source for the feed-down and lifetime comparison between the
-charged- and neutral-$D$ channels that motivates this choice; it is stated
-here as the analyst's reasoning, not yet as a cited or quantified result}
+lifetime ($\sim 1.04 \times 10^{-12}$ sec), which is about 2.5 times longer than the $D^0$ lifetime. 
+We note that ${\cal B} (D^{*+}\to D^0 \pi^+) = (67.7\pm 0.5)\%$, while 
+${\cal B} (D^{*0}\to D^+ \pi^0) = (30.7\pm 0.5)\%$, and
+${\cal B} (D^{*0} \to D^0\gamma) =(1.6\pm 0.4)\% $. However,
+$D^{*0}\to D^+\pi^-$
+is kinematically forbidden. Note that we veto reconstructed $D^{*+} \to D^+ \pi^0$ decays to further reduce the feed-down contribution for $R(D)$.
+
+
 
 Only the $D^{-}$ and $\ell^{+}$ are explicitly reconstructed on the signal
-side (Sec.~\ref{sec:reconstruction}); everything else is assigned to the ROE.
+side (Sec.~\ref{sec:reconstruction}); all other tracks, $K_S^0$ and $\Lambda$'s,  and neutrals are assigned to the ROE.
 The signal decay has three missing neutrinos, and the companion $B$ is
 reconstructed inclusively, so neither $B$ meson's kinematics is tightly
 constrained.
-This has two consequences for the analysis strategy.
-First, because so little kinematic information is available at
-reconstruction level, a selection based on a handful of variables cannot
-reduce the background enough on its own, and both signal and background
-retain very large yields through reconstruction.
-Second, because the phase space is only loosely constrained, signal and
-background events populate similar regions of the available kinematic
-variables, so that the shapes of candidate fitting variables are similar
-between signal and background.
-Together these two consequences make an effective, high-dimensional
-background suppression necessary, which is why a multi-class BDT
-(Sec.~\ref{sec:mva}) rather than a small set of selection cuts is used.
-After the BDT selection, yields for the signal and normalisation modes are
-extracted from a two-dimensional binned likelihood fit in the missing mass
-squared $\mmiss$ and $\pdl$ (Sec.~\ref{sec:fit}).
-As anticipated from the loosely constrained phase space, many components
-retain a similar shape in this plane even after the BDT selection, and their
-distributions are broad and overlapping, which is what makes the
-two-dimensional yield extraction difficult; the correlation between the BDT
-training variables and the two fit variables is checked to be small
-(Appendix~\ref{app:mva:todo}), so the BDT selection is not expected to be the
-cause of that overlap.
-\AnalysisTBD{expected sensitivity on $R(D)$ for the combined Run~1
-(365\,fb$^{-1}$) and partial Run~2 (125\,fb$^{-1}$ processed) Belle~II
-data-sample, including systematics, MC statistics and background
-systematics.  A figure of approximately 12\% has been quoted by the analyst;
-record it here with its producing artifact once the Asimov sensitivity study
-of Sec.~\ref{sec:results} exists}
+Therefore an effective, high-dimensional
+background suppression is necessary. We use a multi-class BDT
+(Sec.~\ref{sec:mva}) rather than a small set of cuts. 
+After the BDT selection, yields for the signal and normalization modes are
+extracted from a two-dimensional binned PYHF likelihood fit in the missing mass
+squared $\mmiss$ and $\pdl$ variables (Sec.~\ref{sec:fit}).
+
+
+A preliminary Asimov-sensitivity study (Sec.~\ref{sec:results}), combining
+the electron and muon channels, gives an expected relative uncertainty
+of approximately $12\%$ on the $B^{0}\to D^{-}\tau^{+}\nu_{\tau}$
+normalization for the current Run~1 (365 fb$^{-1}$) and a partial Run~2 dataset (125 fb$^{-1}$); this
+senstivity includes data statistics, MC statistics, and the two of the normalization
+systematics  (continuum, and the $D^{*}\tau\nu$/$D^{**}\tau\nu$
+feed-down); this is expected to change as further systematics are added to
+the fit.
+
+
 
 % PROVENANCE
 %   status      : ANALYSIS_DECISION (schematic, not a numerical result)
@@ -156,10 +140,10 @@ of Sec.~\ref{sec:results} exists}
   \caption{Event topology for the three tagging strategies used to measure
   $R(D^{(*)})$: hadronic and semileptonic FEI exclusively reconstruct the
   companion $B$ ($B_{\mathrm{tag}}$), while the inclusive tag used in this
-  note represents it only by the rest of the event.
-  The gain in efficiency going from exclusive to inclusive tagging comes at
-  the cost of purity, since the companion side is no longer required to form
-  a specific, fully-reconstructed decay chain.}
+  B2Note uses only the rest of the event.
+  The gain in efficiency going from exclusive FEI tagging to inclusive ROE tagging comes at
+  the cost of purity, since the other $B$ is no longer required to form
+  an exclusive fully-reconstructed decay chain.}
   \label{fig:tagging-topology}
 \end{figure}
 \AnalysisTBD{add a second, dedicated figure for the signal decay
@@ -175,7 +159,7 @@ The signal-side $B$ is reconstructed as $B^{0} \to D^{-} \ell^{+}$ with
 $D^{-} \to K^{+} \pi^{-} \pi^{-}$; the tag-side $B$ is represented by the
 rest of the event rather than by an exclusive tag reconstruction
 (Sec.~\ref{sec:reconstruction}).
-Signal and normalisation yields are extracted from a two-dimensional binned
+Signal and normalization yields are extracted from a two-dimensional binned
 likelihood fit in $\mmiss$ and $\pdl$, performed simultaneously in a
 $D$-mass signal region and a $D$-mass sideband (Sec.~\ref{sec:fit}).
 The dominant experimental challenge is the generic-$B\bar{B}$ background,
@@ -184,7 +168,7 @@ which is treated in Sec.~\ref{sec:bbbar}.
 \subsection{Analysis flow}
 \label{sec:intro:flow}
 
-Figure~\ref{fig:analysis-flow} summarises the chain from detector output to
+Figure~\ref{fig:analysis-flow} summarizes the chain from the detector output to
 the extracted yields.
 Each stage is described in the section named beside it.
 
@@ -210,18 +194,18 @@ Each stage is described in the section named beside it.
   ]
     \node[box] (rec) {Grid reconstruction\\
       $B^{0} \to D^{-}\ell^{+}$, $D^{-} \to K^{+}\pi^{-}\pi^{-}$;
-      ROE built as the tag side};
+      ROE is the tag side};
     \node[box, below=of rec] (off) {Offline selection\\
-      \texttt{offline\_cut}; $D^{*}$ veto applied here};
-    \node[box, below=of off] (bdt) {Four-class LightGBM classifier\\
-      \texttt{sig}, \texttt{fakeD}, \texttt{continuum},
-      \texttt{combinatorial} probabilities};
-    \node[box, below=of bdt] (tru) {Truth classification of simulation\\
-      signal, normalisation, feed-down, backgrounds};
-    \node[box, below=of tru] (cor) {Corrections\\
+      \texttt{offline\_cut}; the $D^{*}$ veto is applied here};
+    \node[box, below=of off] (bdt) {Four-class LightGBM BDT classifier\\
+      Gives probabilities for: \\ \texttt{signal}, \texttt{fake D bkg}, \texttt{continuum bkg},
+      \texttt{combinatorial bkg}};
+    \node[box, below=of bdt] (tru) {MC Truth classification of\\
+      signal, normalization modes, feed-down modes, background modes};
+    \node[box, below=of tru] (cor) {Apply Performance Group and analysis specific corrections: \\
       tracking and PID first, then generic-$B\bar{B}$ reweighting};
     \node[box, below=of cor] (tem) {Template construction\\
-      2D in $\mmiss$ and $\pdl$, per category};
+      2D in $\mmiss$ and $\pdl$, for each category};
     \node[box, below=of tem] (fit) {Simultaneous binned likelihood fit\\
       $D$-mass signal region $+$ $D$-mass sideband};
 
@@ -237,20 +221,8 @@ Each stage is described in the section named beside it.
     \node[side, right=5mm of tem] {Sec.~\ref{sec:fit:templates}};
     \node[side, right=5mm of fit] {Sec.~\ref{sec:fit}};
   \end{tikzpicture}
-  \caption{The analysis chain as implemented at the pinned commit. The
-  classifier is trained after the offline selection and is therefore defined
-  only within it; the generic-$B\bar{B}$ reweighting is derived in a region
-  defined by the classifier output, so it sits after that stage rather than
-  with the collaboration-recommended corrections.}
+  \caption{A flow-chart of the analysis chain. The BDT
+  classifier is trained after the offline selection. The generic-$B\bar{B}$ reweighting is determined in a BDT sideband.}
   \label{fig:analysis-flow}
 \end{figure}
 
-Two features of the ordering are worth stating explicitly, because they
-constrain what can be changed independently.
-The classifier is trained after the offline selection, so its outputs are
-defined only inside that selection and a change to the offline cut invalidates
-the training.
-And the generic-$B\bar{B}$ reweighting is derived in a region defined by the
-classifier output, so it depends on the classifier in a way the
-collaboration-recommended corrections do not: retraining the classifier
-requires re-deriving those weights.

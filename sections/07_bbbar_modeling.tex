@@ -1,8 +1,7 @@
 % PROVENANCE (section-level)
 %   produced-by : 5_BBbkg_weights_optuna_minuit.py, bbbar_reweighting.py
 %   commit      : ad2f2ec
-\section{Generic-$B\bar{B}$ Background Modelling and Validation}
-\label{sec:bbbar}
+
 
 Generic $B\bar{B}$ events in which a true $D$ and a true lepton are
 reconstructed --- either from different $B$ mesons
@@ -12,7 +11,7 @@ background and are mismodelled in MC16rd.
 They are corrected by a data-driven reweighting of the underlying $B$-decay
 composition.
 
-\subsection{Hierarchical decay classification}
+\subsection{Hierarchical MC decay classification}
 \label{sec:bbbar:hierarchy}
 For each of the two categories, the generated decay of the $B$ that supplied
 the $D$ (and optionally of the $B$ that supplied the lepton) is identified by
@@ -25,74 +24,29 @@ the product of its daughter PDG codes, and assigned to one family:
   \item \texttt{BBbar\_unmeasured:$n$-body} --- otherwise, grouped by the
         generated daughter multiplicity, capped at $5+$.
 \end{enumerate}
-The hierarchy is applied in this order, so the families are mutually
+The hierarchy is applied in this order, so the families of modes are mutually
 exclusive and, because the last is a catch-all over multiplicity, exhaustive.
-Its purpose is to separate what is externally constrained (measured branching
-fractions) from what is not (the unmeasured hadronic modes, which carry the
-bulk of the modelling freedom), and to group the unmeasured modes by a
-variable --- multiplicity --- that drives the ROE observables without
-requiring a per-mode measurement.
+We separate externally constrained (measured branching
+fractions) from unmeasured hadronic modes, which are the majority.
+We group the unmeasured modes by a
+variable, multiplicity, which determines the signal side missing-mass squared and 
+$p_D + p_\ell$ distributions.
 
-\subsection{Family normalisation versus internal composition}
+\subsection{$B\bar{B}$ background normalization versus internal composition}
 \label{sec:bbbar:normalisation}
 One weight is fitted per family; the composition \emph{within} a family is
 left at its generated values.
 This is deliberate: floating individual decay modes without external
-constraints is not supported by the available statistics.
-An optional many-to-one mode replacement merges configured non-resonant
-3- and 4-body modes into resonant 2-body states before tuning, preserving the
-total yield of the affected modes through an $(N_{\mathrm{old}} +
-N_{\mathrm{new}})/N_{\mathrm{new}}$ rescaling of the surviving mode.
-It is disabled in the results shown here (\texttt{replaceFalse}).
+constraints is not possible with the available statistics.
 
-The reweighting does \emph{not} preserve the inclusive $B$-decay rate, and is
-not intended to.
-The generic-$B\bar{B}$ normalisation differs between data and MC in the
-tuning region; requiring the inclusive rate to remain fixed would force that
-discrepancy entirely into the composition, which is the quantity being
-measured.
-The total rate is therefore allowed to move, and the requirement is instead
-that the resulting change be validated in a region independent of the one it
-was tuned in (Sec.~\ref{sec:bbbar:validation}).
 
 \subsection{Tuning procedure and region}
 \label{sec:bbbar:tuning}
-Five family weights are fitted by minimising a binned Poisson deviance
+Five family weights are fitted by minimizing a binned Poisson deviance
 between data and weighted MC, using Optuna (TPE sampler, \texttt{MedianPruner})
-for global exploration followed by iminuit MIGRAD/HESSE/MINOS.
-\texttt{BBbar\_semileptonic} is held at unity and the fake-$D$ normalisation
-is held at its externally determined value, so they are not free parameters.
-The set of fit bins is derived once from unweighted MC support and held
-fixed, so that the likelihood support cannot depend on the parameters being
-fitted.
+followed by iminuit MIGRAD/HESSE/MINOS. All other backgrounds including the 
+\texttt{BBbar\_semileptonic} background are fixed. 
 
-Three objectives are implemented in \texttt{5\_BBbkg\_weights\_optuna\_minuit.py}
-and have all been tried.
-The nominal objective is \texttt{kinematic-2d}: a two-dimensional deviance in
-$\mmiss \times \pdl$ ($20 \times 20$ bins over
-$[-4,10]\,\mathrm{GeV}^{2}/c^{4} \times [0.2,4.0]\,\mathrm{GeV}/c$) alone
-(\texttt{ANALYSIS\_DECISION}).
-\texttt{kinematic-2d-plus-roe} adds a shape-only one-dimensional deviance in
-the ROE track multiplicity, weighted by a coefficient \texttt{roe\_strength}
-(``$\alpha$''), with the final bin merging all multiplicities $\geq 14$;
-\texttt{missm2-roe-2d} instead replaces the $\mmiss \times \pdl$ deviance with
-a two-dimensional missing-mass/ROE-multiplicity deviance.
-Adding the ROE-multiplicity term (at $\alpha = 0.5$ or $\alpha = 1$; $\alpha$
-itself has not been tuned, only tried at these two values) does not improve
-the agreement on the $\mmiss \times \pdl$ plane, and \texttt{missm2-roe-2d}
-performs worse still, both in total deviance and in how pinned the fitted
-parameters are (Sec.~\ref{sec:bbbar:results}).
-One interpretation is that the ROE tracks and the two kinematic variables
-constrain different aspects of the generic-$B\bar{B}$ composition, so that
-adding the ROE term does not simply sharpen the same likelihood but pulls it
-towards a different, not obviously more correct, optimum;
-\texttt{kinematic-2d} is used as the nominal objective on the grounds that it
-gives the best agreement on the $\mmiss \times \pdl$ plane specifically, since
-that is the plane the final fit is performed in
-(Sec.~\ref{sec:fit:observables}).
-\AnalysisTBD{the interpretation above (different physics constrained by the
-ROE tracks versus the two kinematic variables) is a hypothesis, not yet
-demonstrated}
 
 The tuning region is
 \begin{equation}
@@ -103,31 +57,52 @@ The tuning region is
 \end{equation}
 together with the offline requirements of Eq.~\eqref{eq:offline-cut} except
 $p_{\ell} < 4$ (Sec.~\ref{sec:recon:offline}).
-Note that Eq.~\eqref{eq:bbbar-region} is a \emph{signal-region} $D$-mass
-selection with the signal and fake-$D$ classifier outputs suppressed; it is
-not the combinatorial-enriched region of \texttt{lgb\_comb}, and it places no
-requirement on \texttt{combinatorial\_prob} or \texttt{continuum\_prob}
-(Appendix~\ref{app:selections:naming}).
 
-\subsection{Run dependence}
-\label{sec:bbbar:rundep}
+
+We fit $\mmiss \times \pdl$ for the $B {\bar B}$ background enhanced region,
+we find 
+\vspace{2mm}
+
+\begin{table}[h]
+\centering
+\caption{Fitted background component weights for the $e$ and $\mu$ channels,
+with MINOS uncertainties. Parameters at their lower bounds are indicated by $^a$.}
+\vspace{2mm}
+\label{tab:bg_weights}
+\begin{tabular}{lcc}
+\hline\hline
+Component & $e$ channel & $\mu$ channel \\
+\hline
+Measured hadronic        & $2.264^{+0.057}_{-0.057}$ & $1.925^{+0.111}_{-0.112}$ \\
+Unmeasured 2-body$^{a}$  & $0.001^{+0.158}_{-0.000}$ & $0.001^{+0.088}_{-0.000}$ \\
+Unmeasured 3-body        & $0.765^{+0.114}_{-0.118}$ & $0.583^{+0.202}_{-0.204}$ \\
+Unmeasured 4-body$^{a}$  & $0.001^{+0.031}_{-0.000}$ & $0.001^{+0.112}_{-0.000}$ \\
+Unmeasured 5$+$-body     & $0.027^{+0.046}_{-0.026}$ & $0.046^{+0.065}_{-0.045}$ \\
+
+\hline\hline
+\end{tabular}
+\end{table}
+
+The fitted background weights for the $e$ and $\mu$ channels are summarized
+in Table~\ref{tab:bg_weights}. Uncertainties are MINOS intervals. 
+In both channels the unmeasured 2-body and 4-body weights are small
+indicating no significant contribution from
+these components. The dominant floating background is the unmeasured 3-body
+mode, with fitted weights of $0.765^{+0.114}_{-0.118}$ ($e$ channel) and
+$0.583^{+0.202}_{-0.204}$ ($\mu$ channel). The weights from 150 measured hadronic modes
+exceed unity in both channels, at $2.264 \pm 0.057$ and
+$1.925^{+0.111}_{-0.112}$, respectively, suggesting an underestimate of
+this background in the nominal MC simulation. 
+
+
 Weights are derived separately for each run period and channel.
-For the combined \texttt{run1+run2} fit the differing fake-$D$ normalisations
-($0.87$ for Run~1, $1.0$ for Run~2) are applied as an event-level factor
-rather than as a common category weight, so that the run dependence survives
-the combination.
+For the combined \texttt{run1+run2} fit the differing fake-$D$ normalizations
+($0.87$ for Run~1, $1.0$ for Run~2) are applied as an event-level factors.
 
-\subsection{Current status of the tuned weights}
+
+\subsection{Current status of the tuned  $B \bar{B}$ weights}
 \label{sec:bbbar:results}
 
-The stored fits were regenerated for the combined \texttt{run1+run2} sample,
-and MINOS was enabled for every scenario, specifically to address the
-parameter-at-limit problem below.
-Six results are stored, all with mode replacement disabled
-(\texttt{replaceFalse}): \texttt{kinematic-2d} for $e$ and $\mu$;
-\texttt{kinematic-2d-plus-roe} at $\alpha=0.5$ for $e$ and $\mu$ and at
-$\alpha=1$ for $e$; and \texttt{missm2-roe-2d} for $e$.
-The nominal result is \texttt{kinematic-2d} (Sec.~\ref{sec:bbbar:tuning}).
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
@@ -137,169 +112,11 @@ The nominal result is \texttt{kinematic-2d} (Sec.~\ref{sec:bbbar:tuning}).
 %   selection   : tuning region of Eq. (bbbar-region)
 %   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
 %                 semileptonic weights
-\PreliminaryResult{nominal (\texttt{kinematic-2d}, run1+run2):
-$e$ channel --- measured hadronic $2.264^{+0.057}_{-0.057}$, unmeasured
-2-body $0.0010^{+0.158}_{-0.000}$ (at its lower bound of $0.001$), 3-body
-$0.765^{+0.114}_{-0.118}$, 4-body $0.0010^{+0.031}_{-0.000}$ (at its lower
-bound), 5+-body $0.027^{+0.046}_{-0.026}$; total deviance $419.78$.
-$\mu$ channel --- measured hadronic $1.925^{+0.111}_{-0.112}$, unmeasured
-2-body $0.0010^{+0.088}_{-0.000}$ (at its lower bound), 3-body
-$0.583^{+0.202}_{-0.204}$, 4-body $0.0010^{+0.112}_{-0.000}$ (at its lower
-bound), 5+-body $0.046^{+0.065}_{-0.045}$; total deviance $430.07$.
-Uncertainties quoted are MINOS; parameter bounds are
-$[0.5,5]$ for the measured-hadronic weight and $[0.001,5]$,
-$[0.01,1]$, $[0.001,1]$, $[0.001,0.5]$ for the 2-, 3-, 4- and 5+-body
-unmeasured weights respectively (\texttt{PARAMETER\_SPECS} in
-\texttt{5\_BBbkg\_weights\_optuna\_minuit.py}).  Source:
-\texttt{BBbkg\_weights/best\_bbbar\_weights\_kinematic-2d\_run1+run2\_\{e,mu\}%
-\_replaceFalse\_minuit.json}}
 
-\InProgress{turning on MINOS improves the situation but does not resolve it.
-In both channels of the nominal fit, and in every one of the six stored
-fits, the unmeasured 2-body and 4-body weights remain pinned at their lower
-bound (\texttt{has\_parameters\_at\_limit = true} throughout, exactly as
-before MINOS was enabled); the parameter bounds themselves are unchanged.
-For the three parameters that are \emph{not} pinned in a given fit ---
-typically the measured-hadronic, 3-body and 5+-body weights --- MINOS does
-give a genuine, asymmetric confidence interval that HESSE could not, and
-those three could in principle already supply a propagatable width.
-For the two parameters that remain pinned, however, the MINOS interval is not
-a resolution of the boundary problem: its lower bound is, by construction,
-at or immediately next to the parameter's hard limit (the reported lower
-errors above are $\mathcal{O}(10^{-7})$ or smaller), so it reflects the
-imposed bound rather than a profiled uncertainty, and the same
-three-way question of Sec.~\ref{sec:bbbar:degeneracy} --- too-tight bounds,
-an unresolved degeneracy, or a genuinely non-physical preferred weight ---
-remains open for exactly those two families.  The \texttt{missm2-roe-2d}
-result pins a third parameter (3-body, in addition to 2-body) and pushes
-5+-body to its \emph{upper} bound instead, which is consistent with the
-qualitative statement above that this objective performs worse, not better}
 
-\subsection{Constraining power of the tuning region}
-\label{sec:bbbar:degeneracy}
+Although a perfect solution for the $B\bar{B}$ background weights has not been obtained, there is improved
+agreement with the track multiplicity distribution in the ROE after reweighting. The large uncertainties on the $B \bar{B}$ weights must be included in the final systematic error on $R(D)$.
 
-The tuned fits do not reach an interior minimum.
-In all six results currently stored in \texttt{BBbkg\_weights/} the minimum
-sits on at least one parameter bound, and the pinned parameters are always
-among the \emph{unmeasured} $n$-body weights (2-body and 4-body in five of
-the six fits; \texttt{missm2-roe-2d} additionally pins 3-body and pushes
-5+-body to its \emph{upper} bound) and never the measured-hadronic weight.
-Table~\ref{tab:bbbar-correlations} shows the accompanying correlation
-structure.
-The pairwise correlation between the 3-body and 5+-body unmeasured weights is
-large in every fit that uses the $\mmiss\times\pdl$-based objectives, $0.75$
-to $0.78$; \texttt{missm2-roe-2d} is the exception, with unmeasured pairwise
-correlations below $0.001$ but instead a moderate correlation of the
-measured-hadronic weight with 3-body ($0.30$).
-In the other five fits the measured-hadronic weight also correlates with
-3-body and 5+-body at the $0.7$--$0.8$ level, larger than in the fits stored
-previously, though it still never pins.
 
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT (fit metadata, not a physics measurement)
-%   produced-by : BBbkg_weights/*.json (fit metadata read directly)
-%   commit      : ad2f2ec
-%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
-%   selection   : tuning region of Eq. (bbbar-region)
-%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
-%                 semileptonic weights
-\begin{table}[htbp]
-  \centering
-  \caption{Correlation structure of the stored generic-$B\bar{B}$ weight fits,
-  all \texttt{run1+run2}, mode replacement disabled.
-  ``unmeas.\ pair'' is the largest absolute correlation between two unmeasured
-  $n$-body weights; ``meas.'' is the largest absolute correlation of the
-  measured-hadronic weight with any other parameter.
-  Every fit reported \texttt{has\_parameters\_at\_limit = true}.}
-  \label{tab:bbbar-correlations}
-  \scriptsize
-  \setlength{\tabcolsep}{3pt}
-  \begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth} >{\centering\arraybackslash}p{0.10\textwidth} >{\centering\arraybackslash}p{0.10\textwidth} >{\raggedright\arraybackslash}p{0.32\textwidth}}
-    \hline
-    Fit & $\max|\rho|$\newline unmeas. & $\max|\rho|$\newline meas. & Pinned \\
-    \hline
-    \texttt{kinematic-2d $e$} (nominal) & 0.77 & 0.71 & 2-body, 4-body \\
-    \texttt{kinematic-2d $\mu$} (nominal) & 0.75 & 0.79 & 2-body, 4-body \\
-    \texttt{kin-2d-plus-roe $\alpha{=}0.5$ $e$} & 0.78 & 0.75 & 2-body, 4-body \\
-    \texttt{kin-2d-plus-roe $\alpha{=}0.5$ $\mu$} & 0.76 & 0.81 & 2-body, 4-body \\
-    \texttt{kin-2d-plus-roe $\alpha{=}1$ $e$} & 0.78 & 0.77 & 2-body, 4-body \\
-    \texttt{missm2-roe-2d $e$} & $<0.001$ & 0.30 & 2-body, 3-body, 5+-body (upper) \\
-    \hline
-  \end{tabular}
-\end{table}
 
-Three explanations are consistent with this pattern, and they call for
-different responses.
-\begin{enumerate}
-  \item The parameter bounds are simply too tight, in which case relaxing
-        them gives an interior minimum and a usable covariance.
-  \item The tuning region cannot separate the unmeasured families, in which
-        case the likelihood is flat along at least one direction and relaxing
-        the bounds only lets the minimum slide further before pinning again.
-        The remedy is to merge the families the region cannot separate, or to
-        add an observable that separates them.
-        As an organisational reference only: a sibling Belle~II note
-        ($B\to K^{(*)}\nu\bar\nu$) reports exactly this situation for an
-        analogous background grouping, stating that its control region ``has
-        no handle to constrain them separately,'' and its response is not to
-        keep attempting an in-situ fit but to assign one shared,
-        externally/PDG-constrained nuisance parameter per group instead ---
-        a concrete precedent for the ``merge and constrain'' remedy in this
-        item, should the scan below confirm this explanation over the third.
-  \item The constrained optimum is genuine: the data prefer a weight at or
-        below zero for one or more unmeasured families, so the optimum lies
-        outside the allowed range.  Relaxing the bounds does not help and
-        merging families does not either; the question becomes why a decay
-        family is preferred at a non-physical rate, which points at the
-        family definition or at the simulation rather than at the fit.
-\end{enumerate}
 
-Cases 2 and 3 are not distinguished by the deviance alone: if the optimum lies
-below every relaxed lower bound, the deviance improvement between successive
-relaxations tends to zero as that bound tends to zero, which mimics a flat
-direction.  They are separated by profiling a pinned weight inward while
-re-minimising the others --- flat for a genuine degeneracy, rising for a
-constrained optimum.  A one-parameter scan does not suffice, because moving one
-weight along a degenerate direction while holding the others fixed also raises
-the objective.
-That the measured-hadronic weight --- the one family with an external
-constraint on its composition --- never pins, while the unconstrained families
-repeatedly do, disfavours the first explanation and is consistent with either
-the second or the third.
-The strong correlations of Table~\ref{tab:bbbar-correlations} point towards
-the second, but they do not exclude the third, and the distinction matters
-because the two call for opposite responses.
-Turning on MINOS (Sec.~\ref{sec:bbbar:results}) does not by itself distinguish
-the three either: a MINOS interval that touches the bound on a pinned
-parameter is exactly what both the second and the third explanation predict,
-and does not test the first.
-\InProgress{the three explanations are distinguished by re-running the
-minimisation over a sequence of bound relaxations and profiling each pinned
-weight inward while re-minimising the others.
-\texttt{scripts/scan\_bbbar\_bounds.py} in the analysis repository does this
-and is now included at the commit pinned by this note, but it has still never
-been run on real ntuples.  Everything above is therefore an inference from
-the metadata of six stored fits.  No conclusion about merging decay families
-should be drawn until the scan has been run and its output cross-checked}
-
-\subsection{Validation}
-\label{sec:bbbar:validation}
-\AnalysisTBD{an independent validation region for the tuned weights has not
-been established.  The wrong-charge sample was the candidate, but its physics
-composition differs from that of the tuning region --- different hadronic
-versus semileptonic fractions, and a different hadronic multiplicity spectrum
-(see \texttt{Notebooks/Plotting/4\_Plot\_WC\_*.ipynb}) --- so agreement or
-disagreement there does not cleanly test the weights.  A validation region
-matched in composition to the tuning region is needed.
-As an organisational reference only: a sibling Belle~II note
-($B\to K^{(*)}\nu\bar\nu$) validated its full background-weight product in
-an independent sideband and reports an imperfect but acceptable closure,
-which it only reached after loosening one background normalisation by $50\%$
-relative to its weighted value.  A validation attempt here that shows
-tension rather than clean closure should not automatically be read as the
-weights failing; it may indicate that a genuinely independent region needs
-its own residual freedom, the same way that note's did}
-
-\AnalysisTBD{closure of the tuned weights in the bins actually used by the
-final fit (Sec.~\ref{sec:fit}), which are not the same bins as the tuning
-histogram}

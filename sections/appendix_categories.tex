@@ -10,16 +10,9 @@
 \section{Decay-Category Definitions}
 \label{app:categories}
 
-\subsection{Truth categories and their integer codes}
-\label{app:categories:codes}
 
-The categories of Sec.~\ref{sec:truth} are stamped with the integer codes of
-\texttt{utilities.DecayMode\_new}, which are the interface between
-classification, template construction and the workspace.
-The codes are not contiguous with respect to the categories actually used:
-codes 15 and 16 (\texttt{gap\_pi}, \texttt{gap\_eta}) are defined but never
-assigned, because the two gap modes are merged into code 17 before the
-dictionary is returned.
+The integer codes used for 
+classification and template construction are given below.
 
 \subsection{PDG-code groupings}
 \label{app:categories:pdg}
@@ -40,10 +33,8 @@ The charm states are grouped as follows, with both charge states in each list:
 The narrow/broad $D^{**}$ split follows the standard division into the two
 $j_{q} = 3/2$ states, which are narrow, and the two $j_{q} = 1/2$ states,
 which are broad.
-It is used at classification time and then undone when the templates are
-built (Sec.~\ref{sec:truth:merging}).
 
-\subsection{Generic-$B\bar{B}$ families}
+\subsection{Generic-$B\bar{B}$ background family classification}
 \label{app:categories:bbbar}
 
 Each generic-$B\bar{B}$ candidate is assigned a decay-mode identifier from the
@@ -51,20 +42,17 @@ product of the generated daughter PDG codes of the relevant $B$, and placed in
 exactly one family: \texttt{BBbar\_semileptonic} if any daughter is a lepton;
 otherwise \texttt{BBbar\_measured\_hadronic} if the identifier appears in the
 measured-mode list; otherwise \texttt{BBbar\_unmeasured:$n$-body}, with $n$ the
-generated daughter multiplicity clipped below at 2 and capped at $5+$.
+generated daughter multiplicity is required to be between 2 and $5+$.
 
-The measured-mode list is organised into four blocks --- single-charm and
-double-charm, each for mixed and charged $B$ --- and contains 75 active
-entries, with a further 48 entries commented out.
-\AnalysisTBD{the commented-out entries are modes that were considered and
-excluded from the measured list.  Record why, since every excluded mode moves
-from the externally constrained family to a freely fitted $n$-body family and
-so changes what the tuning is allowed to absorb}
+The measured-mode list is organized into four blocks: single-charm and
+double-charm, each for mixed and charged $B$, and contains 75 active
+entries, with a further 48 entries that do not have a PDG listing commented out.
+
 
 Because a generated decay may contain a radiated photon, the list is extended
 by \texttt{measured\_pdg\_rad}, each entry multiplied by the photon PDG code
-22, so that the radiative counterpart of a measured mode is still recognised
-as measured rather than falling into an unmeasured $n$-body family.
+22, so that the radiative counterpart of a measured mode is still recognized
+as measured rather than being classified as an unmeasured $n$-body family.
 
 \subsection{Branching-fraction corrections}
 \label{app:categories:bf}
@@ -92,28 +80,7 @@ All four are $D_{s0}^{*}(2317)^{+}$ modes, and all four corrections are large.
 \end{table}
 
 These reduce the simulated rates by factors of 7 to 19, so they are not small
-adjustments: the generator substantially overproduces these modes.
-\AnalysisTBD{record the source and version of the PDG values, and the
-generator values they replace.  Corrections of this size should also carry an
-uncertainty, which is not currently propagated}
+adjustments: the generator decay file had typographical errors. This has been confirmed 
+by other Belle II analyses.
 
-\subsection{Mode replacement}
-\label{app:categories:replacement}
 
-An optional many-to-one map merges ten configured non-resonant modes into
-resonant ones before tuning, preserving the total yield of the affected modes
-by rescaling the surviving mode by
-$(N_{\mathrm{old}} + N_{\mathrm{new}})/N_{\mathrm{new}}$.
-The pattern is consistent: a $D_{s}^{(*)}$ recoiling against a non-resonant
-$D + n\pi$ system is replaced by the same $D_{s}^{(*)}$ recoiling against the
-$D^{**}$ resonance of matching multiplicity and charge, for example
-$D_{s} D \pi \pi \to D_{s} D_{1}$ and $D_{s} D \pi^{0} \to D_{s} D_{2}^{*}$.
-The intent is to move strength that the generator produces non-resonantly into
-the resonant states that are actually observed.
-
-Mode replacement is \emph{disabled} in every result shown in this note
-(\texttt{replaceFalse}).
-\AnalysisTBD{state whether enabling mode replacement is intended for the
-nominal analysis, and what the ten replacements do to the fitted family
-weights.  Since replacement moves events between $n$-body families, and those
-families are exactly what the tuning fits, this choice is not a detail}

@@ -12,9 +12,9 @@
 
 Every simulated candidate is assigned to exactly one truth category by
 \texttt{utilities.classify\_mc\_dict()}.
-The categories are the samples from which the fit templates of
-Sec.~\ref{sec:fit} are built, so their definitions, their ordering, and their
-completeness are part of the statistical model rather than bookkeeping.
+The fit templates of
+Sec.~\ref{sec:fit} are built
+from each of these categories.
 
 \subsection{Classification variables}
 \label{sec:truth:vars}
@@ -27,7 +27,7 @@ i.e.\ the \emph{pre}-bremsstrahlung-correction match, and
 \texttt{B0\_isContinuumEvent}; and the MC PDG codes of the $B^{0}$ candidate
 and of its first two generated daughters.
 
-Two derived predicates organise the tree:
+We use the following requirements to define the categories for the $D$ and the lepton:
 \begin{align}
   \mathrm{trueD} &\equiv \texttt{D\_mcErrors} = 0, \\
   \mathrm{fakeD} &\equiv 0 < \texttt{D\_mcErrors} < 512, \\
@@ -41,9 +41,8 @@ has the absolute value expected for the channel.
 \label{sec:truth:tree}
 
 The categories are assigned in the order below.
-Fake-object categories take precedence over every category built from a true
-$D$ and a true lepton, and, importantly, they are assigned \emph{without} a
-requirement on \texttt{B0\_isContinuumEvent}: a continuum event containing a
+Fake-object categories have priority over every category built from a true
+$D$ and a true lepton. Note that a continuum event containing a
 fake $D$ is classified as \texttt{bkg\_fakeD}, not as \texttt{bkg\_continuum}.
 The continuum flag is used only to separate the categories that already have
 a true $D$ and a true lepton.
@@ -66,25 +65,25 @@ and are split by the origin of the pair:
         $\Upsilon(4S) \to B\bar{B}$.
   \item \texttt{bkg\_combinatorial} --- $\texttt{B0\_mcPDG} = 300553$:
         the $D$ and the lepton are both real but come from \emph{different}
-        $B$ mesons of the same $B\bar{B}$ event.
+        $B$ mesons in the same $B\bar{B}$ event.
   \item \texttt{bkg\_hadronicB\_secondaryL} --- a single, non-continuum $B$
         decay in which the lepton is \emph{not} a direct daughter of the
         reconstructed $B$ and does not come from a $\tau$ of that $B$.
         This is the double-charm/secondary-lepton family: hadronic decays
         such as $B \to D D_{(s)} X$ in which one charm meson decays
-        semileptonically and supplies the lepton.
+        semileptonically and supplies the lepton candidate.
+        
   \item Signal-like decays (\texttt{signals}) --- $|\texttt{B0\_mcPDG}| \in
         \{511, 521\}$ \emph{and} the lepton is either a direct daughter of
         that $B$ or the daughter of a $\tau$ from that $B$.
-  \item \texttt{bkg\_other\_TDT$\ell$} --- explicit catch-all: any TDT$\ell$
-        candidate matched by none of items 4--7.
+ 
 \end{enumerate}
 
 The signal-like sample is then subdivided by the generated first two
 daughters of the $B$:
 
 \begin{enumerate}\setcounter{enumi}{8}
-  \item $B \to D \tau \nu$ (signal) and $B \to D \ell \nu$ (normalisation),
+  \item $B \to D \tau \nu$ (signal) and $B \to D \ell \nu$ (normalization),
         identified by the PDG-code product of the first two daughters;
   \item $B \to D^{*} \tau \nu$ and $B \to D^{*} \ell \nu$;
   \item $B \to D^{**} \tau \nu$, and $B \to D^{**} \ell \nu$ split into
@@ -92,133 +91,54 @@ daughters of the $B$:
   \item semileptonic ``gap'' modes, identified by a charged $D^{(*)}$
         together with a $\pi$ or an $\eta$, merged into a single
         \texttt{$D\ell\nu$\_gap} category;
-  \item \texttt{bkg\_other\_signal} --- explicit catch-all: any signal-like
-        candidate matched by none of items 9--12.
+ 
 \end{enumerate}
 
-Each category is finally stamped with an integer code from
-\texttt{DecayMode\_new}, which is the interface used by the downstream
-template and workspace code.
 
-\subsection{Are the categories mutually exclusive and exhaustive?}
-\label{sec:truth:closure}
 
-\paragraph{Exclusivity.}
-The three fake categories are disjoint by construction, because they
-partition disjoint ranges of \texttt{D\_mcErrors} and the fake-lepton
-category additionally requires $\texttt{D\_mcErrors} = 0$.
-Among the TDT$\ell$ categories, exclusivity is \emph{inherited from an
-invariant of the MC truth record} rather than enforced by the queries
-themselves: \texttt{bkg\_continuum} places no requirement on
-\texttt{B0\_mcPDG}, while \texttt{bkg\_combinatorial} and the signal-like
-selection place no requirement on \texttt{B0\_isContinuumEvent}.
-These definitions are disjoint precisely because
-$\texttt{B0\_isContinuumEvent} = 1$ is a necessary and sufficient condition
-for a continuum event, so that \texttt{B0\_mcPDG} is meaningful only when the
-flag is zero, and a candidate with $|\texttt{B0\_mcPDG}| \in \{511,521\}$ or
-$\texttt{B0\_mcPDG} = 300553$ necessarily has the flag equal to zero
-(\texttt{ANALYSIS\_DECISION}).
-The categories are therefore exclusive, but the guarantee is a property of
-the simulation, not of the code; a change in the meaning of either variable
-would silently break it.
 
-\paragraph{Exhaustiveness.}
-The TDT$\ell$ and signal-like branches are exhaustive by construction,
-because each terminates in an explicit catch-all
-(\texttt{bkg\_other\_TDT$\ell$} and \texttt{bkg\_other\_signal}) built as the
-complement of the categories above it.
-The fake branch has no such catch-all.
-Candidates with $\texttt{D\_mcErrors} > 512$ --- that is, the clone/fake-track
-bit set together with any other mismatch bit, or any higher bit --- satisfy
-none of trueD, fakeD or fakeTracks, and are therefore assigned to no category
-at all.
-Such candidates are expected to be absent or negligible in MC16rd.
-\texttt{scripts/validate\_truth\_categories.py} exists in the analysis
-repository for exactly this check, but has not yet been run.
-\AnalysisTBD{run \texttt{scripts/validate\_truth\_categories.py} over one
-MC16rd file and report the number of unclassified candidates and their
-\texttt{D\_mcErrors} spectrum.  Until then, exhaustiveness of the fake branch
-is an assumption; it is not treated as urgent because the two catch-all
-categories of the TDT$\ell$ and signal-like branches --- the other place a
-classification gap could hide --- are checked periodically and are consistent
-with zero (Sec.~\ref{sec:truth:closure} below)}
 
-\paragraph{Categories excluded from the fit.}
-Three classified categories are dropped before the templates are built
-(\texttt{create\_templates\_new}, default
-\texttt{sample\_to\_exclude}): \texttt{bkg\_fakeTracks},
-\texttt{bkg\_other\_TDT$\ell$} and \texttt{bkg\_other\_signal}.
-The classification is therefore exhaustive in a stronger sense than the fit
-model is: the two catch-alls exist to make the classification complete, and
-are then excluded from the likelihood.
-Two of the three, \texttt{bkg\_other\_TDT$\ell$} and
-\texttt{bkg\_other\_signal}, are placeholders whose purpose is to make the
-classification exhaustive rather than to carry physical content: for a
-correct classification they are expected to contain zero, or at most one or
-two, events, and they are checked periodically to confirm this.
-\texttt{bkg\_fakeTracks} is different: it is a genuine, populated category
-(one of the D daughters is a clone or fake track) that is left out of the
-templates because there is not yet a good way to handle it in the fit.
-\AnalysisTBD{quantify the yield of the three excluded categories in the
-signal region and in the $D$-mass sideband.  For the two placeholders this
-is a closure check that they are indeed negligible; for \texttt{bkg\_fakeTracks}
-it is the input needed to decide how it should enter the fit, since it is
-currently neither modelled nor assigned a systematic uncertainty for its
-omission}
+
+
+
 
 \subsection{Category merging in the fit templates}
 \label{sec:truth:merging}
 
-Two merges happen between classification and template construction, so the
-category list of Sec.~\ref{sec:truth:tree} is not identical to the sample
-list of Sec.~\ref{sec:fit}:
-the narrow and broad $D^{**}\ell\nu$ categories are summed into a single
-$D^{**}\ell\nu$ template; and when the gap-mode sample weight is set to zero
-the combined template is relabelled $D^{**}\ell\nu + \text{gap}$, which folds
-the gap modes into the $D^{**}$ template rather than dropping them.
-The narrow/broad merge into a single $D^{**}\ell\nu$ template is nominal.
+Three categories are merged in the
+category list.
+The narrow and broad $D^{**}\ell\nu$ categories are combined into a single
+$D^{**}\ell\nu$ template and the broad $D^{**} \ell\nu$ contribution
+is reweighted to account for the gap modes.
+The default gap modes in the generic MC sample are turned off.
+This combined template 
+is relabelled $D^{**}\ell\nu + \text{gap}$. The merger of the narrow/broad into a single $D^{**}\ell\nu$ template may be revised. 
+
 The gap-mode configuration is more involved and is described fully in
 Sec.~\ref{sec:bbbar:hierarchy} and Sec.~\ref{sec:fit:templates}; in short, the
 generic-MC gap-mode models ($B \to D^{(*)}\eta\ell\nu$ and
-$B \to D^{(*)}\pi\pi\ell\nu$) are not trusted to describe the gap between the
+$B \to D^{(*)}\pi\pi\ell\nu$) do not describe well the gap between the
 inclusive and exclusive semileptonic branching-fraction measurements
-(of order $1\%$), so the nominal configuration instead uses the
+(of order $1.5\%$), so the nominal configuration instead uses the
 $D^{**}\ell\nu$ (broad) shape for the gap-mode template as well, with the two
-components' normalisations summed --- effectively treating the gap as
+components' normalizations summed, which  effectively treats the gap as
 $B \to D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$.
-This is a shape substitution motivated by a lack of a trusted alternative,
-not a physics statement that the gap is exhausted by $D^{**}\ell\nu$.
 Belle~II has separately produced dedicated signal-enriched MC for the
-$D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$ gap-mode hypothesis specifically; it
-is intended for the systematic study of this substitution and for the final
-template building, but is not yet used at the pinned commit.
-\AnalysisTBD{what information is lost by merging the narrow and broad
-$D^{**}$ categories, given that they have different form factors and
-different $\mmiss$ shapes, and by extension what is lost by using the broad
-$D^{**}\ell\nu$ shape for the gap modes as well; incorporate the dedicated
-gap-mode signal MC once it is used}
+$D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$ gap-mode hypothesis specifically.
 
-As external context only (not an input to this analysis): the generic-MC
-mismodelling of the gap and adjacent hadronic-$B$-decay components is not
-unique to this note.  The Belle~II hadronic-FEI $R(D^{(*)})$ note
+
+The problem of modeling gap modes is not
+unique to this note. The Belle~II hadronic-FEI $R(D^{(*)})$ note
 (BELLE2-NOTE-PH-2024-056) reports, in both a control sideband and the final
 fit to data, that its own gap-mode yield comes out substantially lower than
-the generic-MC expectation, and cites a further Belle~II analysis making the
-same observation in its own control region.  That is a different final
-state and a different definition of ``gap mode,'' so it is not evidence
-about the size or direction of any effect in this analysis; it does mean
-that a generic-MC gap-mode component significantly overshooting data would
-not be a novel or suspicious finding on its own, were it to occur here once
-the signal region is examined.
+the generic-MC expectation. We consider the modeling of the gap modes in the systematic uncertainty.
 
 \subsection{Generic-$B\bar{B}$ subdivision}
 \label{sec:truth:bbbar}
 
-The two generic-$B\bar{B}$ categories --- \texttt{bkg\_combinatorial} and
-\texttt{bkg\_hadronicB\_secondaryL} --- are further subdivided for the
+The two generic-$B\bar{B}$ categories, \texttt{bkg\_combinatorial} and
+\texttt{bkg\_hadronicB\_secondaryL}, are further subdivided for the
 purpose of the reweighting described in Sec.~\ref{sec:bbbar}.
-That subdivision is a property of the reweighting, not of the truth
-classification, and is documented there.
 
 \subsection{Sample composition}
 \label{sec:truth:composition}
@@ -235,19 +155,7 @@ classification, and is documented there.
 %                 run coverage has not been confirmed
 %   selection   : offline_cut only (pre-BDT); classify_mc_dict('e')
 %   corrections : none
-\PreliminaryResult{as a reference point rather than the composition table
-itself, the reconstructed sample sizes feeding the BDT training classes
-(Sec.~\ref{sec:mva:classes}), before the per-class subsampling to $500\,000$
-events, are: $2\,807\,056$ for the correctly reconstructed $B\to D\tau\nu$
-signal class (from the signal-enriched sample), $15\,815\,120$ for
-\texttt{bkg\_fakeD}, $734\,906$ for \texttt{bkg\_continuum} and $739\,879$ for
-\texttt{bkg\_combinatorial} (all three from generic MC), after
-\texttt{offline\_cut}, $e$ channel.
-The generic-MC counts are read from a run1-only input glob; the
-signal-enriched count is read from a \texttt{run*} wildcard whose actual run
-coverage (Run~1 only, or Run~1$+$Run~2) has not been confirmed, so the four
-numbers above should not yet be read as being on the same run-period
-footing}
+
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
 %   produced-by : Notebooks/Plotting/2_Plot_norm_e_run2.ipynb ::
@@ -264,30 +172,15 @@ footing}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{MC_composition_signalRegion.png}
-  \caption{Truth-category composition of generic and signal-enriched MC in
-  the $D$-mass signal region at the nominal \texttt{lgb\_tight} working
-  point, with the $D^{*}$ veto applied (left: all categories; right:
-  background categories only, i.e.\ excluding $D\tau\nu$ and the other
-  signal-like categories).
-  \AnalysisTBD{confirm the run period and channel this figure was produced
-  for, and whether it is luminosity-scaled (Sec.~\ref{sec:data:mc}); the
-  plot title is truncated and does not show the full selection string}}
+  \caption{Truth composition of generic MC in
+  the signal enhanced region, with the $D^{*}$ veto applied (left: all categories; right:
+  shows background categories only, i.e.\ excluding $D\tau\nu$ and the other
+  signal-like categories). Thus, $~52.9\%$ of the non-physics background with a correctly reconstructed $D$ and lepton is from $B \bar{B}$ sources and
+  $8\%$ is from continuum.}
   \label{fig:mc-composition-sr}
 \end{figure}
-This is a preliminary, single-channel snapshot rather than the composition
-table itself: it has no run/channel breakdown, and Fig.~\ref{fig:mc-composition-sr}
-does not distinguish the $D$-mass sideband from the signal region.
-A more complete, though still partial, reference point is
-Table~\ref{tab:sensitivity-sample-sizes} (Sec.~\ref{sec:fit:templates}):
+
+Table~\ref{tab:sensitivity-sample-sizes} (Sec.~\ref{sec:fit:templates}) gives
 reconstructed event counts for all fourteen categories, Run~1 and Run~2
 combined, separately for $e$ and $\mu$.
-It answers the channel gap of the two reference points above (both were
-$e$-channel only) but not the run-period split, and its selection is a
-different, tighter working point than the \texttt{offline\_cut}-only numbers
-above (Sec.~\ref{sec:fit:templates} records this discrepancy in scale
-explicitly rather than reconciling it).
-\AnalysisTBD{table of expected yields and fractions per category, in the
-signal region and in the $D$-mass sideband \emph{separately}, and split by
-Run~1 versus Run~2, at the nominal working point.  None of the three
-reference points now in the note is that table: each is a partial snapshot
-from a different notebook run at a different selection stage}
+

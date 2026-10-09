@@ -7,60 +7,10 @@
 %   sample      : MC16rd, e channel
 %   selection   : D-mass signal region or sideband, per file
 %   corrections : not recorded in the workspace files
-\section{Fit-Parameter Tables and Alternative Binnings}
+\section{PYHF Fit Setup Details}
 \label{app:fit}
 
-\subsection{Anatomy of the stored example workspaces}
-\label{app:fit:stored}
-
-Four generated \texttt{pyhf} workspaces are stored under \texttt{Fit\_toys/}.
-They are the only concrete realisations of the statistical model in the
-repository, so their contents are tabulated here --- with the important
-caveat, established below, that they do \emph{not} correspond to the nominal
-fit of Sec.~\ref{sec:fit}.
-
-\begin{table}[htbp]
-  \centering
-  \caption{Contents of the stored workspaces. Each file contains a single
-  channel; the signal region and the sideband are separate files rather than
-  two channels of one model.}
-  \label{tab:stored-workspaces}
-  \small
-  \begin{tabular}{l c c c}
-    \hline
-    File & Channels & Samples & Bins \\
-    \hline
-    \texttt{2dws\_SR\_e\_MC16rd\_normsys}    & 1 & 6 & 310 \\
-    \texttt{2dws\_SR\_e\_MC16rd\_fakeD}      & 1 & 7 & 378 \\
-    \texttt{2dws\_SB\_e\_MC16rd\_fakeD}      & 1 & 7 & 378 \\
-    \texttt{2dws\_SR\_e\_MC16rd\_fakeD\_cont}& 1 & 8 & 403 \\
-    \hline
-  \end{tabular}
-\end{table}
-
-The bin counts are the flattened two-dimensional bins surviving the population
-threshold, so they also record how much of the $\mmiss \times \pdl$ plane is
-retained: 310 to 403 bins out of a full grid.
-
-The most complete file, \texttt{2dws\_SR\_e\_MC16rd\_fakeD\_cont}, contains
-the samples and modifiers of Table~\ref{tab:stored-modifiers}, with
-$49\,221$ observed entries in its single channel.
-
-A separate, more current set of workspaces underlies the preliminary
-sensitivity result of Sec.~\ref{sec:results}: a two-channel (signal region
-plus sideband), per-channel ($e$, $\mu$) pair referenced by
-\texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} under paths such as
-\texttt{../Toys\_pipeline/2d\_ws\_SR\_e\_50\_50\_allUncer.json}.
-The \texttt{Toys\_pipeline/} directory does not exist in this repository
-checkout, so those workspace files cannot be inspected directly; the
-modifier configuration of Sec.~\ref{sec:fit:modifiers}'s
-Fig.~\ref{fig:pyhf-config} is read off a plot rather than the file itself,
-and the four-workspace table above should not be taken as documenting them.
-\AnalysisTBD{add the \texttt{Toys\_pipeline} workspace files (or copies of
-them) to a location in this repository, so that Table~\ref{tab:stored-workspaces}
-and Table~\ref{tab:stored-modifiers} can be regenerated from the workspace
-that actually produced Sec.~\ref{sec:results}, and so that its content no
-longer has to be read off a plot}
+{\bf Move this table to the main body of the B2NOTE}
 
 \begin{table}[htbp]
   \centering
@@ -85,47 +35,15 @@ longer has to be read off a plot}
   \end{tabular}
 \end{table}
 
-The parameter of interest is the $B \to D \tau \nu$ normalisation,
+The parameter of interest is the $B \to D \tau \nu$ normalization,
 \texttt{\$D$\backslash$tau$\backslash$nu\$\_norm}, consistent with
 Sec.~\ref{sec:fit:poi}.
 The MC statistical uncertainty is carried by one \texttt{staterror} parameter
 shared across samples within a channel, \texttt{mcStat\_ch0}, except for
 fake-$D$, which has its own \texttt{fakeD\_Stat\_ch0}.
 
-\subsection{Differences from the current generator}
-\label{app:fit:superseded}
 
-The stored workspaces were produced by an earlier version of
-\texttt{create\_workspace} and differ from what the pinned commit generates in
-four respects.
-They are therefore \Superseded{examples only; they are not the nominal model
-and no number should be taken from them}.
 
-\begin{enumerate}
-  \item \textbf{Channels.} Each stored file has one channel. The nominal fit
-        is the simultaneous signal-region plus $D$-mass-sideband fit of
-        Sec.~\ref{sec:fit:observables}, which the current generator builds as
-        two channels of one workspace.
-  \item \textbf{Fake-$D$.} Constrained here by a $\pm 5\%$ \texttt{normsys};
-        free \texttt{normfactor} in the current generator. Note that neither
-        matches the $\pm 3.5\%$ recorded in the analysis context document, so
-        three different treatments exist in the record.
-  \item \textbf{Continuum.} Fixed here through the parameter configuration;
-        constrained by a one-sided $+15\%/-0\%$ \texttt{normsys} in the
-        current generator (Sec.~\ref{sec:syst:continuum}).
-  \item \textbf{Generic $B\bar{B}$.} Absent entirely from every stored
-        workspace. The dominant background of Sec.~\ref{sec:bbbar} has no
-        template in any stored realisation of the model.
-\end{enumerate}
-
-\AnalysisTBD{regenerate a workspace from the pinned commit, including the
-sideband channel and the generic-$B\bar{B}$ templates, and replace
-Tables~\ref{tab:stored-workspaces} and~\ref{tab:stored-modifiers} with its
-contents.  Until then this note documents an obsolete realisation of its own
-fit model}
-
-\subsection{MC composition of the fit variables}
-\label{app:fit:composition}
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
@@ -135,78 +53,14 @@ fit model}
 %   sample      : MC16rd, Run 1, e channel
 %   selection   : offline_cut (Eq. offline-cut); region as captioned
 %   corrections : not confirmed from the image alone
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\textwidth]{Dtaunu_region_MC_mm2_run1e.png}
-  \caption{$\mmiss$, all truth categories, in a $B\to D\tau\nu$-enhanced
-  region (Run~1, $e$ channel).
-  Per-category mean, standard deviation and a cut efficiency are annotated
-  in the legend; several categories overlap substantially with the
-  $D\tau\nu$ shape itself.}
-  \label{fig:mc-comp-dtaunu-mm2}
-\end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\textwidth]{Dtaunu_region_MC_pDL_run1e.png}
-  \caption{$\pdl$, all truth categories, in the same $B\to D\tau\nu$-enhanced
-  region as Fig.~\ref{fig:mc-comp-dtaunu-mm2} (Run~1, $e$ channel).}
-  \label{fig:mc-comp-dtaunu-pdl}
-\end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\textwidth]{Dellnu_region_MC_mm2_run1e.png}
-  \caption{$\mmiss$, all truth categories, in a $B\to D\ell\nu$-enhanced
-  (normalisation) region (Run~1, $e$ channel).
-  The normalisation mode dominates and peaks near $\mmiss = 0$, as expected
-  for a single-neutrino final state, but the signal-like backgrounds
-  ($D^{*}\ell\nu$, $D^{**}\ell\nu$, gap) extend across the same range as the
-  $D\tau\nu$-enhanced region of Fig.~\ref{fig:mc-comp-dtaunu-mm2}.}
-  \label{fig:mc-comp-dellnu-mm2}
-\end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\textwidth]{Dellnu_region_MC_pDL_run1e.png}
-  \caption{$\pdl$, all truth categories, in the same $B\to D\ell\nu$-enhanced
-  region as Fig.~\ref{fig:mc-comp-dellnu-mm2} (Run~1, $e$ channel).}
-  \label{fig:mc-comp-dellnu-pdl}
-\end{figure}
-
-\AnalysisTBD{identify the exact producing notebook/cell for
-Figs.~\ref{fig:mc-comp-dtaunu-mm2}--\ref{fig:mc-comp-dellnu-pdl}, confirm
-the precise region definitions (beyond ``$D\tau\nu$-enhanced''/``$D\ell\nu$-enhanced''),
-and extend to Run~2 and the $\mu$ channel.
-A true two-dimensional ($\mmiss$ versus $\pdl$) version per category, as
-referenced in Sec.~\ref{sec:fit:observables}, would show the correlation
-between the two variables that these one-dimensional projections cannot}
 
 \subsection{Tables still required}
 \label{app:fit:todo}
 
-\AnalysisTBD{complete parameter table for the regenerated workspace:
-initial values, bounds, constraint terms and which parameters are fixed,
-extracted from the workspace rather than transcribed from the generator.
-As an organisational template only: sibling Belle~II \texttt{pyhf}-based
-notes tabulate this per sample/parameter as modifier type
-(\texttt{normfactor}/\texttt{normsys}/\texttt{histosys}/\texttt{staterror}),
-constraint width, which region(s) it applies in, and whether the response is
-one- or two-sided --- a structure this table could follow directly}
-A preliminary version of this now exists: the electron-channel correlation
-matrix and the expected uncertainty on the parameter of interest are given
-in Sec.~\ref{sec:results} (Fig.~\ref{fig:pyhf-correlation},
-Table~\ref{tab:sensitivity-breakdown}).
-\AnalysisTBD{the equivalent correlation matrix for the muon channel, the
-constrained (\texttt{normsys}) parameters currently omitted from
-Fig.~\ref{fig:pyhf-correlation}, and a version extracted directly from the
-workspace once Appendix~\ref{app:fit:stored}'s request to add the
-\texttt{Toys\_pipeline} workspace files to the repository is done}
-\AnalysisTBD{alternative binnings and the stability of the extracted yields
-against them, including the effect of the population threshold that sets the
-bin counts of Table~\ref{tab:stored-workspaces}}
-\AnalysisTBD{complete postfit projections in both channels and both fit
-observables, after box opening}
+\AnalysisTBD{complete parameter table for the PYHF fit:}
 
 \subsection{Toy studies}
 \label{app:fit:toys}
@@ -214,8 +68,4 @@ observables, after box opening}
 The toy machinery is \texttt{utilities.toy\_utils} together with
 \texttt{Fit\_toys/FitToys\_b2luigi.py}, which drives ensembles through
 \texttt{b2luigi}.
-\AnalysisTBD{pull distributions and linearity scans from that machinery,
-reported separately from any result on data.  No toy study output is stored in
-the repository at the pinned commit.  See Sec.~\ref{sec:fit:validation} for
-the planned methodology, including an organisational template drawn from
-sibling analyses}
+\AnalysisTBD{Add Toy Fits and pull plots}

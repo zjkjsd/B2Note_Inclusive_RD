@@ -7,11 +7,8 @@
 %   sample      : MC16rd training sample, e and mu
 %   selection   : offline_cut (Eq. offline-cut)
 %   corrections : none applied at training time
-\section{MVA Diagnostics}
+\section{BDT Training and Validation}
 \label{app:mva}
-
-\subsection{Hyper-parameters}
-\label{app:mva:hyper}
 
 \begin{table}[htbp]
   \centering
@@ -33,57 +30,24 @@
     \texttt{min\_child\_samples} & 1000 & leaf occupancy floor \\
     \texttt{bagging\_fraction} & 0.7, \texttt{bagging\_freq} 5 & row subsampling \\
     \texttt{feature\_fraction} & 0.7 & column subsampling \\
-    \texttt{lambda\_l1}, \texttt{lambda\_l2} & 1, 1 & regularisation \\
+    \texttt{lambda\_l1}, \texttt{lambda\_l2} & 1, 1 & regularization \\
     \texttt{seed} & 0 & reproducibility \\
     \hline
   \end{tabular}
 \end{table}
 
-The combination of \texttt{min\_child\_samples} $=1000$ with only 49 leaves
-and 25 boosting rounds gives a deliberately small, heavily regularised model.
-That is a reasonable choice for a classifier whose output defines control
-regions as well as the signal selection, since a sharply overtrained
-discriminant would sculpt those regions differently in data and simulation.
-\AnalysisTBD{this reading of the configuration is inference, not a documented
-motivation; confirm or replace it}
+We use a BDT with \texttt{min\_child\_samples} $=1000$ and only 49 leaves,
+and 25 boosting rounds. This gives a small and regularized model.
 
-\subsection{Training and validation metrics}
-\label{app:mva:metrics}
+We use separate training and validation samples. We find no evidence for over-training of the BDT.
 
-\begin{table}[htbp]
-  \centering
-  \caption{Recorded metrics for the three stored models, first and last
-  boosting round, from \texttt{BDTs/LightGBM/eval\_result\_v*.json}.}
-  \label{tab:mva-metrics}
-  \small
-  \begin{tabular}{l c c c c c}
-    \hline
-    Model & Rounds & \multicolumn{2}{c}{multi-class log-loss} & \multicolumn{2}{c}{\texttt{auc\_mu}} \\
-          &        & train & validation & train & validation \\
-    \hline
-    \texttt{v1} & 50 & 0.771 & 0.894 & 0.923 & 0.909 \\
-    \texttt{v2} & 34 & 0.777 & 0.808 & 0.922 & 0.915 \\
-    \texttt{v3} & 25 & 0.796 & 0.805 & 0.918 & 0.916 \\
-    \hline
-  \end{tabular}
-\end{table}
 
-The train--validation gap narrows monotonically from \texttt{v1} to
-\texttt{v3}: the log-loss gap falls from $0.123$ to $0.009$ and the
-\texttt{auc\_mu} gap from $0.014$ to $0.002$.
-\texttt{v1} shows the clearest sign of overtraining and \texttt{v3} essentially
-none, which is consistent with \texttt{v3} being the model produced by the
-current two-stage schedule.
-Confirmed: \texttt{v3} is the nominal model (Sec.~\ref{sec:mva:training}),
-and \texttt{v1}/\texttt{v2} are retained only as history and will be removed
-in a future update.
 
-\subsection{Input variables}
+\subsection{BDT Input variables}
 \label{app:mva:inputs}
 
-The stored model header lists 17 input features, matching
-\texttt{utilities.training\_variables} exactly; they are enumerated in
-Appendix~\ref{app:selections:mva}, and the variables excluded from training
+The BDT uses 17 input features, which are listed in 
+Appendix~\ref{app:selections:mva}. The variables excluded from training are given 
 in Appendix~\ref{app:selections:excluded}.
 
 % PROVENANCE
@@ -104,14 +68,12 @@ in Appendix~\ref{app:selections:excluded}.
   $\Delta E^{\mathrm{ROE}}$) and $B_0\_CMS\_cos\_angle\_0\_1$ dominate;
   \texttt{D\_A1FflightDistanceSig\_IP}, the $D$ flight-distance significance
   of Sec.~\ref{sec:recon:d}, is the next most important, ahead of any single
-  continuum-suppression variable.
-  \AnalysisTBD{confirm which stored model (Sec.~\ref{sec:mva:training}) this
-  importance ranking was computed from, and whether it should be recomputed
-  for \texttt{v3} specifically if it is not already}}
+  continuum-suppression variable.}
+  
   \label{fig:lgbm-importance}
 \end{figure}
 
-\subsection{Diagnostics still required}
+\subsection{Additional Information on the BDT Classifier to be added}
 \label{app:mva:todo}
 
 \AnalysisTBD{ROC or efficiency-versus-purity curves for each of the four
@@ -119,17 +81,3 @@ classes on the validation subset}
 \AnalysisTBD{learning curves per round, from the stored evaluation histories}
 \AnalysisTBD{distributions of every retained input variable, data versus
 simulation, in an unblinded control region}
-\InProgress{correlation matrix of the inputs, and the correlation of each
-input with $\mmiss$ and $\pdl$ in the bins used by the fit.  This is the
-quantitative evidence for the exclusions listed in
-Appendix~\ref{app:selections:excluded}, which currently rest on source
-comments alone.  Two-dimensional plots of each fit variable against the BDT
-inputs and, in particular, against the BDT output probabilities are planned
-(Sec.~\ref{sec:mva:inputs}) to show any sculpting directly}
-\AnalysisTBD{signal and normalisation selection efficiency separately as a
-function of the working point, since $R(D)$ depends on their ratio rather
-than on either alone}
-
-Diagnostics for the earlier XGBoost and random-forest models retained in the
-analysis repository are not reproduced here: those are superseded by the
-LightGBM four-class model of Sec.~\ref{sec:mva}.

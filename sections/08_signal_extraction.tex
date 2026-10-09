@@ -10,7 +10,7 @@
 \section{Signal Extraction}
 \label{sec:fit}
 
-\subsection{Fit observables and channels}
+\subsection{Fit observables, fitting region, and PYHF binning}
 \label{sec:fit:observables}
 
 Yields are extracted from a two-dimensional binned likelihood fit in
@@ -26,9 +26,7 @@ The $q^{2}$, $D^{*}$-veto, off-resonance, BDT-sideband and wrong-charge
 regions of Sec.~\ref{sec:validation} are cross-checks and do not enter the
 likelihood.
 
-The templates are built from the same MC categories in both channels, so the
-sideband determines the fake-$D$ normalisation and shape in situ rather than
-through an external prior.
+The templates are built from the same MC categories in both channels.
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
@@ -47,20 +45,9 @@ through an external prior.
   \includegraphics[width=\textwidth]{MC_fitVars_2d.png}
   \caption{$\pdl$ versus $\mmiss$ for every generic-MC truth category, before
   any selection.
-  This is the motivating plot for a two-dimensional fit: every category's
+  This motivates a two-dimensional fit: every category's
   shape is a broad, correlated band in this plane rather than separable in
-  $\mmiss$ or $\pdl$ alone, and several categories occupy overlapping regions
-  of it, exactly the difficulty motivated in Sec.~\ref{sec:intro:motivation}.
-  The panel labels differ from the category names used elsewhere in this
-  note: \texttt{bkg\_TDFl} is \texttt{bkg\_fakeL} and \texttt{bkg\_singleBbkg}
-  is \texttt{bkg\_hadronicB\_secondaryL}; the two \texttt{$D\ell\nu$\_gap\_*}
-  panels are the narrow gap sub-categories (integer codes 15 and 16 of
-  Appendix~\ref{app:categories:codes}) shown \emph{before} they are merged
-  into the single $D\ell\nu$\_gap template of Sec.~\ref{sec:truth:merging}.
-  \AnalysisTBD{identify the producing script/notebook cell, and confirm
-  whether the same shapes hold after the nominal selection
-  (\texttt{offline\_cut} plus \texttt{lgb\_tight}) used to build the actual
-  fit templates, since this plot is explicitly unselected}}
+  $\mmiss$ or $\pdl$ alone.}
   \label{fig:mc-fitvars-2d}
 \end{figure}
 
@@ -69,10 +56,6 @@ one-dimensional fits: a two-dimensional binned likelihood can exploit the
 correlation between $\mmiss$ and $\pdl$ visible in
 Fig.~\ref{fig:mc-fitvars-2d} to help separate components with similar
 one-dimensional projections, which a pair of one-dimensional fits cannot.
-\InProgress{quantify the correlation coefficient between $\mmiss$ and $\pdl$
-per category, rather than relying on Fig.~\ref{fig:mc-fitvars-2d} alone, and
-confirm the same conclusion holds after the nominal selection rather than
-before it}
 
 % PROVENANCE
 %   status      : CODE_FACT
@@ -86,83 +69,33 @@ before it}
 %   sample      : n/a (binning/threshold configuration)
 %   selection   : n/a
 %   corrections : n/a
-The nominal binning is fixed per channel and per fit region rather than
-derived from the data (\texttt{ANALYSIS\_DECISION}).
-In the $D$-mass signal region, $\pdl \in \{0.4, 0.6, 0.8\} \cup
-\mathrm{linspace}(1,3,41) \cup \{3.1, 3.2, 3.3, 3.4, 3.6, 3.8, 4, 4.2, 4.4,
-4.6, 4.8\}$ (irregular, finer in the bulk of the distribution) and
-$\mmiss \in \mathrm{linspace}(-2.5,2.5,11) \cup \mathrm{linspace}(2.8,10,31)$;
-in the $D$-mass sideband, both variables instead use a coarser, regular
-binning, $\pdl \in \mathrm{linspace}(0.4,4.8,21)$ and
-$\mmiss \in \mathrm{linspace}(-2.5,10,21)$
-(\texttt{CODE\_FACT}: \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb},
-the cell defining \texttt{p\_D\_l\_bins}/\texttt{MM2\_bins}/
-\texttt{p\_D\_l\_bins\_sb}/\texttt{MM2\_bins\_sb}, matches exactly).
-Two distinct mechanisms then act on the flattened 2D bins before they become
-the \texttt{pyhf} template, both exposed as arguments of
-\texttt{create\_templates\_new} (lines 1087--1284) rather than hardcoded: a
-\texttt{bin\_threshold} below which a bin is dropped outright (the function
-default is $1$, i.e.\ only literally empty bins; the fitting notebook
-overrides this to $10$), and, separately, a \texttt{merge\_threshold} used by
-\texttt{rebin\_histogram} (line 984) to \emph{merge} adjacent bins, rather
-than drop them, until each merged bin's content reaches the threshold (the
-notebook passes $5$).
-This is a more precise description than ``empty bins, and separately bins
-below 10, are removed'': in the executed notebook the single prune threshold
-of $10$ already subsumes the empty-bin case ($0 < 10$), and the separate
-merge step combines rather than discards the remaining low-population bins.
-\AnalysisTBD{document the exact order/interaction between the prune and merge
-steps and which channel(s) each is applied to --- this was not established
-from the code alone --- and move the nominal threshold values
-(\texttt{bin\_threshold}$=10$, \texttt{merge\_threshold}$=5$) out of the
-calling notebook and into a documented default in \texttt{utilities.py}.
-State the resulting bin count per channel once regenerated: the counts in
-Table~\ref{tab:stored-workspaces} predate this and should not be assumed
-current}
-The remaining bins are flattened into the \texttt{pyhf} sample-data list, and
-the per-bin Poisson uncertainty --- the square root of the sum of squared
-per-event weights (\texttt{utilities.py} lines 1121--1143) --- is flattened
-identically to form the \texttt{staterror} data of
-Sec.~\ref{sec:fit:modifiers}.
+
+ We start with fine binning in the two variables, which is defined by a
+ 1-D list of bin edges, a, for MM$^2$ and list of bin edges, b, for $|p_D|+ |p_\ell|$. Thus lists are used to form a two-dimensional histogram, which contains about $2000$ bins. Templates from MC
+have about the equivalent of four times data luminosity. We require at least 10 counts in each bin of the template. Otherwise the bin is removed from the template. The resulting two-dimensional (2D) histogram is flattened into a one
+dimensional (1D) histogram, which is used for the final PYHF fit.
+
+For data, we will use the same bins as in the MC templates.
+
 
 \subsection{Templates}
 \label{sec:fit:templates}
 
-Templates are filled per truth category with per-bin statistical
+Template histograms are filled for each truth category with per-bin statistical
 uncertainties from the sum of squared weights, then trimmed to bins whose
 summed content passes the population threshold and flattened.
 Three categories are excluded before filling
 (Sec.~\ref{sec:truth:closure}), and the narrow and broad $D^{**}\ell\nu$
 categories are merged (Sec.~\ref{sec:truth:merging}).
-Per-category MC breakdowns of both fit variables, in regions enhanced for
-each of the two signal-like modes, are shown in
-Appendix~\ref{app:fit:composition}; they illustrate directly the
-overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
 
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : analyst-reported reconstructed event counts from
-%                 Notebooks/3_fitting_cabinetry_2d_SR.ipynb; exact cell and
-%                 selection within that notebook not yet confirmed against a
-%                 stored printout
-%   commit      : ad2f2ec
-%   sample      : MC16rd, Run 1 + Run 2 combined, e and mu channels
-%   selection   : offline_cut (Eq. offline-cut) plus lgb_tight (Eq.
-%                 lgb-tight), spanning the full D-mass range rather than
-%                 the signal region or sideband separately (unconfirmed)
-%   corrections : not confirmed
 \begin{table}[htbp]
   \centering
-  \caption{Reconstructed event counts feeding template construction, Run~1
-  plus Run~2 combined, from \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb}.
-  Sourcing rule: the three semitauonic ($B\to X\tau\nu$) categories,
-  $D\tau\nu$, $D^{*}\tau\nu$ and $D^{**}\tau\nu$, are signal-enriched MC;
-  every other category is generic MC.
-  These counts are preliminary and expected to shift slightly with the next
-  basf2 software release.
-  \AnalysisTBD{confirm the exact cell and selection within that notebook
-  these counts were computed at (in particular whether both D-mass regions
-  are combined here, as assumed), and the Run~1/Run~2 split}}
+  \caption{Reconstructed events used to obtain templates. Here Run~1
+  and Run~2 are combined. The three semitauonic ($B\to X\tau\nu$) categories,
+  $D\tau\nu$, $D^{*}\tau\nu$ and $D^{**}\tau\nu$, are from signal MC;
+  every other category is taken from generic MC.}
+\vspace{1.0mm}
+  
   \label{tab:sensitivity-sample-sizes}
   \small
   \begin{tabular}{l r r}
@@ -187,71 +120,40 @@ overlapping-shape difficulty motivated in Sec.~\ref{sec:intro:motivation}.
   \end{tabular}
 \end{table}
 
-At the pinned commit, the specific \texttt{create\_templates\_new} calls
-saved in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} do not read
-as matching the sourcing rule above at face value for the three semitauonic
-categories: both channels' saved calls pass the all-generic-MC dictionary,
-and the $e$-channel call additionally excludes $D^{*}\tau\nu$ and
-$D^{**}\tau\nu$ entirely via \texttt{sample\_to\_exclude}.
-Per the analyst (\texttt{ANALYSIS\_DECISION}), this is a later,
-$e$-channel-only artifact from tests run \emph{after} the
-Sec.~\ref{sec:results} sensitivity was produced, not a procedural difference
-between the two channels: the sourcing rule above holds identically for both
-$e$ and $\mu$, and this is not a concern for the sensitivity numbers as
-reported.
 
-The generic-MC luminosity weight of $0.25$ (Sec.~\ref{sec:data:mc}) is
-applied through the \texttt{sample\_weights} argument at the notebook call
-site, rather than inside \texttt{create\_templates\_new} itself
-(\texttt{CODE\_FACT}: \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb},
-cells 13--14, the \texttt{sample\_weights} dictionary), and it applies to
-every category's underlying event count, including $D\ell\nu$\_gap and
-$D^{**}\ell\nu$ (broad).
-Two entries in that dictionary look like exceptions, $D\ell\nu$\_gap
-weighted $0$ and $D^{**}\ell\nu$ (broad) weighted $0.25 \times 1.435 \approx
-0.359$, but per the analyst this is the same $0.25$ applied to both
-categories, expressed through the gap-mode merge already described in
-Sec.~\ref{sec:truth:merging}: since the gap-mode shape from generic MC is
-not trusted, its own histogram is not used (weight $0$) and its \emph{yield}
-is instead folded into the $D^{**}\ell\nu$ (broad) sample by inflating that
-sample's weight by the ratio of the two categories' event counts (gap is
-about $43.5\%$ of $D^{**}\ell\nu$ (broad) by count, giving the combined
-factor $0.25 \times (1 + 0.435) = 0.25 \times 1.435$), so that the merged
-sample takes the $D^{**}\ell\nu$ (broad) shape while carrying both
-categories' luminosity-scaled normalisation.
-This scales both the bin content and, since the per-bin uncertainty is
-computed from the sum of squared weights, its Poisson statistical
-uncertainty consistently.
-$D\ell\nu$\_gap's zero weight makes it contribute nothing to the template
-regardless of whether it is also separately excluded by
-\texttt{sample\_to\_exclude}, which itself differs between the two saved
-calls (excluded in the $e$-channel cell, not excluded in the $\mu$-channel
-cell) --- consistent with the $e$-channel cell reflecting later,
-unrelated edits noted above.
+
+
+
+
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : analyst-reported reconstructed event counts from
+%                 Notebooks/3_fitting_cabinetry_2d_SR.ipynb; exact cell and
+%                 selection within that notebook not yet confirmed against a
+%                 stored printout
+%   commit      : ad2f2ec
+%   sample      : MC16rd, Run 1 + Run 2 combined, e and mu channels
+%   selection   : offline_cut (Eq. offline-cut) plus lgb_tight (Eq.
+%                 lgb-tight), spanning the full D-mass range rather than
+%                 the signal region or sideband separately (unconfirmed)
+%   corrections : not confirmed
+
+
 
 \subsection{Parameter of interest}
 \label{sec:fit:poi}
 
-The parameter of interest in the generated workspace is the normalisation of
+The parameter of interest is the normalization of
 the $B \to D \tau \nu$ template, \texttt{\$D$\backslash$tau$\backslash$nu\$\_norm}.
-$R(D)$ is therefore not fitted directly; it is derived from the fitted
-signal and normalisation yields.
-\AnalysisTBD{the explicit relation between the two fitted normalisations and
-$R(D)$, including the signal and normalisation efficiencies, their ratio, and
-the $\tau \to \ell \nu \nu$ branching fraction.  Until this is written down
-the note does not define its own observable.
-Some other Belle~II analyses set $R(D)$ itself, rather than the
-$B\to D\tau\nu$ normalisation, as the parameter of interest; that is not yet
-implemented here, and doing so is expected to need help beyond what is
-currently in \texttt{utilities.py}.  A possible intermediate step, also not
-yet implemented, is to fit the $B\to D\ell\nu$ normalisation and $R(D)$
-directly rather than the two normalisations separately}
+At the moment, $R(D)$ is therefore not fitted directly; it is derived from the fitted
+signal and normalization yields.
+
 
 \subsection{Modifiers and constraints}
 \label{sec:fit:modifiers}
 
-Table~\ref{tab:fit-parameters} lists the modifiers as generated at the pinned
-commit, and the intended configuration where the two differ.
+Table~\ref{tab:fit-parameters} lists the PYHF modifiers or "fitting parameters".
 
 % PROVENANCE
 %   status      : CODE_FACT (current) / ANALYSIS_DECISION (intended)
@@ -262,38 +164,31 @@ commit, and the intended configuration where the two differ.
 %   corrections : n/a
 \begin{table}[htbp]
   \centering
-  \caption{Fit parameters as generated at commit \texttt{ad2f2ec}, and the
+  \caption{Fit parameters and the
   intended configuration. ``free'' denotes an unconstrained
   \texttt{normfactor}.}
+  \vspace{2mm}
   \label{tab:fit-parameters}
   \small
   \begin{tabular}{>{\raggedright\arraybackslash}p{0.26\textwidth} >{\raggedright\arraybackslash}p{0.28\textwidth} >{\raggedright\arraybackslash}p{0.38\textwidth}}
     \hline
-    Sample & Current modifier & Intended \\
+    Sample & Current modifier & Comment \\
     \hline
-    $D\tau\nu$ & free (POI) & unchanged \\
-    $D\ell\nu$ & free & unchanged \\
-    $D^{*}\ell\nu$ & free & unchanged \\
-    $D^{**}\ell\nu + \text{gap}$ & free & unchanged \\
-    $D^{*}\tau\nu$ & \texttt{normsys} $\pm 10\%$ & unchanged \\
-    $D^{**}\tau\nu$ & \texttt{normsys} $\pm 30\%$ & unchanged \\
-    \texttt{bkg\_fakeD} & free & unchanged; determined by the sideband channel \\
+    $D\tau\nu$ & free (POI) &  \\
+    $D\ell\nu$ & free &  \\
+    $D^{*}\ell\nu$ & free &  \\
+    $D^{**}\ell\nu + \text{gap}$ & free &  \\
+    $D^{*}\tau\nu$ & \texttt{normsys} $\pm 10\%$ &  \\
+    $D^{**}\tau\nu$ & \texttt{normsys} $\pm 30\%$ &  \\
+    \texttt{bkg\_fakeD} & free &  simultaneously fitted by the signal and the sideband channels \\
     \texttt{bkg\_continuum} & \texttt{normsys} $+15\%/-0\%$ & see Sec.~\ref{sec:syst:continuum} \\
-    Generic-$B\bar{B}$ families & free & \texttt{normsys}, width from the tuning covariance \\
+    Generic-$B\bar{B}$ families & fixed & \texttt{normsys}, width from the tuning covariance \\
     All samples & \texttt{staterror}, one shared parameter per channel & see below \\
     \hline
   \end{tabular}
 \end{table}
 
-Table~\ref{tab:fit-parameters} documents \texttt{create\_workspace}'s
-defaults; it is not the same workspace that produced the sensitivity result
-of Sec.~\ref{sec:results}, which instead comes from a separate, per-channel
-($e$, $\mu$) two-channel (signal region plus sideband) workspace pair
-referenced by \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb} under a
-\texttt{Toys\_pipeline/} path not present in this repository checkout
-(Appendix~\ref{app:fit:stored}), so its modifier configuration can only be
-read off the plot below rather than confirmed against the workspace file
-itself.
+
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
@@ -307,191 +202,59 @@ itself.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.75\textwidth]{pyhf_config.png}
-  \caption{Samples and modifier types of the workspace behind the
+  \caption{The PYHF workspace for the
   Sec.~\ref{sec:results} sensitivity result, one channel per row group:
   \texttt{channel\_0} is the $D$-mass signal region and \texttt{channel\_1}
   the sideband, matching Sec.~\ref{sec:fit:observables}.
   Electron and muon modes are fit separately, each with its own such
-  workspace.
-  Unlike Table~\ref{tab:fit-parameters}, generic-$B\bar{B}$ appears here as
-  four separate categories (\texttt{bkg\_combinatorial},
-  \texttt{bkg\_fakeL}, \texttt{bkg\_fakeTracks},
-  \texttt{bkg\_hadronicB\_secondaryL}), each with \emph{only} a
-  \texttt{staterror} modifier and no dedicated normalisation modifier at
-  all --- neither the free \texttt{normfactor} of Table~\ref{tab:fit-parameters}
-  nor the \texttt{normsys} constraint intended to replace it
-  (Sec.~\ref{sec:syst:bbbar}) --- so in this particular workspace those four
-  categories are effectively fixed to their MC prediction.
-  Per the analyst, this is deliberate rather than an omission
-  (\texttt{ANALYSIS\_DECISION}): background studies for these categories are
-  ongoing, so no systematic uncertainty is yet available to encode as a
-  modifier for them, and a family is left fixed rather than given an
-  unjustified constraint width.
-  \texttt{bkg\_combinatorial} and \texttt{bkg\_hadronicB\_secondaryL} are
-  expected to receive \texttt{normsys} modifiers once the generic-$B\bar{B}$
-  reweighting of Sec.~\ref{sec:bbbar} is complete; \texttt{bkg\_fakeL} and
-  \texttt{bkg\_fakeTracks} each already have a stated plan
-  (Sec.~\ref{sec:syst:sources}) --- the \texttt{SystematicFramework} tool for
-  \texttt{bkg\_fakeL}, and a fallback $\pm50\%$ \texttt{normsys} for
-  \texttt{bkg\_fakeTracks} if no control sample is found --- not yet
-  implemented as modifiers here.
-  \InProgress{add the \texttt{normsys} modifiers for \texttt{bkg\_combinatorial}
-  and \texttt{bkg\_hadronicB\_secondaryL} once the generic-$B\bar{B}$
-  reweighting of Sec.~\ref{sec:bbbar} is complete, and implement the
-  \texttt{bkg\_fakeL}/\texttt{bkg\_fakeTracks} plans of
-  Sec.~\ref{sec:syst:sources}.
-  Also add the workspace file(s) themselves to a location in the repository
-  so this configuration can be verified directly rather than read off the
-  plot}}
+  workspace.  }
   \label{fig:pyhf-config}
 \end{figure}
 
-Three properties of the generated workspace require attention.
 
-\paragraph{Generic-$B\bar{B}$ normalisations.}
-The generic-$B\bar{B}$ families currently enter as free normalisation
-factors.
-That is appropriate in the control-region context the workspace generator was
-originally written for, but not in the signal-region fit: floating them there
-discards the constraint obtained by the tuning of Sec.~\ref{sec:bbbar} and
-adds five free parameters that the signal normalisation must be separated
-from.
-The intended configuration is instead a \texttt{normsys} constraint per
-family, with the width taken from the uncertainty of the tuned weights
-(\texttt{ANALYSIS\_DECISION}).
-\InProgress{a usable width now exists for three of the five families.  With
-MINOS enabled (Sec.~\ref{sec:bbbar:results}), the nominal \texttt{kinematic-2d}
-tuning gives a genuine, non-boundary MINOS interval for the measured-hadronic,
-3-body and 5+-body weights, and using that interval as the \texttt{normsys}
-width for those three families is reasonable.
-It is not yet appropriate for the 2-body and 4-body weights: both remain
-pinned at their lower bound in every stored fit (Sec.~\ref{sec:bbbar:results}),
-so their MINOS interval reflects the imposed bound rather than a profiled
-uncertainty, and using it as a constraint width would understate the true
-uncertainty on those two families rather than represent it.  A width for
-those two can only be set once a tuning fit reaches an interior minimum in
-those directions, per the three-way question of
-Sec.~\ref{sec:bbbar:degeneracy}}
+
 
 \paragraph{Parameter bounds.}
-Every normalisation parameter is generated with bounds $[-5, 5]$, which
-permits negative values.
-This is deliberate (\texttt{ANALYSIS\_DECISION}).
-The intent is not that a negative yield is physical, but that the minimiser
-should be free to traverse the negative region so that the reported minimum is
-the global one, rather than a value pushed against a boundary at zero.
-A parameter constrained at zero cannot be distinguished from a parameter whose
-true minimum lies below it, and a best-fit value that sits on a physical
-boundary carries no meaningful parabolic uncertainty --- the same pathology
-documented for the generic-$B\bar{B}$ weights in
-Sec.~\ref{sec:bbbar:degeneracy}.
-Allowing the fit to explore negative values and observing that the minimum
-lands in the positive region is therefore evidence, whereas forcing
-positivity and observing a positive result is not.
-
-The freedom is intended for the free \texttt{normfactor} parameters only.
-Constrained parameters are not affected: a \texttt{normsys} modifier is
-parameterised by a nuisance parameter with its own Gaussian constraint and an
+Every normalization parameter is generated with bounds $[-5, 5]$, which
+permits negative values. Constrained parameters are not affected: a \texttt{normsys} modifier is
+parameterized by a nuisance parameter with its own Gaussian constraint and an
 interpolated response, so the $[-5,5]$ range does not apply to it in the same
 way.
-\AnalysisTBD{once the generic-$B\bar{B}$ families move from
-\texttt{normfactor} to \texttt{normsys} (above), confirm that no constrained
-component is left with an unconstrained $[-5,5]$ normalisation, and state
-what is done if a free normalisation returns a negative best-fit value ---
-whether the result is reported as-is, or the fit is repeated with a
-positivity requirement as a cross-check}
+
+\AnalysisTBD{the generic-$B\bar{B}$ families should move from
+fixed to \texttt{normsys} (above)}
 
 \paragraph{MC statistical uncertainty.}
 All samples in a channel share a single \texttt{staterror} modifier name,
 \texttt{mcStat\_ch$n$}, so the MC statistical uncertainty is treated as one
 constrained nuisance parameter per channel per bin, summing the samples'
 individual MC statistical uncertainties in quadrature into that one
-parameter, rather than as an independent nuisance parameter per sample per
-bin.
-This is the ``lite'' Beeston--Barlow treatment.
-An earlier version of this note justified it by treating the per-bin MC
-statistical fluctuations of different truth categories drawn from one
-generic-MC production as themselves correlated, ``since they trace back to
-the same finite set of generated events.''
-That justification was incorrect and has been removed
-(\texttt{ANALYSIS\_DECISION}, corrected): the categories are mutually
-exclusive subsets of one generated sample, and in the standard binned
-template-statistics model each category's per-bin count is an independent
-Poisson variate with its own finite-sample uncertainty, exactly as it would
-be if the categories came from separate productions.
-Sharing one production does not by itself correlate their fluctuations; if
-anything, conditioning on a fixed total count in a bin would induce
-\emph{anti}-correlation between categories (a multinomial split of a fixed
-total), not the positive correlation the earlier text asserted, and no such
-conditioning is imposed here.
-The real justification for the lite treatment is practical rather than a
-consequence of shared origin: every sample's statistics here are large
-enough that the lite and full (one nuisance parameter per sample per bin)
-treatments are expected to differ only slightly, and the lite treatment
-keeps the nuisance-parameter count at (channels $\times$ bins) rather than
-(channels $\times$ bins $\times$ samples), which is both simpler and
-cheaper to fit.
-This is unrelated to whether the samples in a channel come from one MC
-production or several: the same lite-versus-full trade-off applies either
-way, so a channel mixing generic and signal-enriched MC
-(Sec.~\ref{sec:data:mc}) does not need a different number of \texttt{staterror}
-parameters than a single-production channel on these grounds.
-\InProgress{quantify, rather than assert, that the lite and full treatments
-give a small difference here, given the actual per-bin statistics of each
-sample --- large generic-MC statistics support this for the current
-generic-MC-only templates, but it should be checked again once
-signal-enriched MC enters the templates, particularly in bins where one
-sample's per-bin count is not large.
-As an organisational reference only: a sibling Belle~II semileptonic-tag
-$R(D^{(*)})$ note independently adopted the same lite Beeston-Barlow choice,
-citing an otherwise linearly growing, poorly constrained parameter count as
-the reason to avoid the per-sample alternative --- consistent with, though
-not a substitute for, quantifying the difference directly here}
+parameter, rather than as an independent nuisance parameter per sample. 
+This is the ``lite'' Beeston--Barlow treatment (see Computer Physics Communications, volume 77, issue 2, pages 219–228).
+We note that the Belle II semileptonic $R(D^{(*)})$ paper used the same treatment.
+
+
+
 
 \subsection{Fit validation}
 \label{sec:fit:validation}
 
-A preliminary Asimov-sensitivity study now exists and is reported in
-Sec.~\ref{sec:results}; the method is to fit the Asimov dataset (the exact
+We determine the $R(D)$ sensitivity using an Asimov fit.
+The results are given in Sec.~\ref{sec:results}. 
+The method is to fit the Asimov dataset (the exact
 sum of all template samples) once per channel with every \emph{constrained}
 modifier (\texttt{normsys}, \texttt{staterror}) fixed while the free
-\texttt{normfactor} normalisations ($D\ell\nu$, $D^{*}\ell\nu$,
+\texttt{normfactor} normalizations ($D\ell\nu$, $D^{*}\ell\nu$,
 $D^{**}\ell\nu$~+~gap, \texttt{bkg\_fakeD}; Table~\ref{tab:fit-parameters})
-remain floating alongside the parameter of interest, giving the
-data-statistics-only uncertainty; then re-fit repeatedly with one further
-constrained modifier freed at a time, attributing each one's systematic
+remain floating alongside the parameter of interest, which gives the
+uncertainty from data statistics alone. We then re-fit repeatedly with one further
+constrained modifier freed at a time, and attribute each one's systematic
 contribution to the quadrature difference between the new and previous
-returned uncertainty on the $B\to D\tau\nu$ normalisation
-(\texttt{ANALYSIS\_DECISION}, per the analyst, resolving an earlier ambiguity
-in this description raised in review).
-This mechanism (progressively unmasking fixed parameters and refitting) is
-implemented in \texttt{Notebooks/3\_fitting\_cabinetry\_2d\_SR.ipynb}
-(\texttt{cabinetry}/\texttt{pyhf} Asimov and toy-fit calls, cells 36--53,
-including the quadrature-difference arithmetic); no stored artifact in the
-repository prints or tabulates the resulting per-modifier breakdown, so the
-numbers of Sec.~\ref{sec:results} are the analyst's own summary of running
-this notebook rather than a committed table.
-\AnalysisTBD{add a script or notebook cell that prints/records the labelled
-per-modifier uncertainty breakdown directly, rather than leaving it as a
-manually-assembled summary}
+returned uncertainty on the $B\to D\tau\nu$ normalization
 
-Toy studies, pull distributions and linearity tests remain not yet done.
+
+Toy studies, pull distributions and linearity tests are not yet done.
 The machinery exists in \texttt{utilities.pyhf\_utils} and
 \texttt{utilities.toy\_utils} and in \texttt{Fit\_toys/FitToys\_b2luigi.py};
 producing and recording the nominal study is planned but not yet done.
-\InProgress{As an organisational template only, drawn from several sibling Belle~II
-semileptonic-tag notes rather than as numbers to reproduce: a toy study
-generates $O(10^{3})$ Poisson-fluctuated pseudo-datasets around the Asimov
-best fit (auxiliary measurements fluctuated too, for the nuisance
-parameters), refits each with every parameter free, and reports the fitted
-$B\to D\tau\nu$-normalisation pull, $(\hat\theta - \theta_{\rm true}) /
-\hat\sigma_{\hat\theta}$, fit to a Gaussian --- mean consistent with $0$ and
-width consistent with $1$ is the pass criterion.  A linearity check repeats
-this at several injected normalisation values spanning a wide range (for
-example corresponding to $R(D)$ from about half to double its expected
-value) and fits the mean fitted value against the injected value, requiring
-close to unit slope and zero intercept.  Per-nuisance-parameter pull plots
-and a full correlation matrix are produced alongside, and a
-tornado/ranking plot of each nuisance parameter's impact on the parameter of
-interest is a useful addition once systematics enter the fit
-(Sec.~\ref{sec:syst})}
+
