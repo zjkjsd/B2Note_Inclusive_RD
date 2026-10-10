@@ -30,7 +30,7 @@ uncertainty, we then free one further constrained modifier at a time and
 attribute its systematic contribution to the quadrature difference between
 the new and previous returned uncertainty.
 Electron and muon channels are fit separately, each against its own
-two-channel (signal region plus sideband) workspace, and the two resulting
+two-channel (signal region plus sideband) workspace. The two resulting
 uncertainties are combined at the end (below) rather than fit jointly.
 
 \begin{table}[htbp]
@@ -50,8 +50,7 @@ uncertainties are combined at the end (below) rather than fit jointly.
   The ``Total'' row is the uncertainty returned directly by the fit with all
   listed modifiers simultaneously free, not a value recomputed from the rows
   above: summing the four individual differences in quadrature gives
-  $14.1\%$ ($e$) and $21.8\%$ ($\mu$), not exactly the $14.5\%$ and $22.1\%$
-  quoted.}
+  $14.1\%$ ($e$) and $21.8\%$ ($\mu$).}
   \vspace{2mm}
   \label{tab:sensitivity-breakdown}
   \small
