@@ -71,9 +71,9 @@ one-dimensional projections, which a pair of one-dimensional fits cannot.
 %   corrections : n/a
 
  We start with fine binning in the two variables, which is defined by a
- 1-D list of bin edges, a, for MM$^2$ and list of bin edges, b, for $|p_D|+ |p_\ell|$. Thus lists are used to form a two-dimensional histogram, which contains about $2000$ bins. Templates from MC
-have about the equivalent of four times data luminosity. We require at least 10 counts in each bin of the template. Otherwise the bin is removed from the template. The resulting two-dimensional (2D) histogram is flattened into a one
-dimensional (1D) histogram, which is used for the final PYHF fit.
+ 1-D list of bin edges, $a$, for $\mmiss$ and a list of bin edges, $b$, for $\pdl$. These lists are used to form a two-dimensional histogram, which contains about $2000$ bins. Templates from MC
+have about the equivalent of four times data luminosity. We require at least 10 counts in each bin of the template. Otherwise the bin is removed from the template. The resulting two-dimensional (2D) histogram is flattened into a
+one-dimensional (1D) histogram, which is used for the final PYHF fit.
 
 For data, we will use the same bins as in the MC templates.
 
@@ -148,7 +148,7 @@ signal and normalization yields.
 \subsection{Modifiers and constraints}
 \label{sec:fit:modifiers}
 
-Table~\ref{tab:fit-parameters} lists the PYHF modifiers or "fitting parameters".
+Table~\ref{tab:fit-parameters} lists the PYHF modifiers or ``fitting parameters''.
 
 % PROVENANCE
 %   status      : CODE_FACT (current) / ANALYSIS_DECISION (intended)
@@ -245,7 +245,7 @@ remain floating alongside the parameter of interest, which gives the
 uncertainty from data statistics alone. We then re-fit repeatedly with one further
 constrained modifier freed at a time, and attribute each one's systematic
 contribution to the quadrature difference between the new and previous
-returned uncertainty on the $B\to D\tau\nu$ normalization
+returned uncertainty on the $B\to D\tau\nu$ normalization.
 
 
 Toy studies, pull distributions and linearity tests are not yet done.

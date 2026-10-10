@@ -34,19 +34,20 @@ The narrow/broad $D^{**}$ split follows the standard division into the two
 $j_{q} = 3/2$ states, which are narrow, and the two $j_{q} = 1/2$ states,
 which are broad.
 
-\subsection{Generic-$B\bar{B}$ background family classification}
+\subsection{Measured generic-$B\bar{B}$ decay modes}
 \label{app:categories:bbbar}
 
-Each generic-$B\bar{B}$ candidate is assigned a decay-mode identifier from the
-product of the generated daughter PDG codes of the relevant $B$, and placed in
-exactly one family: \texttt{BBbar\_semileptonic} if any daughter is a lepton;
-otherwise \texttt{BBbar\_measured\_hadronic} if the identifier appears in the
-measured-mode list; otherwise \texttt{BBbar\_unmeasured:$n$-body}, with $n$ the
-generated daughter multiplicity is required to be between 2 and $5+$.
-
-The measured-mode list is organized into four blocks: single-charm and
-double-charm, each for mixed and charged $B$, and contains 75 active
-entries, with a further 48 entries that do not have a PDG listing commented out.
+The family hierarchy is described in Sec.~\ref{sec:bbbar:hierarchy}.
+The measured-mode list (\texttt{measured\_pdg\_list} in
+\texttt{utilities.py}) was built by examining the most populated generated
+decay modes in the MC sample at generator level, each identified by the
+product of its daughter PDG codes.
+Each of these modes was checked against the latest published PDG listing: the
+75 modes with a measured branching fraction are active entries in the list,
+while the 48 modes without one are commented out and are therefore classified
+as \texttt{BBbar\_unmeasured:$n$-body}.
+The list is organized into four blocks: single-charm and double-charm, each
+for mixed and charged $B$.
 
 
 Because a generated decay may contain a radiated photon, the list is extended

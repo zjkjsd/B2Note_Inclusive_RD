@@ -11,15 +11,20 @@ number, plot, or method is preliminary.
 When sources disagree, use this precedence:
 
 1. Explicit instructions in the current task.
-2. The analysis repository's `docs/ANALYSIS_CONTEXT.md` at the pinned commit.
+2. Edits made by the analysts on Overleaf.  These are authoritative: when the
+   prose they wrote disagrees with a comment, a provenance block, a TODO
+   marker or anything else in the source, update the latter to match, and
+   report any disagreement with the analysis code instead of reverting their
+   text.
+3. The analysis repository's `docs/ANALYSIS_CONTEXT.md` at the pinned commit.
    The analysis repository is not vendored into this one (no submodule); it
    is referenced by commit SHA only, recorded in `CHANGELOG.md` and in each
    provenance block.
-3. Current executable analysis code at the pinned commit.
-4. Reference B2Notes in `docs/`, for organization and methodological
+4. Current executable analysis code at the pinned commit.
+5. Reference B2Notes in `docs/`, for organization and methodological
    examples only.  Their selections, correction factors, uncertainties and
    conclusions are never inputs to this analysis.
-5. Inference.
+6. Inference.
 
 Never silently resolve a disagreement. Report it and insert a marked TODO.
 
@@ -87,7 +92,14 @@ records which analysis commit each note version corresponds to.
   items with ad-hoc bold or coloured text: only \AnalysisTBD{} and
   \InProgress{} appear in the to-do list that the draft builds from them
   (`\listofTBDs`, defined in `definitions.tex`).
-- Do not remove TODO markers without evidence that the item is resolved.
+- Do not remove TODO markers without evidence that the item is resolved.  An
+  analyst removing a marker on Overleaf counts as that evidence.
+- Use American English spelling throughout (normalization, modeling, flavor,
+  center).
+- The note is read by reviewers outside the analysis team (for example the
+  Belle II semileptonic working group), so prefer physics explanations over
+  code detail in the main text, and keep the appendices free of material
+  already covered in the main text.
 
 ## Workflow
 
