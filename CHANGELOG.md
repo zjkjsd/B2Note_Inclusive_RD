@@ -35,6 +35,26 @@ Followed by a tidy-up that changes no prose:
 - Removed the empty `sections/12_summary.tex` and its `\input`.
 - Restored the executable bit on the scripts (lost in the Overleaf sync).
 
+Corrections confirmed by the analyst:
+- Sec. 1: the $D^{*}$ branching fractions are for $D^{*+} \to D^{+}\pi^{0}$
+  and $D^{*+} \to D^{+}\gamma$ (previously written as $D^{*0}$ modes).
+- Sec. 7 and Appendix B: the measured-hadronic family contains the 75 modes
+  of `measured_pdg_list` with a PDG measurement (previously "150"); the
+  remaining examined modes are commented out and fall into the unmeasured
+  families.  Appendix B now explains how the list was built.
+- Sec. 5: `KSFWV17` is a training input, not an excluded variable.
+- Sec. 9.1: the generic-$B\bar{B}$ normalizations are currently fixed (as
+  in Table 6), not free.
+- Sec. 11: the combined sensitivity is quoted as $12.1\%$ only.
+- Sec. 6: "Four further corrections" (previously "Two").
+- Appendix D: removed the outdated stored-workspace table and its text.
+- Appendices: removed material already covered in the main text (excluded
+  BDT variables, selections defined in the main text, region-nomenclature
+  table, family hierarchy, duplicated BDT TBDs, toy-machinery paragraph).
+- Typos fixed and spelling standardized on American English throughout.
+- AGENTS.md: Overleaf edits by the analysts are authoritative; American
+  English; one-sentence-per-line rule dropped.
+
 ## Version 0.4 (draft) — unreleased (updated a fifth time)
 
 Addressed one of two minor Codex findings from the latest PR #3 review (the

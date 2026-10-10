@@ -58,7 +58,7 @@ enough momentum to reach it and must point into its acceptance.
 
 
 Electron candidates below $0.3$~GeV$/c$ have a high fake
-rate and there is little $B\to D\tau\nu$ signal in this region, so they  are removed.
+rate and there is little $B\to D\tau\nu$ signal in this region, so they are removed.
 Muon identification relies on the KLM; a track needs a momentum of
 at least $0.6$~GeV$/c$ to
 reach it.
@@ -110,8 +110,8 @@ A determination of the small systematic uncertainty from this source may require
 Exactly one lepton is required per event,
 \texttt{nParticlesInList(e-:goode) + nParticlesInList(mu-:goodmu) == 1}.
 This is a requirement on the whole event.
-The {\bf goode}
-and {\bf goodmu} selections on the ROE have the usual tight NN lepton-ID requirements
+The \texttt{goode}
+and \texttt{goodmu} selections on the ROE have the usual tight NN lepton-ID requirements.
 
 \subsection{$D^{-}$ candidate reconstruction}
 \label{sec:recon:d}
@@ -155,7 +155,7 @@ $\texttt{beamBackgroundSuppression} > 0.5$ and
 $\texttt{fakePhotonSuppression} > 0.1$, using the MC16rd weight files.
 The $\pi^{0}$ from $D^{*} \to D \pi^{0}$ is soft, so its photons are in the
 energy range where beam background and misreconstructed clusters are 
-abundant; without these requirements the veto would  remove signal.
+abundant; without these requirements the veto would remove signal.
 
 Because a $\pi^{0}$ can be reconstructed from more than one photon pair, at most one
 $D^{*}$ candidate is retained per event, the one whose mass difference is
@@ -176,8 +176,8 @@ This will be a consistency check not a world-competitive measurement.
 \subsection{$B^{0}$ candidate and rest of event}
 \label{sec:recon:b}
 
-$B^{0}$ candidates are formed as
-from $ D^- \ell^+$ combinations and vertex-fitted with an IP
+$B^{0}$ candidates are formed
+from $D^- \ell^+$ combinations and vertex-fitted with an IP
 constraint and \texttt{updateAllDaughters} disabled.  Thus the $D$ daughter
 retains the momenta from its own fit so that the $D$ sidebands can be used later.
 The reduced vertex $\chi^{2}$ is required to be below 14, which is a loose requirement that is fully efficient for signal.
@@ -186,7 +186,7 @@ The distance between the $D$ and the lepton at the $B$ vertex is computed with
 $B \to D \ell$ decay has both daughters emerging from a single vertex, while a
 combinatorial pair does not.
 
-All tracks and neutrals not used on the signal side forms the rest of the event (ROE). We apply "clean-up" requirements to remove poorly constrained low-momentum tracks and neutral clusters.
+All tracks and neutrals not used on the signal side form the rest of the event (ROE). We apply ``clean-up'' requirements to remove poorly constrained low-momentum tracks and neutral clusters.
 The ROE
 is built in three stages under a single mask (\texttt{my\_mask}).
 First a loose mask admits tracks with $dr < 10$~cm, $|dz| < 20$~cm, inside the
@@ -235,7 +235,7 @@ These loose requirements preserve the sidebands in these variables, which
 are needed both as classifier inputs and to build the control regions of
 Sec.~\ref{sec:validation}. 
 
-We provide a Table summarizing all the selections in the $R(D)$ analysis in Table ~\ref{tab:recon-cuts}.
+We provide a table summarizing all the selections in the $R(D)$ analysis in Table~\ref{tab:recon-cuts}.
 
 
 \begin{table}[h]
@@ -304,7 +304,7 @@ Within each event, in the case of multiple candidates, the candidate with
 the smallest \texttt{B\_D\_ReChi2}, the sum of the vertex-fit
 $\chi^{2}$ at the $K\pi\pi$ vertex and at the $D\ell$ vertex is chosen.
 The nominal best-candidate selection is \texttt{utilities.apply\_mva\_bcs()}
-with its default, \texttt{bcs='vtx'}: 
+with its default, \texttt{bcs='vtx'}.
 
 \AnalysisTBD{candidate multiplicity \emph{before} best-candidate selection,
 i.e.\ how many candidates per event the \texttt{vtx} criterion is choosing
@@ -320,7 +320,7 @@ among.}
 Two further selections are applied offline rather than during online
 analysis, and both are tighter than their online
 counterparts.
-The nominal offline requirement (in units of GeV for mass, energies and momenta, impact parameters are in units of cm) are:
+The nominal offline requirements (in units of GeV for mass, energies and momenta; impact parameters are in units of cm) are:
 \begin{equation}
   M_{\mathrm{bc}}^{\mathrm{ROE}} > 5,\quad
   -4 < \Delta E^{\mathrm{ROE}} < 1,\quad
@@ -330,10 +330,10 @@ The nominal offline requirement (in units of GeV for mass, energies and momenta,
 \end{equation}
 
 
-The expected distributions of the two fitting variables for a $1.4 ~ab^{-1}$ MC sample are shown below in
-Figs~\ref{fig:mc-comp-dtaunu-mm2} and \ref{fig:mc-comp-dtaunu-pdl}. Here we show the $B\to D\tau \nu$ enhanced
-part of the fitting region. In addition, we also show the fitting in the $B\to D \ell\nu$ normalization region,
-Figs~\ref{fig:mc-comp-dellnu-mm2} and \ref{fig:mc-comp-dellnu-pdl}.
+The expected distributions of the two fitting variables for a $1.4~\mathrm{ab}^{-1}$ MC sample are shown below in
+Figs.~\ref{fig:mc-comp-dtaunu-mm2} and \ref{fig:mc-comp-dtaunu-pdl}. Here we show the $B\to D\tau \nu$ enhanced
+part of the fitting region. In addition, we also show the fit variables in the $B\to D \ell\nu$ normalization region,
+Figs.~\ref{fig:mc-comp-dellnu-mm2} and \ref{fig:mc-comp-dellnu-pdl}.
 
 % PROVENANCE (applies to the four figures below)
 %   status      : PRELIMINARY_RESULT
