@@ -1,13 +1,19 @@
 % PROVENANCE (section-level)
+%   status      : CODE_FACT unless marked otherwise
 %   produced-by : 5_BBbkg_weights_optuna_minuit.py, bbbar_reweighting.py
 %   commit      : ad2f2ec
-
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : tuning region of Eq. (bbbar-region)
+%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
+%                 semileptonic weights
+\section{Generic-$B\bar{B}$ Background Modeling and Validation}
+\label{sec:bbbar}
 
 Generic $B\bar{B}$ events in which a true $D$ and a true lepton are
 reconstructed --- either from different $B$ mesons
 (\texttt{bkg\_combinatorial}) or from a single hadronic $B$ decay supplying a
 secondary lepton (\texttt{bkg\_hadronicB\_secondaryL}) --- are the dominant
-background and are mismodelled in MC16rd.
+background and are mismodeled in MC16rd.
 They are corrected by a data-driven reweighting of the underlying $B$-decay
 composition.
 
@@ -19,13 +25,17 @@ the product of its daughter PDG codes, and assigned to one family:
 \begin{enumerate}
   \item \texttt{BBbar\_semileptonic} --- any generated daughter is a lepton;
   \item \texttt{BBbar\_measured\_hadronic} --- the decay-mode identifier
-        appears in the list of modes with a measured branching fraction,
-        in which case a PDG branching-fraction correction is also applied;
+        appears in the list of modes with a measured branching fraction;
   \item \texttt{BBbar\_unmeasured:$n$-body} --- otherwise, grouped by the
         generated daughter multiplicity, capped at $5+$.
 \end{enumerate}
 The hierarchy is applied in this order, so the families of modes are mutually
 exclusive and, because the last is a catch-all over multiplicity, exhaustive.
+The measured hadronic modes are corrected only through their family weight,
+determined in the fit of Sec.~\ref{sec:bbbar:tuning}.
+The only exception is four $D_{s0}^{*}(2317)^{+}$ modes whose generator
+branching fractions are wrong; these additionally receive a PDG
+branching-fraction correction (Appendix~\ref{app:categories:bf}).
 We separate externally constrained (measured branching
 fractions) from unmeasured hadronic modes, which are the majority.
 We group the unmeasured modes by a
@@ -33,7 +43,7 @@ variable, multiplicity, which determines the signal side missing-mass squared an
 $p_D + p_\ell$ distributions.
 
 \subsection{$B\bar{B}$ background normalization versus internal composition}
-\label{sec:bbbar:normalisation}
+\label{sec:bbbar:normalization}
 One weight is fitted per family; the composition \emph{within} a family is
 left at its generated values.
 This is deliberate: floating individual decay modes without external
@@ -59,10 +69,18 @@ together with the offline requirements of Eq.~\eqref{eq:offline-cut} except
 $p_{\ell} < 4$ (Sec.~\ref{sec:recon:offline}).
 
 
-We fit $\mmiss \times \pdl$ for the $B {\bar B}$ background enhanced region,
-we find 
+We fit $\mmiss \times \pdl$ in the $B\bar{B}$-background-enhanced region and
+find 
 \vspace{2mm}
 
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : BBbkg_weights/*.json (fit metadata read directly)
+%   commit      : ad2f2ec
+%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
+%   selection   : tuning region of Eq. (bbbar-region)
+%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
+%                 semileptonic weights
 \begin{table}[h]
 \centering
 \caption{Fitted background component weights for the $e$ and $\mu$ channels,
@@ -89,7 +107,7 @@ In both channels the unmeasured 2-body and 4-body weights are small
 indicating no significant contribution from
 these components. The dominant floating background is the unmeasured 3-body
 mode, with fitted weights of $0.765^{+0.114}_{-0.118}$ ($e$ channel) and
-$0.583^{+0.202}_{-0.204}$ ($\mu$ channel). The weights from 150 measured hadronic modes
+$0.583^{+0.202}_{-0.204}$ ($\mu$ channel). The weights from the $\sim 60$ measured hadronic modes
 exceed unity in both channels, at $2.264 \pm 0.057$ and
 $1.925^{+0.111}_{-0.112}$, respectively, suggesting an underestimate of
 this background in the nominal MC simulation. 
@@ -97,21 +115,11 @@ this background in the nominal MC simulation.
 
 Weights are derived separately for each run period and channel.
 For the combined \texttt{run1+run2} fit the differing fake-$D$ normalizations
-($0.87$ for Run~1, $1.0$ for Run~2) are applied as an event-level factors.
+($0.87$ for Run~1, $1.0$ for Run~2) are applied as event-level factors.
 
 
-\subsection{Current status of the tuned  $B \bar{B}$ weights}
+\subsection{Current status of the tuned $B\bar{B}$ weights}
 \label{sec:bbbar:results}
-
-
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : BBbkg_weights/*.json (fit metadata read directly)
-%   commit      : ad2f2ec
-%   sample      : MC16rd + Proc16/Prompt16, Run 1 + Run 2, e and mu
-%   selection   : tuning region of Eq. (bbbar-region)
-%   corrections : PID, generic-MC luminosity 0.25, fixed fake-D and
-%                 semileptonic weights
 
 
 Although a perfect solution for the $B\bar{B}$ background weights has not been obtained, there is improved

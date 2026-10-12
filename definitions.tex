@@ -26,11 +26,33 @@
 \input{belle2-symbols}
 
 % ---------------------------------------------------------------------------
-% Result-status macros.  Every number, figure or statement in this note must
-% be in exactly one of four states: settled prose (no macro), TBD, PRELIMINARY,
-% or SUPERSEDED.  See AGENTS.md, section "Result and placeholder discipline".
+% Result-status macros.  Every number, figure or statement in this note is in
+% exactly one of five states: settled prose (no macro), TBD, IN PROGRESS,
+% PRELIMINARY, or SUPERSEDED.  See AGENTS.md, section "Writing conventions".
+%
+% \AnalysisTBD and \InProgress also add an entry to the to-do list printed by
+% \listofTBDs at the start of the draft (see note.tex).  The list is written
+% to note.tbd on every build, so it always matches the markers in the source;
+% there is no hand-maintained copy to keep in sync.
 % ---------------------------------------------------------------------------
+\makeatletter
+\newcommand{\tbd@record}[2]{%
+  \phantomsection
+  \addcontentsline{tbd}{tbdentry}{\protect\numberline{\thesection}\textbf{#1:} #2}%
+}
+\newcommand{\l@tbdentry}{\@dottedtocline{1}{0em}{2.3em}}
+\newcommand{\listofTBDs}{%
+  \section*{To-do list}
+  Open items marked in the text, by section.
+  \textcolor{red}{\textbf{TBD}} marks missing content;
+  \textcolor{orange}{\textbf{In progress}} marks known-incomplete work that
+  is actively being addressed.
+  \par\medskip
+  \@starttoc{tbd}%
+}
+
 \newcommand{\AnalysisTBD}[1]{%
+  \tbd@record{\textcolor{red}{TBD}}{#1}%
   \textcolor{red}{\textbf{[TBD: #1]}}%
 }
 \newcommand{\PreliminaryResult}[1]{%
@@ -42,8 +64,10 @@
 % In-progress work that is known to be incomplete and is actively being worked
 % on, as distinct from \AnalysisTBD (not started / source unknown).
 \newcommand{\InProgress}[1]{%
+  \tbd@record{\textcolor{orange}{In progress}}{#1}%
   \textcolor{orange}{\textbf{[IN PROGRESS: #1]}}%
 }
+\makeatother
 
 % Shorthand used throughout for the two fit observables.
 \newcommand{\mmiss}{M_{\mathrm{miss}}^{2}}

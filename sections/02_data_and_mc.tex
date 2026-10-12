@@ -19,7 +19,7 @@ is evaluated separately for the $e$ and $\mu$ channels throughout.
 The run periods are initially kept separate because
 several inputs are run dependent: the PID correction tables
 (Sec.~\ref{sec:corrections:recommended}), the fake-$D$ normalization, and the
-generic-$B\bar{B}$ corrections themselves (Sec.~\ref{sec:bbbar:rundep}).
+generic-$B\bar{B}$ corrections themselves (Sec.~\ref{sec:bbbar:tuning}).
 For the final $R(D)$ result, we combine the Run 1 and Run 2 datasets.
 Both on-resonance ($\Upsilon(4S)$) and off-resonance samples are processed.
 
@@ -29,9 +29,7 @@ Both on-resonance ($\Upsilon(4S)$) and off-resonance samples are processed.
 
 We use the MC16rd (run-dependent) MC campaign, which was produced with release-08.
 
-\emph{Generic MC}: 
-%decays particles according to their measured branching
-%fractions, so that it simulates real data as a whole;
+\emph{Generic MC}:
 The generic MC sample has four
 times the data luminosity, so a factor of $0.25$ is applied whenever an
 absolute normalization is compared with data.
@@ -53,13 +51,13 @@ $B^{0}\bar{B}^{0}$ and $B^{+}B^{-}$.  To summarize the signal MC samples:
         $D^{**}$, since both charge combinations of $D^{**}$ decay to a
         charged $D$.
 
-        \item \textcolor{red}{\bf $B\to D^{**}\ell\nu$ and semileptonic gap modes will be described.}
+        \item \AnalysisTBD{$B\to D^{**}\ell\nu$ and semileptonic gap modes will be described.}
 \end{itemize}
-These three signal MC samples are used to obtain the $Pyhf$ fit templates of
+These three signal MC samples are used to obtain the PYHF fit templates of
 Sec.~\ref{sec:fit:templates}. In addition, the $B\to D\tau\nu$ MC sample is used 
 as the signal class in the BDT training (Sec.~\ref{sec:mva:classes}).
 
-Generic MC is used for for various purposes including determination of background templates, fit validations,  and checks of control regions.
+Generic MC is used for various purposes including determination of background templates, fit validations, and checks of control regions.
 Since the signal components do not have sufficient statistics, we use dedicated signal MC samples 
 for the signal templates in the PYHF fit.
 
@@ -98,7 +96,7 @@ momentum-scale and energy-loss payloads.
 We use the following versions of the offline Python stack --- \texttt{pyhf}: 0.7.6,
 \texttt{cabinetry}: 0.6.0, \texttt{iminuit}: 2.26.0, \texttt{LightGBM}: 4.4.0, \texttt{optuna}: 4.5.0,
 \texttt{uproot}: 5.6.1 and the Belle II systematics-corrections framework, version 20260922, to produce
-the results in this B2note.
+the results in this B2Note.
 
 \subsection{Ntuple production and offline samples}
 \label{sec:data:ntuples}
@@ -117,10 +115,10 @@ There are weights determined by the Performance group to correct the PID efficie
 for charged hadrons and for leptons.
 These are corrections for tracking efficiency, momentum scale, charged track energy loss, and slow $\pi^0$ efficiency.
 
-There are a second class of  weights to correct MC physics modeling. 
+There is a second class of weights to correct MC physics modeling. 
 These are corrections for the
 $B\bar{B}$ background and 
-continuum background, which are discussed later in the B2NOTE.
+continuum background, which are discussed later in this B2Note.
 
 
 

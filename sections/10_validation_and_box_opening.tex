@@ -27,9 +27,9 @@ and the $D$-mass sideband.
     \hline
     Region & Intended test \\
     \hline
-    $q^{2} < 3$ &
+    $q^{2} < 3~\mathrm{GeV}^{2}/c^{4}$ &
       $B \to D \ell \nu$ dominant. Tests the modeling of the two fit
-      observables where the normalisation mode is enhanced \\
+      observables where the normalization mode is enhanced \\
     $D^{*}$ veto region, $0.135 < \Delta M < 0.145$ &
       $B \to D^{*} \ell \nu$ dominant. Tests the largest signal-like
       background. Currently limited by the missing slow-$\pi^{0}$ efficiency
@@ -40,7 +40,7 @@ and the $D$-mass sideband.
     Combinatorial-enriched region (\texttt{lgb\_comb}) &
       Generic-$B\bar{B}$ modeling. Note that this is \emph{not} the region in
       which the weights were fitted; see
-      Appendix~\ref{app:selections:naming} \\
+      Sec.~\ref{sec:bbbar:tuning} \\
     Wrong-charge sample &
       Intended as a generic-$B\bar{B}$ cross-check, but has significantly different physics composition (not used)\\
     $D$-mass sidebands &
@@ -50,20 +50,6 @@ and the $D$-mass sideband.
   \end{tabular}
 \end{table}
 
-
-%\paragraph{The wrong-charge sample.}
-%It was intended as an independent validation of the tuned
-%generic-$B\bar{B}$ weights, on the reasoning that reversing the lepton charge
-%removes the signal while retaining the background.
-%Its background composition is however not the same as that of the tuning
-%region: the fraction of hadronic relative to semileptonic $B$ decays differs,
-%and the hadronic decay multiplicity spectrum differs as well.
-%Since the tuned weights are organized precisely by decay family and by
-%multiplicity (Sec.~\ref{sec:bbbar:hierarchy}), a sample with a different
-%composition in those variables does not test the weights so much as test a
-%different mixture of them.
-%Agreement in the wrong-charge sample would therefore not establish that the
-%weights generalize, and disagreement would not establish that they fail.
 
 
 
@@ -89,7 +75,7 @@ fitted to data.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{prefit_mD_q2Sideband_tightBDT_run1e.png}
-  \caption{$D$ candidate mass in the $q^{2}$ $<3~GeV$ sideband, after the nominal
+  \caption{$D$ candidate mass in the $q^{2} < 3~\mathrm{GeV}^{2}/c^{4}$ sideband, after the nominal
   \texttt{lgb\_tight} selection.
   Good prefit agreement (reduced $\chi^{2} = 1.07$) in a region where the
   normalization mode dominates.}
@@ -99,7 +85,7 @@ fitted to data.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{prefit_mm2_q2Sideband_mDsignal_tightBDT_run1e.png}
-  \caption{$\mmiss$ in the $q^{2}$ $<3 ~GeV$ sideband, $D$-mass \emph{signal} region,
+  \caption{$\mmiss$ in the $q^{2} < 3~\mathrm{GeV}^{2}/c^{4}$ sideband, $D$-mass \emph{signal} region,
   after \texttt{lgb\_tight}.
   Reduced $\chi^{2} = 6.5$; data sit below the prediction in the tail,
   unlike the good agreement of Fig.~\ref{fig:prefit-mD-q2sb} in the same
@@ -159,7 +145,7 @@ unblinding could be a discussion item.}
 The following technical points need to be resolved:
 \begin{itemize}
   \item $E_{\mathrm{cms}}$ and experiment-level data/MC discrepancies in
-        several Run~1 and Run~2 experiments, hypothesised to originate from
+        several Run~1 and Run~2 experiments, hypothesized to originate from
         background-overlay run mismatches.
   \item A fixed, non-run-dependent $B\bar{B}$ cross section in MC16rd despite
         the $E_{\mathrm{cms}}$ drift across the data-taking period.

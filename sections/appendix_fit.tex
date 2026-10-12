@@ -1,71 +1,23 @@
 % PROVENANCE (section-level)
-%   status      : CODE_FACT (workspace contents) / SUPERSEDED (the stored
-%                 workspaces relative to the current generator)
-%   produced-by : Fit_toys/2dws_{SR,SB}_e_MC16rd_*.json (generated pyhf
-%                 workspaces); utilities.py create_workspace (1397-1553)
+%   status      : PLANNED
+%   produced-by : n/a (content still to be produced; the current fit model is
+%                 Table tab:fit-parameters in Sec. 8)
 %   commit      : ad2f2ec
-%   sample      : MC16rd, e channel
-%   selection   : D-mass signal region or sideband, per file
-%   corrections : not recorded in the workspace files
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
 \section{PYHF Fit Setup Details}
 \label{app:fit}
 
-{\bf Move this table to the main body of the B2NOTE}
-
-\begin{table}[htbp]
-  \centering
-  \caption{Samples and modifiers of
-  \texttt{2dws\_SR\_e\_MC16rd\_fakeD\_cont.json}. All normalisation parameters
-  carry bounds $[-5,5]$.}
-  \label{tab:stored-modifiers}
-  \small
-  \begin{tabular}{l l l}
-    \hline
-    Sample & Modifiers & Constraint \\
-    \hline
-    $D\tau\nu$ & \texttt{normfactor}, \texttt{staterror} & free (POI) \\
-    $D\ell\nu$ & \texttt{normfactor}, \texttt{staterror} & free \\
-    $D^{*}\ell\nu$ & \texttt{normfactor}, \texttt{staterror} & free \\
-    $D^{**}\ell\nu + \text{gap}$ & \texttt{normfactor}, \texttt{staterror} & free \\
-    $D^{*}\tau\nu$ & \texttt{normsys}, \texttt{staterror} & $\pm 10\%$ \\
-    $D^{**}\tau\nu$ & \texttt{normsys}, \texttt{staterror} & $\pm 30\%$ \\
-    \texttt{bkg\_fakeD} & \texttt{normsys}, \texttt{staterror} & $\pm 5\%$ \\
-    \texttt{bkg\_continuum} & \texttt{staterror} only & normalisation fixed \\
-    \hline
-  \end{tabular}
-\end{table}
-
-The parameter of interest is the $B \to D \tau \nu$ normalization,
-\texttt{\$D$\backslash$tau$\backslash$nu\$\_norm}, consistent with
-Sec.~\ref{sec:fit:poi}.
-The MC statistical uncertainty is carried by one \texttt{staterror} parameter
-shared across samples within a channel, \texttt{mcStat\_ch0}, except for
-fake-$D$, which has its own \texttt{fakeD\_Stat\_ch0}.
-
-
-
-
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : Notebooks/Plotting/ (utilities.mpl-based stacked plotting
-%                 helper; exact notebook/cell not identified)
-%   commit      : ad2f2ec
-%   sample      : MC16rd, Run 1, e channel
-%   selection   : offline_cut (Eq. offline-cut); region as captioned
-%   corrections : not confirmed from the image alone
-
-
-
+The fit model is summarized in Table~\ref{tab:fit-parameters}, and the toy
+machinery in Sec.~\ref{sec:fit:validation}.
 
 \subsection{Tables still required}
 \label{app:fit:todo}
 
-\AnalysisTBD{complete parameter table for the PYHF fit:}
+\AnalysisTBD{complete parameter table for the PYHF fit}
 
 \subsection{Toy studies}
 \label{app:fit:toys}
 
-The toy machinery is \texttt{utilities.toy\_utils} together with
-\texttt{Fit\_toys/FitToys\_b2luigi.py}, which drives ensembles through
-\texttt{b2luigi}.
 \AnalysisTBD{Add Toy Fits and pull plots}

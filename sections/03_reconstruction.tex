@@ -3,10 +3,10 @@
 %   status      : CODE_FACT unless marked otherwise
 %   produced-by : Recon_scripts/2_Reconstruction.py
 %   commit      : ad2f2ec (analysis repository, referenced by SHA only)
-%   scope       : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
-%   note        : every selection below was transcribed from the pinned
-%                 source.  Physics motivation is marked TODO wherever the
-%                 code does not document it -- do not invent one.
+%   sample      : Proc16 + Prompt16 data, MC16rd; Run 1 + Run 2; e and mu
+%   selection   : every selection below was transcribed from the pinned
+%                 source; the physics motivation is the analysts' own
+%   corrections : n/a
 % =========================================================================
 \section{Event Reconstruction}
 \label{sec:reconstruction}
@@ -58,7 +58,7 @@ enough momentum to reach it and must point into its acceptance.
 
 
 Electron candidates below $0.3$~GeV$/c$ have a high fake
-rate and there is little $B\to D\tau\nu$ signal in this region, so they  are removed.
+rate and there is little $B\to D\tau\nu$ signal in this region, so they are removed.
 Muon identification relies on the KLM; a track needs a momentum of
 at least $0.6$~GeV$/c$ to
 reach it.
@@ -110,8 +110,8 @@ A determination of the small systematic uncertainty from this source may require
 Exactly one lepton is required per event,
 \texttt{nParticlesInList(e-:goode) + nParticlesInList(mu-:goodmu) == 1}.
 This is a requirement on the whole event.
-The {\bf goode}
-and {\bf goodmu} selections on the ROE have the usual tight NN lepton-ID requirements
+The \texttt{goode}
+and \texttt{goodmu} selections on the ROE have the usual tight NN lepton-ID requirements.
 
 \subsection{$D^{-}$ candidate reconstruction}
 \label{sec:recon:d}
@@ -155,7 +155,7 @@ $\texttt{beamBackgroundSuppression} > 0.5$ and
 $\texttt{fakePhotonSuppression} > 0.1$, using the MC16rd weight files.
 The $\pi^{0}$ from $D^{*} \to D \pi^{0}$ is soft, so its photons are in the
 energy range where beam background and misreconstructed clusters are 
-abundant; without these requirements the veto would  remove signal.
+abundant; without these requirements the veto would remove signal.
 
 Because a $\pi^{0}$ can be reconstructed from more than one photon pair, at most one
 $D^{*}$ candidate is retained per event, the one whose mass difference is
@@ -176,8 +176,8 @@ This will be a consistency check not a world-competitive measurement.
 \subsection{$B^{0}$ candidate and rest of event}
 \label{sec:recon:b}
 
-$B^{0}$ candidates are formed as
-from $ D^- \ell^+$ combinations and vertex-fitted with an IP
+$B^{0}$ candidates are formed
+from $D^- \ell^+$ combinations and vertex-fitted with an IP
 constraint and \texttt{updateAllDaughters} disabled.  Thus the $D$ daughter
 retains the momenta from its own fit so that the $D$ sidebands can be used later.
 The reduced vertex $\chi^{2}$ is required to be below 14, which is a loose requirement that is fully efficient for signal.
@@ -186,7 +186,7 @@ The distance between the $D$ and the lepton at the $B$ vertex is computed with
 $B \to D \ell$ decay has both daughters emerging from a single vertex, while a
 combinatorial pair does not.
 
-All tracks and neutrals not used on the signal side forms the rest of the event (ROE). We apply "clean-up" requirements to remove poorly constrained low-momentum tracks and neutral clusters.
+All tracks and neutrals not used on the signal side form the rest of the event (ROE). We apply ``clean-up'' requirements to remove poorly constrained low-momentum tracks and neutral clusters.
 The ROE
 is built in three stages under a single mask (\texttt{my\_mask}).
 First a loose mask admits tracks with $dr < 10$~cm, $|dz| < 20$~cm, inside the
@@ -235,7 +235,7 @@ These loose requirements preserve the sidebands in these variables, which
 are needed both as classifier inputs and to build the control regions of
 Sec.~\ref{sec:validation}. 
 
-We provide a Table summarizing all the selections in the $R(D)$ analysis in Table ~\ref{tab:recon-cuts}.
+We provide a table summarizing all the selections in the $R(D)$ analysis in Table~\ref{tab:recon-cuts}.
 
 
 \begin{table}[h]
@@ -304,11 +304,74 @@ Within each event, in the case of multiple candidates, the candidate with
 the smallest \texttt{B\_D\_ReChi2}, the sum of the vertex-fit
 $\chi^{2}$ at the $K\pi\pi$ vertex and at the $D\ell$ vertex is chosen.
 The nominal best-candidate selection is \texttt{utilities.apply\_mva\_bcs()}
-with its default, \texttt{bcs='vtx'}: 
+with its default, \texttt{bcs='vtx'}.
 
-\AnalysisTBD{candidate multiplicity \emph{before} best-candidate selection,
-i.e.\ how many candidates per event the \texttt{vtx} criterion is choosing
-among.}
+The best-candidate selection is applied after the BDT selection of
+Sec.~\ref{sec:mva:wp}.
+
+% PROVENANCE (applies to the figure and table below)
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb, cells 20
+%                 (lgb_loose) and 21 (lgb_tight), printed by
+%                 utilities.apply_mva_bcs(..., perf_eval=True) and
+%                 utilities.bcs_correct_pick_metrics(); the figure was
+%                 provided by the analyst (producing cell not identified)
+%   commit      : f920910 (newer than the ad2f2ec pinned elsewhere; this
+%                 commit refactored the best-candidate selection code)
+%   sample      : MC16rd signal MC (Samples/MC16rd/signal*_deimos_1.root:
+%                 the D tau nu, D* tau nu and D** tau nu samples together);
+%                 e and mu channels; figure is e channel only
+%   selection   : offline_cut (Eq. offline-cut) plus lgb_loose (figure and
+%                 first two rows) or lgb_tight (last two rows)
+%   corrections : none
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{BCS_multiplicity_signalMC_e_looseBDT.png}
+  \caption{Number of $B^{0}$ candidates per event before the best-candidate
+  selection, in signal MC (electron channel, \texttt{lgb\_loose} BDT
+  selection), on a logarithmic scale.
+  Of the $4\,325\,168$ events, $4\,095\,433$ ($94.7\%$) have a single
+  candidate; the average is $\langle N\rangle = 1.057$ candidates per event,
+  and $5.31\%$ of the events have more than one.}
+  \label{fig:bcs-multiplicity}
+\end{figure}
+
+Figure~\ref{fig:bcs-multiplicity} shows the number of candidates per event
+before the best-candidate selection in signal MC.
+Multiple candidates are rare: in the electron channel with the loose BDT
+selection, $94.7\%$ of the events have a single candidate, $5.0\%$ have two,
+and fewer than $0.4\%$ have three or more.
+Table~\ref{tab:bcs-performance} summarizes the multiplicity and the
+performance of the selection for both lepton channels and both BDT
+selections.
+The correct-pick rate is the fraction of events containing at least one
+truth-matched $B \to D\tau\nu$ candidate in which the selected candidate is
+the truth-matched one.
+Since events with a single candidate are included in this fraction, it is
+dominated by them; the multiplicity is low enough that the
+best-candidate selection affects only a few percent of the events.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Candidate multiplicity before the best-candidate selection and
+  correct-pick rate of the \texttt{vtx} best-candidate selection in signal
+  MC. $\langle N\rangle$ is the average number of candidates per event and
+  $f(N>1)$ the fraction of events with more than one candidate.
+  \texttt{lgb\_tight} is the nominal BDT selection
+  (Eq.~\eqref{eq:lgb-tight}).}
+  \label{tab:bcs-performance}
+  \small
+  \begin{tabular}{l l c c c}
+    \hline
+    Channel & BDT selection & $\langle N\rangle$ & $f(N>1)$ & Correct-pick rate \\
+    \hline
+    $e$   & \texttt{lgb\_loose} & $1.057$ & $5.31\%$ & $0.9881$ \\
+    $\mu$ & \texttt{lgb\_loose} & $1.056$ & $5.22\%$ & $0.9887$ \\
+    $e$   & \texttt{lgb\_tight} & $1.028$ & $2.70\%$ & $0.9950$ \\
+    $\mu$ & \texttt{lgb\_tight} & $1.028$ & $2.69\%$ & $0.9951$ \\
+    \hline
+  \end{tabular}
+\end{table}
 
 
 
@@ -320,7 +383,7 @@ among.}
 Two further selections are applied offline rather than during online
 analysis, and both are tighter than their online
 counterparts.
-The nominal offline requirement (in units of GeV for mass, energies and momenta, impact parameters are in units of cm) are:
+The nominal offline requirements (in units of GeV for mass, energies and momenta; impact parameters are in units of cm) are:
 \begin{equation}
   M_{\mathrm{bc}}^{\mathrm{ROE}} > 5,\quad
   -4 < \Delta E^{\mathrm{ROE}} < 1,\quad
@@ -330,10 +393,19 @@ The nominal offline requirement (in units of GeV for mass, energies and momenta,
 \end{equation}
 
 
-The expected distributions of the two fitting variables for a $1.4 ~ab^{-1}$ MC sample are shown below in
-Figs~\ref{fig:mc-comp-dtaunu-mm2} and \ref{fig:mc-comp-dtaunu-pdl}. Here we show the $B\to D\tau \nu$ enhanced
-part of the fitting region. In addition, we also show the fitting in the $B\to D \ell\nu$ normalization region,
-Figs~\ref{fig:mc-comp-dellnu-mm2} and \ref{fig:mc-comp-dellnu-pdl}.
+The expected distributions of the two fitting variables for a $1.4~\mathrm{ab}^{-1}$ MC sample are shown below in
+Figs.~\ref{fig:mc-comp-dtaunu-mm2} and \ref{fig:mc-comp-dtaunu-pdl}. Here we show the $B\to D\tau \nu$ enhanced
+part of the fitting region. In addition, we also show the fit variables in the $B\to D \ell\nu$ normalization region,
+Figs.~\ref{fig:mc-comp-dellnu-mm2} and \ref{fig:mc-comp-dellnu-pdl}.
+
+% PROVENANCE (applies to the four figures below)
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/ (utilities.mpl-based stacked plotting
+%                 helper; exact notebook/cell not identified)
+%   commit      : ad2f2ec
+%   sample      : MC16rd, Run 1, e channel
+%   selection   : offline_cut (Eq. offline-cut); region as captioned
+%   corrections : not confirmed from the image alone
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.85\textwidth]{Dtaunu_region_MC_mm2_run1e.png}

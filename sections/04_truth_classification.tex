@@ -5,7 +5,9 @@
 %                 utilities.py :: DecayMode_new       (line 73)
 %                 utilities.py :: create_templates_new (lines 1087-1287)
 %   commit      : ad2f2ec
-%   scope       : MC16rd, Run 1 + Run 2, e and mu channels
+%   sample      : MC16rd, Run 1 + Run 2, e and mu channels
+%   selection   : n/a (definitions)
+%   corrections : n/a
 % =========================================================================
 \section{Truth Classification and Simulated Sample Composition}
 \label{sec:truth}
@@ -51,7 +53,7 @@ a true $D$ and a true lepton.
   \item \texttt{bkg\_fakeD} --- $0 < \texttt{D\_mcErrors} < 512$.
         The $K\pi\pi$ combination does not come from a real $D^{\pm}$.
   \item \texttt{bkg\_fakeL} --- trueD and the lepton is not a true lepton of
-        the channel flavour.
+        the channel flavor.
   \item \texttt{bkg\_fakeTracks} --- $\texttt{D\_mcErrors} = 512$: one of the
         $D$ daughters is a clone or fake track.
 \end{enumerate}
@@ -82,7 +84,7 @@ and are split by the origin of the pair:
 The signal-like sample is then subdivided by the generated first two
 daughters of the $B$:
 
-\begin{enumerate}\setcounter{enumi}{8}
+\begin{enumerate}\setcounter{enumi}{7}
   \item $B \to D \tau \nu$ (signal) and $B \to D \ell \nu$ (normalization),
         identified by the PDG-code product of the first two daughters;
   \item $B \to D^{*} \tau \nu$ and $B \to D^{*} \ell \nu$;
@@ -112,7 +114,7 @@ $D^{**}\ell\nu$ template and the broad $D^{**} \ell\nu$ contribution
 is reweighted to account for the gap modes.
 The default gap modes in the generic MC sample are turned off.
 This combined template 
-is relabelled $D^{**}\ell\nu + \text{gap}$. The merger of the narrow/broad into a single $D^{**}\ell\nu$ template may be revised. 
+is relabeled $D^{**}\ell\nu + \text{gap}$. The merger of the narrow/broad into a single $D^{**}\ell\nu$ template may be revised. 
 
 The gap-mode configuration is more involved and is described fully in
 Sec.~\ref{sec:bbbar:hierarchy} and Sec.~\ref{sec:fit:templates}; in short, the
@@ -121,7 +123,7 @@ $B \to D^{(*)}\pi\pi\ell\nu$) do not describe well the gap between the
 inclusive and exclusive semileptonic branching-fraction measurements
 (of order $1.5\%$), so the nominal configuration instead uses the
 $D^{**}\ell\nu$ (broad) shape for the gap-mode template as well, with the two
-components' normalizations summed, which  effectively treats the gap as
+components' normalizations summed, which effectively treats the gap as
 $B \to D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$.
 Belle~II has separately produced dedicated signal-enriched MC for the
 $D^{**}\ell\nu \to D^{(*)}\pi\pi\ell\nu$ gap-mode hypothesis specifically.
@@ -145,19 +147,6 @@ purpose of the reweighting described in Sec.~\ref{sec:bbbar}.
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
-%   produced-by : Notebooks/2_create_BDTtrainingSet.ipynb (printed sample
-%                 sizes before the per-class 500,000-event subsampling of
-%                 Sec.~\ref{sec:mva:classes})
-%   commit      : ad2f2ec
-%   sample      : MC16rd, e channel, offline_cut (Eq. offline-cut); the
-%                 generic-MC input glob is explicitly run1-only, the
-%                 signal-enriched input glob is a run* wildcard whose actual
-%                 run coverage has not been confirmed
-%   selection   : offline_cut only (pre-BDT); classify_mc_dict('e')
-%   corrections : none
-
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
 %   produced-by : Notebooks/Plotting/2_Plot_norm_e_run2.ipynb ::
 %                 mpl_mc.plot_pie(); the identical call also appears in
 %                 Notebooks/Plotting/2_Plot_norm_mu_run2.ipynb, so the exact
@@ -173,9 +162,9 @@ purpose of the reweighting described in Sec.~\ref{sec:bbbar}.
   \centering
   \includegraphics[width=\textwidth]{MC_composition_signalRegion.png}
   \caption{Truth composition of generic MC in
-  the signal enhanced region, with the $D^{*}$ veto applied (left: all categories; right:
+  the signal-enhanced region, with the $D^{*}$ veto applied (left: all categories; right:
   shows background categories only, i.e.\ excluding $D\tau\nu$ and the other
-  signal-like categories). Thus, $~52.9\%$ of the non-physics background with a correctly reconstructed $D$ and lepton is from $B \bar{B}$ sources and
+  signal-like categories). Thus, $\approx 52.9\%$ of the non-physics background with a correctly reconstructed $D$ and lepton is from $B \bar{B}$ sources and
   $8\%$ is from continuum.}
   \label{fig:mc-composition-sr}
 \end{figure}

@@ -1,22 +1,24 @@
 \section{Introduction and Analysis Overview}
 \label{sec:intro}
 
+% PROVENANCE
+%   status      : PLANNED (external figure, not produced by this analysis;
+%                 its producer is not yet confirmed against a citable source)
+%   produced-by : Matplotlib-generated summary plot; the caption points to the
+%                 HFLAV semileptonic page for the measurements it compiles
+%   commit      : n/a (external figure, ICHEP 2026 preliminary)
+%   sample      : n/a
+%   selection   : n/a
+%   corrections : n/a
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.75\textwidth]{RD_RDst_ichep_2026_prelim.pdf}
   \caption{$R(D)$--$R(D^{*})$ measurements and their combination, ICHEP 2026
   preliminary. 
   None of the $B$ factory results use inclusive ROE tagging. See
-~~https://hflav.web.cern.ch/historic/pre2026/semileptonic/}  
-  
+  \url{https://hflav.web.cern.ch/historic/pre2026/semileptonic/}}
   \label{fig:rd-rdst-prelim}
 \end{figure}
-
-
-
-%The Belle~II physics programme and detector are described in
-%Refs.~\cite{Kou:2018nap,Abe:2010gxa}.
-
 
 \subsection{Physics motivation}
 \label{sec:intro:motivation}
@@ -28,7 +30,7 @@ The ratios
        {\mathcal{B}(B \to D^{(*)}\ell\bar\nu_{\ell})},
   \qquad \ell = e, \mu ,
 \end{equation}
-are direct tests of lepton flavour universality in the Standard Model (SM):
+are direct tests of lepton flavor universality in the Standard Model (SM):
 the $B \to D^{(*)}\ell\bar\nu_\ell$ and $B \to D^{(*)}\tau\bar\nu_\tau$ decay
 rates differ, at tree level, only through the charged-lepton mass and phase
 space, so that $R(D^{(*)})$ is predicted with small theoretical uncertainty
@@ -62,18 +64,6 @@ own rather than only in combination with $R(D^{*})$.
   \label{fig:rd-uncertainties}
 \end{figure}
 
-% PROVENANCE
-%   status      : PLANNED (a placeholder pending confirmation of its
-%                 producer and sources; not produced by this analysis)
-%   produced-by : Matplotlib-generated summary plot; specific authorship and
-%                 the individual measurements it compiles are not yet
-%                 confirmed against a citable source
-%   commit      : n/a (external figure, ICHEP 2026 preliminary)
-%   sample      : n/a
-%   selection   : n/a
-%   corrections : n/a
-
-
 Figures~\ref{fig:rd-uncertainties} and~\ref{fig:rd-rdst-prelim} summarize the
 current experimental and theoretical status.
 The first round of $R(D)$ measurements at Belle and Belle~II used the Full
@@ -94,10 +84,10 @@ inclusively-tagged one.
 For an inclusively-tagged analysis, the $B^{0} \to D^{-}\ell^{+}$ mode (as
 opposed to $B^{+} \to \bar D^{0}\ell^{+}$ or a combination of the two) is used
 because of its small $D^{*}$ feed-down and the comparatively long $D^{+}$
-lifetime ($\sim 1.04 \times 10^{-12}$ sec), which is about 2.5 times longer than the $D^0$ lifetime. 
+lifetime ($\sim 1.04 \times 10^{-12}$~s), which is about 2.5 times longer than the $D^0$ lifetime. 
 We note that ${\cal B} (D^{*+}\to D^0 \pi^+) = (67.7\pm 0.5)\%$, while 
-${\cal B} (D^{*0}\to D^+ \pi^0) = (30.7\pm 0.5)\%$, and
-${\cal B} (D^{*0} \to D^0\gamma) =(1.6\pm 0.4)\% $. However,
+${\cal B} (D^{*+}\to D^+ \pi^0) = (30.7\pm 0.5)\%$, and
+${\cal B} (D^{*+} \to D^+\gamma) =(1.6\pm 0.4)\% $. However,
 $D^{*0}\to D^+\pi^-$
 is kinematically forbidden. Note that we veto reconstructed $D^{*+} \to D^+ \pi^0$ decays to further reduce the feed-down contribution for $R(D)$.
 
@@ -119,9 +109,9 @@ squared $\mmiss$ and $\pdl$ variables (Sec.~\ref{sec:fit}).
 A preliminary Asimov-sensitivity study (Sec.~\ref{sec:results}), combining
 the electron and muon channels, gives an expected relative uncertainty
 of approximately $12\%$ on the $B^{0}\to D^{-}\tau^{+}\nu_{\tau}$
-normalization for the current Run~1 (365 fb$^{-1}$) and a partial Run~2 dataset (125 fb$^{-1}$); this
-senstivity includes data statistics, MC statistics, and the two of the normalization
-systematics  (continuum, and the $D^{*}\tau\nu$/$D^{**}\tau\nu$
+normalization for the current Run~1 ($365~\mathrm{fb}^{-1}$) and a partial Run~2 dataset ($125~\mathrm{fb}^{-1}$); this
+sensitivity includes data statistics, MC statistics, and two of the normalization
+systematics (continuum, and the $D^{*}\tau\nu$/$D^{**}\tau\nu$
 feed-down); this is expected to change as further systematics are added to
 the fit.
 
@@ -200,9 +190,9 @@ Each stage is described in the section named beside it.
     \node[box, below=of off] (bdt) {Four-class LightGBM BDT classifier\\
       Gives probabilities for: \\ \texttt{signal}, \texttt{fake D bkg}, \texttt{continuum bkg},
       \texttt{combinatorial bkg}};
-    \node[box, below=of bdt] (tru) {MC Truth classification of\\
+    \node[box, below=of bdt] (tru) {MC truth classification of\\
       signal, normalization modes, feed-down modes, background modes};
-    \node[box, below=of tru] (cor) {Apply Performance Group and analysis specific corrections: \\
+    \node[box, below=of tru] (cor) {Apply Performance Group and analysis-specific corrections: \\
       tracking and PID first, then generic-$B\bar{B}$ reweighting};
     \node[box, below=of cor] (tem) {Template construction\\
       2D in $\mmiss$ and $\pdl$, for each category};

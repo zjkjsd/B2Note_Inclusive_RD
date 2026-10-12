@@ -25,7 +25,6 @@ The four training classes are assigned in
 \texttt{Notebooks/2\_create\_BDTtrainingSet.ipynb} as
 \begin{center}
 \begin{tabular}{c l l}
-  % narrow content; kept simple
   \hline
   Target & Class & Output probability \\
   \hline
@@ -43,19 +42,11 @@ selection of Eq.~\eqref{eq:lgb-tight}, the fake-$D$ suppression that defines
 the generic-$B\bar{B}$ tuning region (Eq.~\eqref{eq:bbbar-region}), and the
 combinatorial-enriched control region of Sec.~\ref{sec:validation}.
 A binary classifier would have required a separate training for each.
-% PROVENANCE
-%   status      : PRELIMINARY_RESULT
-%   produced-by : Notebooks/2_create_BDTtrainingSet.ipynb
-%   commit      : ad2f2ec
-%   sample      : MC16rd, e channel, offline_cut (Eq. offline-cut)
-%   selection   : classify_mc_dict('e'); per-class random subsampling,
-%                 random_state=0
-%   corrections : none
 
 \subsection{BDT Training configuration}
 \label{sec:mva:training}
 
-Training uses \texttt{4 \_LightGBM \_Multiclass \_Training.py} with gradient
+Training uses \texttt{4\_LightGBM\_Multiclass\_Training.py} with gradient
 boosted decision trees (\texttt{gbdt}) and the \texttt{multiclass} objective
 over four classes, optimizing multiclass log-loss and monitoring
 \texttt{auc\_mu}.
@@ -77,7 +68,7 @@ We use Optuna for the hyper-parameter tuning.
 
 
 
-\subsection{ BDT Input variables}
+\subsection{BDT Input variables}
 \label{sec:mva:inputs}
 
 The training variables are defined in
@@ -97,12 +88,12 @@ removed from the BDT for the following reasons:
         \texttt{KSFWV11} and \texttt{KSFWV12} are excluded because they
         correlate with $\mmiss$ or $\pdl$.
         
-  \item \textbf{Data/MC mismodelling}: \texttt{R2}, \texttt{thrustOm},
-        \texttt{cosTBz}, \texttt{KSFWV8}, \texttt{KSFWV14}--\texttt{KSFWV18},
+  \item \textbf{Data/MC mismodeling}: \texttt{R2}, \texttt{thrustOm},
+        \texttt{cosTBz}, \texttt{KSFWV8}, \texttt{KSFWV14}--\texttt{KSFWV16}, \texttt{KSFWV18},
         \texttt{D\_vtxReChi2}, \texttt{B0\_vtxReChi2} and
         \texttt{B0\_TagVReChi2IP} are excluded because they are known to be
-        mismodelled.
-        Using mismodeled variables could, for example, lead to data/MC discrepances in selection efficiencies.
+        mismodeled.
+        Using mismodeled variables could, for example, lead to data/MC discrepancies in selection efficiencies.
 \end{itemize}
 
 
@@ -134,5 +125,5 @@ are made.
 four output probabilities, in an unblinded control region, with the producing
 artifact recorded}
 \AnalysisTBD{classifier performance: ROC or efficiency-versus-purity curves
-per class, and the selection efficiency for signal and normalisation
+per class, and the selection efficiency for signal and normalization
 separately, since $R(D)$ depends on their ratio rather than on either alone}

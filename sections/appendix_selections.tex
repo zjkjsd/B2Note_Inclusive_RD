@@ -1,7 +1,7 @@
 % PROVENANCE (section-level)
 %   status      : CODE_FACT
-%   produced-by : utilities.py lines 5-29 (training variables), 81-87
-%                 (working points, offline cut, D* veto)
+%   produced-by : utilities.py lines 5-29 (training variables), 83
+%                 (lgb_comb)
 %   commit      : ad2f2ec
 %   sample      : n/a (definitions)
 %   selection   : n/a
@@ -9,7 +9,7 @@
 \section{Variable Lists in the inclusive $R(D)$ analysis}
 \label{app:selections}
 
-We list the variables used in the PYTHON analysis scripts.
+We list the variables used in the Python analysis scripts.
 
 \subsection{Classifier input variables}
 \label{app:selections:mva}
@@ -33,70 +33,16 @@ We list the variables used in the PYTHON analysis scripts.
 The two spectator momenta are the components of the second fit observable,
 $\pdl$ (Sec.~\ref{sec:recon:b}). These variables are not used in the BDT classifier.
 
-\subsection{Variables not used in the BDT}
-\label{app:selections:excluded}
-
-\begin{description}
-  \item[Excluded: correlated with the fit observables:]
-    \texttt{B0\_thrustBm}, \texttt{B0\_KSFWV1}, \texttt{B0\_KSFWV2},
-    \texttt{B0\_KSFWV11}, \texttt{B0\_KSFWV12}
-  \item[Excluded: data/MC mismodeling:]
-    \texttt{B0\_R2}, \texttt{B0\_thrustOm}, \texttt{B0\_cosTBz},
-    \texttt{B0\_KSFWV8}, \texttt{B0\_KSFWV14}, \texttt{B0\_KSFWV15},
-    \texttt{B0\_KSFWV16}, \texttt{B0\_KSFWV18}, \texttt{D\_vtxReChi2},
-    \texttt{B0\_vtxReChi2}, \texttt{B0\_TagVReChi2IP}
-\end{description}
-
-\subsection{Selection requirements:}
+\subsection{Combinatorial-enriched region}
 \label{app:selections:cuts}
 
+The selections \texttt{offline\_cut} (Eq.~\eqref{eq:offline-cut}),
+\texttt{lgb\_tight} (Eq.~\eqref{eq:lgb-tight}), the $D^{*}$ veto
+(Sec.~\ref{sec:recon:dstveto}) and the generic-$B\bar{B}$ tuning region
+(Eq.~\eqref{eq:bbbar-region}) are defined in the main text.
+The remaining BDT selection is
 \begin{description}
-  \item[\texttt{offline\_cut}]
-    \texttt{B0\_roeMbc\_my\_mask > 5}, \texttt{-4 < B0\_roeDeltae\_my\_mask < 1},
-    \texttt{B0\_dr < 0.1}, \texttt{ell\_p < 4}
-  \item[\texttt{lgb\_tight} (nominal signal selection)]
-    \texttt{sig\_prob > 0.5}, \texttt{fakeD\_prob < 0.06},
-    \texttt{continuum\_prob < 0.4}, \texttt{combinatorial\_prob < 0.6}
-  
   \item[\texttt{lgb\_comb} (combinatorial-enriched region)]
     \texttt{fakeD\_prob < 0.15}, \texttt{continuum\_prob < 0.5},
     \texttt{combinatorial\_prob > 0.5}
-  \item[\texttt{Dst\_veto\_cut}]
-    \texttt{DstVeto\_massDiff\_0 < 0.135} or
-    \texttt{0.145 < DstVeto\_massDiff\_0}
-  \item[Generic-$B\bar{B}$ tuning region]
-    \texttt{1.855 < D\_M < 1.885}, \texttt{fakeD\_prob < 0.1},
-    \texttt{sig\_prob < 0.1}, plus \texttt{offline\_cut} 
 \end{description}
-
-\subsection{Region nomenclature}
-\label{app:selections:naming}
-
-BDT control regions are given below.
-
-\begin{table}[htbp]
-  \centering
-  \caption{Control regions}
-  \label{tab:region-names}
-  \small
-  \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{>{\raggedright\arraybackslash}p{0.24\textwidth} >{\raggedright\arraybackslash}p{0.35\textwidth} >{\raggedright\arraybackslash}p{0.31\textwidth}}
-    \hline
-    Name used here & Selection & Purpose \\
-    \hline
-    Generic-$B\bar{B}$ tuning region &
-      \texttt{1.855<D\_M<1.885}, \texttt{fakeD\_prob<0.1},
-      \texttt{sig\_prob<0.1} &
-      The region in which the family weights are \emph{fitted}
-      (Sec.~\ref{sec:bbbar:tuning}) \\
-    Combinatorial-enriched region (\texttt{lgb\_comb}) &
-      \texttt{fakeD\_prob<0.15}, \texttt{continuum\_prob<0.5},
-      \texttt{combinatorial\_prob>0.5} &
-      The region in which the generic-$B\bar{B}$ data/simulation
-      \emph{comparisons} are made \\
-
-    \hline
-  \end{tabular}
-\end{table}
-
-

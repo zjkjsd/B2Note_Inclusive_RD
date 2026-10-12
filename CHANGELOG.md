@@ -5,6 +5,70 @@ Each released version of the note is pinned to an analysis commit in
 analysis repository is referenced by commit SHA only and is not vendored
 into this one.
 
+## Version 0.5 (draft) — unreleased
+
+Sec. 3.5 (best-candidate selection) completed, closing its TBD: candidate
+multiplicity plot for signal MC (new `figures/BCS_multiplicity_signalMC_e_looseBDT.png`)
+and a table of multiplicity and correct-pick rate for $e$/$\mu$ and
+`lgb_loose`/`lgb_tight`, from `Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb`
+at analysis commit `f920910` (newer than the `ad2f2ec` pinned elsewhere).
+
+Overleaf revision by the analysts (commit `69f744d`), focused on physics
+understanding and readability for reviewers outside the analysis team; many
+TBD markers were resolved or removed and several passages rewritten or cut.
+Followed by a tidy-up that changes no prose:
+- Added an automatically generated to-do list after the table of contents
+  (draft mode only), built from every `\AnalysisTBD`/`\InProgress` marker.
+  It replaces the hand-maintained open-items appendix
+  (`sections/appendix_open_items.tex`, whose text had already been removed
+  on Overleaf, leaving only its provenance comment), which is deleted.
+- The three informal open-item notes written in bold/red on Overleaf
+  (Sec. 2 gap modes, Sec. 6 fake-D sideband corrections, Appendix D table
+  placement) now use `\AnalysisTBD` with their wording unchanged, so they
+  appear in the to-do list.
+- Restored the Sec. 7 heading and `sec:bbbar` label (removed on Overleaf;
+  six cross-references were left undefined); pointed the stale
+  `sec:bbbar:rundep` reference at `sec:bbbar:tuning`, where the run
+  dependence is now described; replaced the stale `sec:truth:closure`
+  reference in Sec. 8 with a TBD, since the subsection it pointed to was
+  removed.
+- LaTeX comments brought in line with the edited text: provenance blocks
+  moved to the float they describe (Fig. 1; the four MC fit-variable figures
+  now in Sec. 3; Tables 4 and 6), orphaned blocks whose content was cut
+  removed (Secs. 4, 5, 9, Appendix D), Sec. 7 provenance completed,
+  commented-out prose removed (recoverable from git history).
+- Fixed the Sec. 4 enumeration, which skipped item 8 after an item was cut.
+- Removed the empty `sections/12_summary.tex` and its `\input`.
+- Restored the executable bit on the scripts (lost in the Overleaf sync).
+
+Corrections confirmed by the analyst:
+- Sec. 1: the $D^{*}$ branching fractions are for $D^{*+} \to D^{+}\pi^{0}$
+  and $D^{*+} \to D^{+}\gamma$ (previously written as $D^{*0}$ modes).
+- Sec. 7 and Appendix B: the measured-hadronic family contains the 75 modes
+  of `measured_pdg_list` with a PDG measurement (previously "150"); the
+  remaining examined modes are commented out and fall into the unmeasured
+  families.  Appendix B now explains how the list was built.
+- Sec. 5: `KSFWV17` is a training input, not an excluded variable.
+- Sec. 9.1: the generic-$B\bar{B}$ normalizations are currently fixed (as
+  in Table 6), not free.
+- Sec. 11: the combined sensitivity is quoted as $12.1\%$ only.
+- Sec. 6: "Four further corrections" (previously "Two").
+- Appendix D: removed the outdated stored-workspace table and its text.
+- Appendices: removed material already covered in the main text (excluded
+  BDT variables, selections defined in the main text, region-nomenclature
+  table, family hierarchy, duplicated BDT TBDs, toy-machinery paragraph).
+- Typos fixed and spelling standardized on American English throughout.
+- AGENTS.md: Overleaf edits by the analysts are authoritative; American
+  English; one-sentence-per-line rule dropped.
+- Sec. 7 / Appendix B (follow-up): the measured-hadronic family is quoted as
+  ~60 modes (14 of the 75 active entries are semileptonic and go to
+  `BBbar_semileptonic`); the 150 entries of `measured_pdg_list` are the 75
+  active modes plus a radiative counterpart for each, not all of which
+  exist physically (those simply match no events).  The PDG branching-fraction
+  correction applies only to the four $D_{s0}^{*}(2317)$ modes; the other
+  measured modes are corrected only through the family weight.  New TBD: the
+  measured-mode list covers only the most populated generated modes.
+
 ## Version 0.4 (draft) — unreleased (updated a fifth time)
 
 Addressed one of two minor Codex findings from the latest PR #3 review (the

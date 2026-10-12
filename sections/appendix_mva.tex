@@ -36,10 +36,7 @@
   \end{tabular}
 \end{table}
 
-We use a BDT with \texttt{min\_child\_samples} $=1000$ and only 49 leaves,
-and 25 boosting rounds. This gives a small and regularized model.
-
-We use separate training and validation samples. We find no evidence for over-training of the BDT.
+We find no evidence for over-training of the BDT.
 
 
 
@@ -47,8 +44,8 @@ We use separate training and validation samples. We find no evidence for over-tr
 \label{app:mva:inputs}
 
 The BDT uses 17 input features, which are listed in 
-Appendix~\ref{app:selections:mva}. The variables excluded from training are given 
-in Appendix~\ref{app:selections:excluded}.
+Appendix~\ref{app:selections:mva}. The variables excluded from training are given
+in Sec.~\ref{sec:mva:inputs}.
 
 % PROVENANCE
 %   status      : PRELIMINARY_RESULT
@@ -76,8 +73,7 @@ in Appendix~\ref{app:selections:excluded}.
 \subsection{Additional Information on the BDT Classifier to be added}
 \label{app:mva:todo}
 
-\AnalysisTBD{ROC or efficiency-versus-purity curves for each of the four
-classes on the validation subset}
+ROC curves, efficiencies and the data/MC comparison of the input variables
+are listed as open items in Sec.~\ref{sec:mva:validation}.
+
 \AnalysisTBD{learning curves per round, from the stored evaluation histories}
-\AnalysisTBD{distributions of every retained input variable, data versus
-simulation, in an unblinded control region}
