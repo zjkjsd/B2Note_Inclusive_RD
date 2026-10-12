@@ -57,7 +57,8 @@ Corrections confirmed by the analyst:
 - Sec. 7 / Appendix B (follow-up): the measured-hadronic family is quoted as
   ~60 modes (14 of the 75 active entries are semileptonic and go to
   `BBbar_semileptonic`); the 150 entries of `measured_pdg_list` are the 75
-  active modes plus their radiative counterparts.  The PDG branching-fraction
+  active modes plus a radiative counterpart for each, not all of which
+  exist physically (those simply match no events).  The PDG branching-fraction
   correction applies only to the four $D_{s0}^{*}(2317)$ modes; the other
   measured modes are corrected only through the family weight.  New TBD: the
   measured-mode list covers only the most populated generated modes.
