@@ -25,13 +25,17 @@ the product of its daughter PDG codes, and assigned to one family:
 \begin{enumerate}
   \item \texttt{BBbar\_semileptonic} --- any generated daughter is a lepton;
   \item \texttt{BBbar\_measured\_hadronic} --- the decay-mode identifier
-        appears in the list of modes with a measured branching fraction,
-        in which case a PDG branching-fraction correction is also applied;
+        appears in the list of modes with a measured branching fraction;
   \item \texttt{BBbar\_unmeasured:$n$-body} --- otherwise, grouped by the
         generated daughter multiplicity, capped at $5+$.
 \end{enumerate}
 The hierarchy is applied in this order, so the families of modes are mutually
 exclusive and, because the last is a catch-all over multiplicity, exhaustive.
+The measured hadronic modes are corrected only through their family weight,
+determined in the fit of Sec.~\ref{sec:bbbar:tuning}.
+The only exception is four $D_{s0}^{*}(2317)^{+}$ modes whose generator
+branching fractions are wrong; these additionally receive a PDG
+branching-fraction correction (Appendix~\ref{app:categories:bf}).
 We separate externally constrained (measured branching
 fractions) from unmeasured hadronic modes, which are the majority.
 We group the unmeasured modes by a
@@ -103,7 +107,7 @@ In both channels the unmeasured 2-body and 4-body weights are small
 indicating no significant contribution from
 these components. The dominant floating background is the unmeasured 3-body
 mode, with fitted weights of $0.765^{+0.114}_{-0.118}$ ($e$ channel) and
-$0.583^{+0.202}_{-0.204}$ ($\mu$ channel). The weights from the 75 measured hadronic modes
+$0.583^{+0.202}_{-0.204}$ ($\mu$ channel). The weights from the $\sim 60$ measured hadronic modes
 exceed unity in both channels, at $2.264 \pm 0.057$ and
 $1.925^{+0.111}_{-0.112}$, respectively, suggesting an underestimate of
 this background in the nominal MC simulation. 

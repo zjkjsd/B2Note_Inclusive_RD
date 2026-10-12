@@ -1,7 +1,8 @@
 % PROVENANCE (section-level)
 %   status      : CODE_FACT
 %   produced-by : utilities.py lines 73-79 (DecayMode_new), 93-122 (PDG
-%                 lists), 125-275 (measured modes, replacement map);
+%                 lists), 125-259 (measured_pdg_norad, measured_pdg_rad,
+%                 measured_pdg_list);
 %                 bbbar_reweighting.py lines 19-25 (PDG corrections)
 %   commit      : ad2f2ec
 %   sample      : n/a (definitions)
@@ -48,12 +49,22 @@ while the 48 modes without one are commented out and are therefore classified
 as \texttt{BBbar\_unmeasured:$n$-body}.
 The list is organized into four blocks: single-charm and double-charm, each
 for mixed and charged $B$.
-
+Fourteen of the 75 active entries are semileptonic modes; these are assigned
+to \texttt{BBbar\_semileptonic}, which takes precedence in the hierarchy, so
+the \texttt{BBbar\_measured\_hadronic} family contains $\sim 60$ hadronic
+modes.
 
 Because a generated decay may contain a radiated photon, the list is extended
 by \texttt{measured\_pdg\_rad}, each entry multiplied by the photon PDG code
 22, so that the radiative counterpart of a measured mode is still recognized
 as measured rather than being classified as an unmeasured $n$-body family.
+\texttt{measured\_pdg\_list} therefore holds 150 entries: the 75 active
+modes and their radiative counterparts.
+
+\AnalysisTBD{the measured-mode list is not complete: only the most populated
+generated modes were checked against the PDG, for the sake of time.  Survey
+all generated modes in the MC sample against the PDG to make the
+\texttt{BBbar\_measured\_hadronic} family complete}
 
 \subsection{Branching-fraction corrections}
 \label{app:categories:bf}
