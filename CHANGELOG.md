@@ -7,6 +7,12 @@ into this one.
 
 ## Version 0.5 (draft) — unreleased
 
+Sec. 3.5 (best-candidate selection) completed, closing its TBD: candidate
+multiplicity plot for signal MC (new `figures/BCS_multiplicity_signalMC_e_looseBDT.png`)
+and a table of multiplicity and correct-pick rate for $e$/$\mu$ and
+`lgb_loose`/`lgb_tight`, from `Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb`
+at analysis commit `f920910` (newer than the `ad2f2ec` pinned elsewhere).
+
 Overleaf revision by the analysts (commit `69f744d`), focused on physics
 understanding and readability for reviewers outside the analysis team; many
 TBD markers were resolved or removed and several passages rewritten or cut.
