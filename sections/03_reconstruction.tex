@@ -306,9 +306,72 @@ $\chi^{2}$ at the $K\pi\pi$ vertex and at the $D\ell$ vertex is chosen.
 The nominal best-candidate selection is \texttt{utilities.apply\_mva\_bcs()}
 with its default, \texttt{bcs='vtx'}.
 
-\AnalysisTBD{candidate multiplicity \emph{before} best-candidate selection,
-i.e.\ how many candidates per event the \texttt{vtx} criterion is choosing
-among.}
+The best-candidate selection is applied after the BDT selection of
+Sec.~\ref{sec:mva:wp}.
+
+% PROVENANCE (applies to the figure and table below)
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb, cells 20
+%                 (lgb_loose) and 21 (lgb_tight), printed by
+%                 utilities.apply_mva_bcs(..., perf_eval=True) and
+%                 utilities.bcs_correct_pick_metrics(); the figure was
+%                 provided by the analyst (producing cell not identified)
+%   commit      : f920910 (newer than the ad2f2ec pinned elsewhere; this
+%                 commit refactored the best-candidate selection code)
+%   sample      : MC16rd signal MC (Samples/MC16rd/signal*_deimos_1.root:
+%                 the D tau nu, D* tau nu and D** tau nu samples together);
+%                 e and mu channels; figure is e channel only
+%   selection   : offline_cut (Eq. offline-cut) plus lgb_loose (figure and
+%                 first two rows) or lgb_tight (last two rows)
+%   corrections : none
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{BCS_multiplicity_signalMC_e_looseBDT.png}
+  \caption{Number of $B^{0}$ candidates per event before the best-candidate
+  selection, in signal MC (electron channel, \texttt{lgb\_loose} BDT
+  selection), on a logarithmic scale.
+  Of the $4\,325\,168$ events, $4\,095\,433$ ($94.7\%$) have a single
+  candidate; the average is $\langle N\rangle = 1.057$ candidates per event,
+  and $5.31\%$ of the events have more than one.}
+  \label{fig:bcs-multiplicity}
+\end{figure}
+
+Figure~\ref{fig:bcs-multiplicity} shows the number of candidates per event
+before the best-candidate selection in signal MC.
+Multiple candidates are rare: in the electron channel with the loose BDT
+selection, $94.7\%$ of the events have a single candidate, $5.0\%$ have two,
+and fewer than $0.4\%$ have three or more.
+Table~\ref{tab:bcs-performance} summarizes the multiplicity and the
+performance of the selection for both lepton channels and both BDT
+selections.
+The correct-pick rate is the fraction of events containing at least one
+truth-matched $B \to D\tau\nu$ candidate in which the selected candidate is
+the truth-matched one.
+Since events with a single candidate are included in this fraction, it is
+dominated by them; the multiplicity is low enough that the
+best-candidate selection affects only a few percent of the events.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Candidate multiplicity before the best-candidate selection and
+  correct-pick rate of the \texttt{vtx} best-candidate selection in signal
+  MC. $\langle N\rangle$ is the average number of candidates per event and
+  $f(N>1)$ the fraction of events with more than one candidate.
+  \texttt{lgb\_tight} is the nominal BDT selection
+  (Eq.~\eqref{eq:lgb-tight}).}
+  \label{tab:bcs-performance}
+  \small
+  \begin{tabular}{l l c c c}
+    \hline
+    Channel & BDT selection & $\langle N\rangle$ & $f(N>1)$ & Correct-pick rate \\
+    \hline
+    $e$   & \texttt{lgb\_loose} & $1.057$ & $5.31\%$ & $0.9881$ \\
+    $\mu$ & \texttt{lgb\_loose} & $1.056$ & $5.22\%$ & $0.9887$ \\
+    $e$   & \texttt{lgb\_tight} & $1.028$ & $2.70\%$ & $0.9950$ \\
+    $\mu$ & \texttt{lgb\_tight} & $1.028$ & $2.69\%$ & $0.9951$ \\
+    \hline
+  \end{tabular}
+\end{table}
 
 
 
