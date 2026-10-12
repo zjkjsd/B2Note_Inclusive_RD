@@ -58,8 +58,11 @@ Because a generated decay may contain a radiated photon, the list is extended
 by \texttt{measured\_pdg\_rad}, each entry multiplied by the photon PDG code
 22, so that the radiative counterpart of a measured mode is still recognized
 as measured rather than being classified as an unmeasured $n$-body family.
-\texttt{measured\_pdg\_list} therefore holds 150 entries: the 75 active
-modes and their radiative counterparts.
+In the code, \texttt{measured\_pdg\_list} therefore holds 150 entries: the
+75 active modes and a radiative counterpart for each.
+Not every one of these radiative counterparts exists physically; an entry
+for a decay that does not occur simply matches no events, so this does not
+affect the classification.
 
 \AnalysisTBD{the measured-mode list is not complete: only the most populated
 generated modes were checked against the PDG, for the sake of time.  Survey
