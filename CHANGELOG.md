@@ -7,6 +7,20 @@ into this one.
 
 ## Version 0.5 (draft) — unreleased
 
+BDT validation (Sec. 5.5, Appendix C):
+- Data/MC comparison of all 28 candidate BDT input variables (17 used, 11
+  dropped for mismodeling) from `figures/BDT_input_vars/`, supplied by the
+  analysts. Run 1, electron channel, offline selection, $q^2 < 3$ and $D$-mass
+  signal region, no BDT requirement, PID corrections only. Six plots go in
+  the main text (new Fig. `fig:mva-datamc-main`) and the rest in the new
+  Appendix C.2 (`app:mva:datamc`). The `sig_prob` output plot has the
+  additional requirement `sig_prob > 0.5`. This closes the input-variable
+  part of the Sec. 5.5 data/MC TBD; the ROC/efficiency TBD stays open.
+- Training and validation curves (log-loss, `auc_mu`) of the nominal model
+  (new `figures/LGBM_training_{multi_logloss,auc_mu}.png`, identical to
+  `BDTs/LightGBM/lgbm_multiclass_v3_*.png` at analysis commit `f920910`).
+  These close the Appendix C learning-curve TBD.
+
 Sec. 3.5 (best-candidate selection) completed, closing its TBD: candidate
 multiplicity plot for signal MC (new `figures/BCS_multiplicity_signalMC_e_looseBDT.png`)
 and a table of multiplicity and correct-pick rate for $e$/$\mu$ and
