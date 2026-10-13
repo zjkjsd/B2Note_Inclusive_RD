@@ -94,6 +94,8 @@ removed from the BDT for the following reasons:
         \texttt{B0\_TagVReChi2IP} are excluded because they are known to be
         mismodeled.
         Using mismodeled variables could, for example, lead to data/MC discrepancies in selection efficiencies.
+        The data/MC comparisons supporting this choice are shown in
+        Sec.~\ref{sec:mva:validation} and Appendix~\ref{app:mva:datamc}.
 \end{itemize}
 
 
@@ -121,8 +123,80 @@ are made.
 \subsection{BDT Validation}
 \label{sec:mva:validation}
 
-\AnalysisTBD{data/MC comparison of BDT input variable and of the
-four output probabilities, in an unblinded control region}
+The training and validation curves of the classifier, which show no sign of
+over-training, are given in Appendix~\ref{app:mva}
+(Fig.~\ref{fig:lgbm-training}).
+
+Because the classifier is trained on simulation only, any mismodeling of its
+inputs translates into a data/MC difference in the selection efficiency.
+We therefore compare data and simulation for all 28 candidate input
+variables, the 17 used in training and the 11 dropped because of
+mismodeling (Sec.~\ref{sec:mva:inputs}).
+The comparison uses the Run~1 data set in the electron channel, in the
+$q^{2} < 3~\mathrm{GeV}^{2}/c^{4}$ control region with the $D$ candidate in the
+mass signal region of Eq.~\eqref{eq:dmass-windows}.
+The offline selection of Eq.~\eqref{eq:offline-cut} is applied, but no BDT
+requirement, so the distributions show the inputs as the classifier sees them.
+The simulation is scaled to the Run~1 integrated luminosity, and only the
+particle-identification corrections are applied.
+Each plot shows the stacked simulation, broken down into the truth categories
+of Sec.~\ref{sec:truth}, together with the data. The lower panel shows the
+normalized residuals $(N_{\mathrm{data}} - N_{\mathrm{MC}})/\sigma$, where
+$\sigma$ combines the statistical uncertainties of data and simulation.
+
+Representative distributions are shown in Fig.~\ref{fig:mva-datamc-main}
+and the rest in Appendix~\ref{app:mva:datamc}.
+For the variables used in training, illustrated by the three most important
+ones (Fig.~\ref{fig:lgbm-importance}), \texttt{B0\_CMS\_cos\_angle\_0\_1},
+$M_{\mathrm{bc}}^{\mathrm{ROE}}$ and $\Delta E^{\mathrm{ROE}}$, together with
+the continuum-suppression variable \texttt{cosTBTO},
+the residuals are dominated by an overall excess of data over simulation,
+with smooth, monotonic trends across the distribution.
+The two dropped variables in the bottom row behave differently.
+For \texttt{R2} and the $B$-vertex fit quality \texttt{B0\_vtxReChi2}, the
+residuals change sign across the distribution, which shows that the shape
+itself is mismodeled.
+Their reduced $\chi^{2}$ (about 180 and 50, respectively) is several times
+larger than that of the four used variables (about 16 to 19).
+The same holds for the other variables with the largest disagreement, namely
+\texttt{thrustOm} and the $D$-vertex fit quality \texttt{D\_vtxReChi2}
+(Appendix~\ref{app:mva:datamc}).
+The separation is not perfect.
+Among the variables used in training, the $D$ Dalitz variable
+\texttt{D\_daughterInvM\_0\_1} and \texttt{KSFWV9} also show sizeable shape
+differences, while the dropped \texttt{KSFWV15} is well modeled.
+The effect of the remaining mismodeling on the BDT output is shown in
+Fig.~\ref{fig:mva-datamc-sigprob}.
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb (plots supplied
+%                 by the analysts; the note text does not cite the notebook)
+%   commit      : not pinned (supplied directly by the analysts)
+%   sample      : Run 1 data and luminosity-scaled MC, electron channel
+%   selection   : offline_cut (Eq. offline-cut), B0_recQ2BhSimple<3,
+%                 1.855<D_M<1.885; no BDT requirement
+%   corrections : PID only
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/B0_CMS_cos_angle_0_1.png}\hfill
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/B0_cosTBTO.png}\\[2mm]
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/B0_roeMbc_my_mask.png}\hfill
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/B0_roeDeltae_my_mask.png}\\[2mm]
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/B0_R2.png}\hfill
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/B0_vtxReChi2.png}
+  \caption{Data/MC comparison of BDT input variables before any BDT
+  requirement (Run~1, electron channel, offline selection,
+  $q^{2} < 3~\mathrm{GeV}^{2}/c^{4}$, $D$-mass signal region).
+  Top and middle rows: variables used in training
+  (\texttt{B0\_CMS\_cos\_angle\_0\_1}, \texttt{cosTBTO}, $M_{\mathrm{bc}}^{\mathrm{ROE}}$,
+  $\Delta E^{\mathrm{ROE}}$).
+  Bottom row: \texttt{R2} and \texttt{B0\_vtxReChi2}, dropped because of
+  mismodeling.
+  Lower panels: normalized residuals.}
+  \label{fig:mva-datamc-main}
+\end{figure}
+
 \AnalysisTBD{classifier performance: ROC or efficiency-versus-purity curves
 per class, and the selection efficiency for signal and normalization
 separately, since $R(D)$ depends on their ratio rather than on either alone}

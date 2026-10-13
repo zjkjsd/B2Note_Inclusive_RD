@@ -36,7 +36,32 @@
   \end{tabular}
 \end{table}
 
-We find no evidence for over-training of the BDT.
+The evolution of the two monitored metrics over the 25 boosting iterations
+of the nominal model is shown in Fig.~\ref{fig:lgbm-training}.
+The training and validation curves follow each other closely and the gap
+between them stays small and stable through the decaying-learning-rate stage,
+so we find no evidence for over-training of the BDT.
+
+% PROVENANCE
+%   status      : CODE_FACT
+%   produced-by : 4_LightGBM_Multiclass_Training.py (metric plots of the
+%                 v3 model, BDTs/LightGBM/lgbm_multiclass_v3_auc_mu.png and
+%                 lgbm_multiclass_v3_multi_logloss.png; history in
+%                 BDTs/LightGBM/eval_result_v3.json)
+%   commit      : f920910
+%   sample      : MC16rd training sample, 80/20 train/validation split
+%   selection   : offline_cut (Eq. offline-cut)
+%   corrections : none applied at training time
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.49\textwidth]{LGBM_training_multi_logloss.png}\hfill
+  \includegraphics[width=0.49\textwidth]{LGBM_training_auc_mu.png}
+  \caption{Multiclass log-loss (left) and multiclass AUC, \texttt{auc\_mu}
+  (right), per boosting iteration for the training (``train'') and
+  validation (``test'') samples of the nominal classifier.
+  Iterations 0--14 use a fixed learning rate and 15--24 a decaying one.}
+  \label{fig:lgbm-training}
+\end{figure}
 
 
 
@@ -70,10 +95,126 @@ in Sec.~\ref{sec:mva:inputs}.
   \label{fig:lgbm-importance}
 \end{figure}
 
+\subsection{Data/MC comparison of the BDT inputs and output}
+\label{app:mva:datamc}
+
+This subsection collects the data/MC comparisons of the BDT input variables
+not shown in Fig.~\ref{fig:mva-datamc-main}. The sample, selection and
+plotting conventions are the same (Sec.~\ref{sec:mva:validation}).
+Figures~\ref{fig:mva-datamc-used-cs} and~\ref{fig:mva-datamc-used-db} show
+the remaining 13 variables used in training, and
+Fig.~\ref{fig:mva-datamc-dropped} shows the remaining 9 variables dropped
+because of mismodeling.
+Most of the dropped variables, in particular \texttt{thrustOm},
+\texttt{KSFWV14}, \texttt{KSFWV16} and \texttt{D\_vtxReChi2}, have residuals
+that change sign across the distribution, which indicates a mismodeled shape.
+For the vertex-fit quality variables \texttt{D\_vtxReChi2} and
+\texttt{B0\_vtxReChi2}, the simulation underestimates the population at very
+small $\chi^{2}$.
+
+Figure~\ref{fig:mva-datamc-sigprob} shows the classifier output
+\texttt{sig\_prob} in the same region with the additional requirement
+$\texttt{sig\_prob} > 0.5$.
+Data and simulation agree considerably better than for most individual inputs
+(reduced $\chi^{2} \approx 5$).
+The residuals show a mild deficit of data at
+$0.8 \lesssim \texttt{sig\_prob} \lesssim 0.93$ and an excess in the last bin.
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb (plots supplied
+%                 by the analysts)
+%   commit      : not pinned (supplied directly by the analysts)
+%   sample      : Run 1 data and luminosity-scaled MC, electron channel
+%   selection   : offline_cut (Eq. offline-cut), B0_recQ2BhSimple<3,
+%                 1.855<D_M<1.885; no BDT requirement
+%   corrections : PID only
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV3.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV4.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV5.png}\\[2mm]
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV6.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV7.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV9.png}\\[2mm]
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV10.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV13.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV17.png}
+  \caption{Data/MC comparison of the continuum-suppression variables used in
+  training that are not shown in Fig.~\ref{fig:mva-datamc-main}.
+  Sample and selection are as in Fig.~\ref{fig:mva-datamc-main}, with no BDT
+  requirement.}
+  \label{fig:mva-datamc-used-cs}
+\end{figure}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb (plots supplied
+%                 by the analysts)
+%   commit      : not pinned (supplied directly by the analysts)
+%   sample      : Run 1 data and luminosity-scaled MC, electron channel
+%   selection   : offline_cut (Eq. offline-cut), B0_recQ2BhSimple<3,
+%                 1.855<D_M<1.885; no BDT requirement
+%   corrections : PID only
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/D_A1FlightDistanceSig_IP.png}\hfill
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/D_daughterInvM_0_1.png}\\[2mm]
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/D_daughterInvM_1_2.png}\hfill
+  \includegraphics[width=0.48\textwidth,height=0.3\textheight,keepaspectratio]{BDT_input_vars/B0_D_l_DisSig.png}
+  \caption{Data/MC comparison of the $D$-level variables
+  (\texttt{D\_A1FflightDistanceSig\_IP} and the two Dalitz invariant masses)
+  and of \texttt{B0\_D\_l\_DisSig}, all used in training.
+  Sample and selection are as in Fig.~\ref{fig:mva-datamc-main}.}
+  \label{fig:mva-datamc-used-db}
+\end{figure}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb (plots supplied
+%                 by the analysts)
+%   commit      : not pinned (supplied directly by the analysts)
+%   sample      : Run 1 data and luminosity-scaled MC, electron channel
+%   selection   : offline_cut (Eq. offline-cut), B0_recQ2BhSimple<3,
+%                 1.855<D_M<1.885; no BDT requirement
+%   corrections : PID only
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_thrustOm.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_cosTBz.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV8.png}\\[2mm]
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV14.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV15.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV16.png}\\[2mm]
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_KSFWV18.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/D_vtxReChi2.png}\hfill
+  \includegraphics[width=0.32\textwidth,height=0.22\textheight,keepaspectratio]{BDT_input_vars/B0_TagVReChi2IP.png}
+  \caption{Data/MC comparison of the variables dropped from training because
+  of mismodeling that are not shown in Fig.~\ref{fig:mva-datamc-main}.
+  Sample and selection are as in Fig.~\ref{fig:mva-datamc-main}.}
+  \label{fig:mva-datamc-dropped}
+\end{figure}
+
+% PROVENANCE
+%   status      : PRELIMINARY_RESULT
+%   produced-by : Notebooks/Plotting/1_Plot_BFBDT_sigMC.ipynb (plots supplied
+%                 by the analysts)
+%   commit      : not pinned (supplied directly by the analysts)
+%   sample      : Run 1 data and luminosity-scaled MC, electron channel
+%   selection   : offline_cut (Eq. offline-cut), B0_recQ2BhSimple<3,
+%                 1.855<D_M<1.885; sig_prob>0.5 (no other BDT requirement)
+%   corrections : PID only
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{BDT_input_vars/BDToutput_sig_prob.png}
+  \caption{Data/MC comparison of the BDT output \texttt{sig\_prob} with
+  $\texttt{sig\_prob} > 0.5$. The remaining selection is as in
+  Fig.~\ref{fig:mva-datamc-main}.}
+  \label{fig:mva-datamc-sigprob}
+\end{figure}
+
 \subsection{Additional Information on the BDT Classifier to be added}
 \label{app:mva:todo}
 
-ROC curves, efficiencies and the data/MC comparison of the input variables
-are listed as open items in Sec.~\ref{sec:mva:validation}.
-
-\AnalysisTBD{learning curves per round, from the stored evaluation histories}
+ROC curves and efficiencies are listed as an open item in
+Sec.~\ref{sec:mva:validation}.
