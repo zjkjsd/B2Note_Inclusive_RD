@@ -175,9 +175,9 @@ Table~\ref{tab:fit-parameters} lists the PYHF modifiers or ``fitting parameters'
     $D^{**}\ell\nu + \text{gap}$ & free &  \\
     $D^{*}\tau\nu$ & \texttt{normsys} $\pm 10\%$ &  \\
     $D^{**}\tau\nu$ & \texttt{normsys} $\pm 30\%$ &  \\
-    \texttt{bkg\_fakeD} & free &  simultaneously fitted by the signal and the sideband channels \\
+    \texttt{bkg\_fakeD} & free &  simultaneously fitted by the D mass signal and the D mass sideband channels \\
     \texttt{bkg\_continuum} & \texttt{normsys} $+15\%/-0\%$ & see Sec.~\ref{sec:syst:continuum} \\
-    Generic-$B\bar{B}$ families & fixed & \texttt{normsys}, width from the tuning covariance \\
+    Generic-$B\bar{B}$ families & fixed & \texttt{normsys}, width from the reweighting covariance \\
     All samples & \texttt{staterror}, one shared parameter per channel & see below \\
     \hline
   \end{tabular}
@@ -221,10 +221,8 @@ fixed to \texttt{normsys} (above)}
 
 \paragraph{MC statistical uncertainty.}
 All samples in a channel share a single \texttt{staterror} modifier name,
-\texttt{mcStat\_ch$n$}, so the MC statistical uncertainty is treated as one
-constrained nuisance parameter per channel per bin, summing the samples'
-individual MC statistical uncertainties in quadrature into that one
-parameter, rather than as an independent nuisance parameter per sample. 
+\texttt{mcStat\_ch$n$}, so the MC statistical uncertainty is treated as a
+constrained nuisance parameter per channel per bin rather than as an independent nuisance parameter per sample. 
 This is the ``lite'' Beeston--Barlow treatment (see Computer Physics Communications, volume 77, issue 2, pages 219–228).
 We note that the Belle II semileptonic $R(D^{(*)})$ paper used the same treatment.
 
@@ -251,5 +249,5 @@ returned uncertainty on the $B\to D\tau\nu$ normalization.
 Toy studies, pull distributions and linearity tests are not yet done.
 The machinery exists in \texttt{utilities.pyhf\_utils} and
 \texttt{utilities.toy\_utils} and in \texttt{Fit\_toys/FitToys\_b2luigi.py};
-producing and recording the nominal study is planned but not yet done.
+this study is planned but not yet done.
 

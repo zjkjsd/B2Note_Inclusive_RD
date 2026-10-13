@@ -22,15 +22,16 @@ fitted normalizations are expected to return $1$ and constrained nuisance
 parameters $0$: here we determine the uncertainty on 
 the $B\to D\tau\nu$ normalization (Sec.~\ref{sec:fit:poi}).
 
-The method is described in Sec.~\ref{sec:fit:validation}: fit with every
-\emph{constrained} modifier fixed while the free \texttt{normfactor}
-normalizations ($D\ell\nu$, $D^{*}\ell\nu$, $D^{**}\ell\nu$~+~gap,
-\texttt{bkg\_fakeD}) remain floating, to obtain the data-statistics-only
-uncertainty, we then free one further constrained modifier at a time and
-attribute its systematic contribution to the quadrature difference between
-the new and previous returned uncertainty.
-Electron and muon channels are fit separately, each against its own
-two-channel (signal region plus sideband) workspace. The two resulting
+The method is described in Sec.~\ref{sec:fit:validation}: we fit the data with 
+the normalizations ($D\ell\nu$, $D^{*}\ell\nu$, $D^{**}\ell\nu$~+~gap,
+\texttt{bkg\_fakeD}) floating while the normalizations and shapes for the 
+ backgrounds and the normalizations of the $D^*\tau \nu$ and $D^{**} \tau \nu$ components are fixed. 
+This fit gives the data-statistics
+uncertainty. 
+We then free each normalization or shape (i.e. "PYHF modifier") within its constraint and then
+calculate its systematic contribution to the quadrature difference between
+the new and previous returned uncertainty in $R(D)$.
+Electron and muon channels are fit separately. The two resulting
 uncertainties are combined at the end (below) rather than fit jointly.
 
 \begin{table}[htbp]
@@ -70,7 +71,7 @@ uncertainties are combined at the end (below) rather than fit jointly.
 \end{table}
 
 
-\paragraph{Combination.}
+\paragraph{Electron/Muon Channel Combination.}
 The electron channel is more sensitive than the muon
 channel: the tighter muon momentum requirement and the KLM acceptance ($p_{\mu} > 0.6$\,GeV$/c$
 versus $p_{e} > 0.3$\,GeV$/c$, Sec.~\ref{sec:reconstruction}) remove a larger
@@ -100,9 +101,7 @@ Systematic correlations between the electron and muon channels have been neglect
   \centering
   \includegraphics[width=0.7\textwidth]{pyhf_fit_correlation.png}
   \caption{Correlation matrix of five fitted normalization parameters from
-  the electron-channel Asimov fit, produced by
-  \texttt{cabinetry.visualize.correlation\_matrix(fit\_results,
-  pruning\_threshold=0.3)}.
+  the electron-channel Asimov fit.
   Four are free \texttt{normfactor} parameters ($D\ell\nu$, $D\tau\nu$,
   $D^{*}\ell\nu$, $D^{**}\ell\nu$~+~gap); the fifth, $D^{**}\tau\nu$\_norm, is
   a constrained \texttt{normsys} parameter (Table~\ref{tab:fit-parameters})

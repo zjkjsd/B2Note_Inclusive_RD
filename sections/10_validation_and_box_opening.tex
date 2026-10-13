@@ -1,4 +1,4 @@
-\section{Validation and Box-Opening Strategy}
+\section{Control Regions and Validations}
 \label{sec:validation}
 
 The $B\to D\tau\nu$ signal region is blinded.
@@ -6,8 +6,6 @@ Every region in this section is a cross-check: none of them enters the
 likelihood of Sec.~\ref{sec:fit}, which uses only the $D$-mass signal region
 and the $D$-mass sideband.
 
-\subsection{Control regions}
-\label{sec:validation:regions}
 
 % PROVENANCE
 %   status      : ANALYSIS_DECISION
@@ -33,7 +31,7 @@ and the $D$-mass sideband.
     $D^{*}$ veto region, $0.135 < \Delta M < 0.145$ &
       $B \to D^{*} \ell \nu$ dominant. Tests the largest signal-like
       background. Currently limited by the missing slow-$\pi^{0}$ efficiency
-      correction (Sec.~\ref{sec:recon:dstveto}) \\
+      correction (Sec.~\ref{sec:recon:dstveto}). May be used for a $B\to D^*\tau\nu$ consistency check. \\
     $\Upsilon(4S)$ off-resonance &
       Continuum modeling and its normalization. The only region with no
       $B\bar{B}$ contribution at all \\
@@ -41,11 +39,12 @@ and the $D$-mass sideband.
       Generic-$B\bar{B}$ modeling. Note that this is \emph{not} the region in
       which the weights were fitted; see
       Sec.~\ref{sec:bbbar:tuning} \\
-    Wrong-charge sample &
-      Intended as a generic-$B\bar{B}$ cross-check, but has significantly different physics composition (not used)\\
-    $D$-mass sidebands &
+$D$-mass sidebands &
       Fake-$D$ modeling. Unlike the others this region is also a fit
-      channel, but can be used to check data/MC agreement \\
+      channel, but can be used to check data/MC agreement \\      
+    Wrong-charge sample &
+      Intended as a generic-$B\bar{B}$ cross-check, but has significantly different physics composition (in the end, this sample is not used)\\
+    
     \hline
   \end{tabular}
 \end{table}
@@ -54,7 +53,7 @@ and the $D$-mass sideband.
 
 
 
-\subsection{Preliminary control-region comparisons}
+\subsection{Preliminary data/MC control-region comparisons}
 \label{sec:validation:prelim}
 
 % PROVENANCE
@@ -104,7 +103,7 @@ fitted to data.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{prefit_pL_q2Sideband_mDsignal_tightBDT_run1e.png}
-  \caption{Lepton momentum in the same region as
+  \caption{Lepton momentum for the electron channel in the same region as
   Fig.~\ref{fig:prefit-mm2-q2sb-dsig}.
   Good prefit agreement (reduced $\chi^{2} = 0.80$) is found.}
   \label{fig:prefit-pl-q2sb-dsig}
@@ -124,11 +123,11 @@ fitted to data.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{prefit_mm2_mDsideband_tightBDT_run1e.png}
-  \caption{$\mmiss$ in the same $D$-mass sideband as
+  \caption{$\mmiss$ in the same $D$-mass sideband as in
   Fig.~\ref{fig:prefit-mm2-mDsb-noBDT}, after \texttt{lgb\_tight}.
   The classifier substantially improves the agreement (reduced $\chi^{2}$
-  falls from $837$ to $6.3$) but does not eliminate it; residual tension
-  concentrates at high $\mmiss$.}
+  falls from $837$ to $6.3$) but does not eliminate it.}
+  
   \label{fig:prefit-mm2-mDsb-tight}
 \end{figure}
 
@@ -136,13 +135,13 @@ fitted to data.
 \subsection{Box-opening strategy}
 \label{sec:validation:unblinding}
 
-{The unblinding plan and conditions from the referees.  A staged (10\%)
+{The unblinding plan will be determined by the referees once a paper draft is available.  A staged (10\%)
 unblinding could be a discussion item.}
 
 \subsection{Known open issues}
 \label{sec:validation:issues}
 
-The following technical points need to be resolved:
+The following technical points still need to be resolved:
 \begin{itemize}
   \item $E_{\mathrm{cms}}$ and experiment-level data/MC discrepancies in
         several Run~1 and Run~2 experiments, hypothesized to originate from
